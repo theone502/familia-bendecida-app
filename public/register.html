@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Familia Bendecida</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+</head>
+<body style="background: var(--bg-soft);">
+  <div class="auth-container">
+    <div class="card auth-card">
+      <div style="margin-bottom: 32px; color: var(--primary);">
+        <i class="fa-solid fa-house-chimney-heart" style="font-size: 48px;"></i>
+        <h1 style="margin-top: 16px;">Crear Cuenta</h1>
+      </div>
+      
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label" style="text-align: left;">Nombre</label>
+          <input type="text" class="form-input" id="name" required placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="text-align: left;">Email</label>
+          <input type="email" class="form-input" id="email" required placeholder="correo@ejemplo.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="text-align: left;">Contraseña</label>
+          <input type="password" class="form-input" id="password" required placeholder="••••••">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="text-align: left;">Rol Familiar</label>
+          <select class="form-input" id="role">
+            <option value="Padre">Padre</option>
+            <option value="Madre">Madre</option>
+            <option value="Hijo">Hijo</option>
+            <option value="Hija">Hija</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        
+        <button type="submit" class="btn primary" style="width: 100%; margin-top: 16px;">
+          Registrarse
+        </button>
+      </form>
+      
+      <div style="margin-top: 24px; font-size: 14px;">
+        <p>¿Ya tienes cuenta? <a href="login.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Inicia sesión</a></p>
+      </div>
+      
+      <div id="error-message" style="color: var(--danger); margin-top: 16px; display: none;"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+      const errorDiv = document.getElementById('error-message');
+      
+      try {
+        const response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, role })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = '/index.html';
+        } else {
+          errorDiv.textContent = data.error || 'Error al registrarse';
+          errorDiv.style.display = 'block';
+        }
+      } catch (error) {
+        errorDiv.textContent = 'Error de conexión';
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

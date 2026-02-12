@@ -1,0 +1,5762 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Familia Bendecida - Centro Familiar Inteligente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --primary-light: #34D399;
+      --primary-gradient: linear-gradient(135deg, #10B981, #059669);
+      --secondary: #ffffff;
+      --secondary-dark: #f8fafc;
+      --accent: #F59E0B;
+      --accent-dark: #D97706;
+      --danger: #EF4444;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --info: #3B82F6;
+      --purple: #8B5CF6;
+      
+      --bg: #f8fafc;
+      --bg-soft: #f1f5f9;
+      --card: #ffffff;
+      --card-hover: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --border-light: rgba(226, 232, 240, 0.5);
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      
+      --radius: 16px;
+      --radius-sm: 12px;
+      --radius-xs: 8px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      --font-size-base: 16px;
+      --font-size-lg: 18px;
+      --font-size-xl: 24px;
+      --font-size-2xl: 32px;
+      --font-size-sm: 14px;
+      --font-size-xs: 12px;
+      --line-height: 1.6;
+    }
+
+    [data-theme="dark"] {
+      --primary: #34D399;
+      --primary-dark: #10B981;
+      --primary-light: #6EE7B7;
+      --primary-gradient: linear-gradient(135deg, #34D399, #10B981);
+      --secondary: #0f172a;
+      --secondary-dark: #1e293b;
+      --accent: #FCD34D;
+      --accent-dark: #F59E0B;
+      --danger: #F87171;
+      --success: #34D399;
+      --warning: #FCD34D;
+      --info: #60A5FA;
+      --purple: #A78BFA;
+      
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --card: #1e293b;
+      --card-hover: #334155;
+      --text: #f1f5f9;
+      --text-light: #94a3b8;
+      --border: #334155;
+      --border-light: rgba(51, 65, 85, 0.5);
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: var(--text);
+      background-color: var(--bg);
+      line-height: var(--line-height);
+      font-size: var(--font-size-base);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(16,185,129,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(245,158,11,0.08) 0%, transparent 50%);
+      z-index: -1;
+      animation: gradientShift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes gradientShift {
+      0% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Welcome Screen */
+    .welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: var(--secondary);
+      text-align: center;
+      padding: 20px;
+      animation: fadeOut 1.2s ease-in-out 3.5s forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .welcome-content {
+      max-width: 800px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .welcome-icon {
+      font-size: 96px;
+      margin-bottom: 32px;
+      animation: gentlePulse 3s infinite, float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .welcome-verse {
+      font-style: italic;
+      font-size: clamp(20px, 4vw, 32px);
+      margin-bottom: 16px;
+      line-height: 1.4;
+      font-weight: 500;
+      font-family: 'Noto Sans', serif;
+    }
+
+    .welcome-reference {
+      font-size: clamp(16px, 3vw, 24px);
+      opacity: 0.9;
+      margin-bottom: 32px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .welcome-title {
+      font: 700 clamp(28px, 5vw, 48px)/1.2 'Poppins', sans-serif;
+      margin-bottom: 16px;
+      background: linear-gradient(45deg, #fff, rgba(255,255,255,0.9));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-subtitle {
+      font-size: clamp(16px, 3vw, 24px);
+      opacity: 0.9;
+      margin-bottom: 32px;
+    }
+
+    .loading-progress {
+      width: min(300px, 80%);
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 40px auto 0;
+    }
+
+    .loading-bar {
+      height: 100%;
+      background: var(--secondary);
+      width: 0%;
+      animation: loading 3s ease-in-out forwards;
+      border-radius: 2px;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary-gradient);
+      padding: 16px clamp(16px, 4vw, 40px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background-color: rgba(16, 185, 129, 0.95);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .logo-icon {
+      color: var(--secondary);
+      font-size: clamp(24px, 4vw, 32px);
+      animation: gentlePulse 3s infinite;
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+
+    .logo-text {
+      font: 700 clamp(20px, 4vw, 26px)/1.2 'Poppins', sans-serif;
+      letter-spacing: 0.5px;
+      margin: 0;
+      color: var(--secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .action-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.15);
+      color: var(--secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.15);
+      transition: var(--transition);
+      color: var(--secondary);
+      cursor: pointer;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--secondary);
+      flex-shrink: 0;
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 80px);
+      flex-direction: column;
+    }
+
+    @media (min-width: 992px) {
+      .main-layout {
+        flex-direction: row;
+      }
+    }
+
+    /* Enhanced Sidebar */
+    .sidebar {
+      width: 100%;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 10;
+      box-shadow: var(--shadow-sm);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 992px) {
+      .sidebar {
+        width: 300px;
+        max-height: none;
+        border-right: 1px solid var(--border);
+        border-bottom: none;
+        padding: 32px 0;
+        overflow-y: visible;
+      }
+    }
+
+    .sidebar-header {
+      padding: 0 16px 16px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 992px) {
+      .sidebar-header {
+        padding: 0 32px 24px;
+      }
+    }
+
+    .current-date {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+      color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (min-width: 768px) {
+      .current-date {
+        font-size: var(--font-size-lg);
+      }
+    }
+
+    .nav {
+      display: flex;
+      gap: 4px;
+      padding: 0 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+    }
+
+    @media (min-width: 992px) {
+      .nav {
+        flex-direction: column;
+        overflow-x: visible;
+        padding: 0 20px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .nav-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text);
+      border: 2px solid transparent;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 992px) {
+      .nav-item {
+        gap: 20px;
+        padding: 18px 24px;
+      }
+    }
+
+    .nav-item.active {
+      background: var(--bg-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 992px) {
+      .nav-icon {
+        font-size: 20px;
+      }
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: var(--secondary);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .sidebar-stats {
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-soft);
+      display: none;
+    }
+
+    @media (min-width: 992px) {
+      .sidebar-stats {
+        display: block;
+        padding: 24px 32px;
+      }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 992px) {
+      .stats-grid {
+        gap: 16px;
+      }
+    }
+
+    .stat-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 992px) {
+      .stat-item {
+        padding: 18px;
+      }
+    }
+
+    .stat-value {
+      font: 700 20px/1 'Poppins', sans-serif;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 992px) {
+      .stat-value {
+        font-size: 28px;
+      }
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    @media (min-width: 992px) {
+      .stat-label {
+        font-size: 13px;
+      }
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: clamp(16px, 4vw, 40px);
+      overflow-y: auto;
+      background: var(--bg-soft);
+    }
+
+    .content-section {
+      display: none;
+      animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .section-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+    }
+
+    .section-title {
+      font: 600 clamp(24px, 5vw, 32px)/1 'Poppins', sans-serif;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--text);
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 768px) {
+      .section-title {
+        gap: 20px;
+      }
+    }
+
+    .section-title-icon {
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .section-title-icon {
+        font-size: 32px;
+      }
+    }
+
+    .btn {
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      height: 44px;
+      padding: 0 20px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .btn {
+        height: 48px;
+        padding: 0 24px;
+        font-size: 15px;
+        gap: 12px;
+      }
+    }
+
+    .btn.primary {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: var(--secondary);
+    }
+
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(12, 1fr);
+        gap: 30px;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 32px;
+      }
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: var(--secondary);
+      padding: 32px;
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .welcome-card {
+        padding: 48px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .welcome-card {
+        grid-column: span 12;
+      }
+    }
+
+    .welcome-content h2 {
+      font: 700 clamp(24px, 5vw, 40px)/1.2 'Poppins', sans-serif;
+      margin-bottom: 16px;
+    }
+
+    .welcome-content p {
+      font-size: clamp(16px, 3vw, 20px);
+      opacity: 0.95;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .welcome-content p {
+        margin-bottom: 32px;
+      }
+    }
+
+    .welcome-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .welcome-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 32px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .welcome-stats {
+        gap: 60px;
+        margin-top: 40px;
+      }
+    }
+
+    .welcome-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .welcome-stat-value {
+      font: 700 clamp(20px, 4vw, 36px)/1 'Poppins', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    .welcome-stat-label {
+      font-size: clamp(12px, 2vw, 16px);
+      opacity: 0.9;
+    }
+
+    /* Spiritual Section */
+    @media (min-width: 1200px) {
+      .spiritual-section {
+        grid-column: span 8;
+      }
+    }
+
+    .spiritual-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-soft);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .tab-btn {
+        padding: 12px 24px;
+        font-size: 15px;
+      }
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: var(--secondary);
+    }
+
+    .verse-card, .prayer-card {
+      text-align: center;
+      padding: 32px 24px;
+      background: linear-gradient(135deg, var(--bg-soft), var(--card));
+      border: 2px solid var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .verse-card, .prayer-card {
+        padding: 40px;
+      }
+    }
+
+    .verse-icon {
+      font-size: 48px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .verse-icon {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .verse-text {
+      font-style: italic;
+      font-size: clamp(18px, 3vw, 24px);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      font-family: 'Noto Sans', serif;
+    }
+
+    .verse-reference {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text-light);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    /* Quick Stats */
+    @media (min-width: 1200px) {
+      .quick-stats {
+        grid-column: span 4;
+      }
+    }
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-soft);
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .stat-card {
+        gap: 20px;
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      background: var(--primary);
+      color: var(--secondary);
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .stat-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+      }
+    }
+
+    .stat-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stat-value {
+      font: 700 24px/1 'Poppins', sans-serif;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    @media (min-width: 768px) {
+      .stat-value {
+        font-size: 32px;
+        margin-bottom: 4px;
+      }
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* Progress Ring */
+    .progress-ring {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .progress-ring {
+        width: 56px;
+        height: 56px;
+      }
+    }
+
+    /* Tasks Overview & Recent Activity */
+    @media (min-width: 1200px) {
+      .tasks-overview {
+        grid-column: span 6;
+      }
+      
+      .recent-activity {
+        grid-column: span 6;
+      }
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font: 600 18px/1 'Poppins', sans-serif;
+      color: var(--text);
+    }
+
+    @media (min-width: 768px) {
+      .card-title {
+        font-size: 20px;
+      }
+    }
+
+    .task-progress {
+      margin-top: 16px;
+    }
+
+    .progress-item {
+      margin-bottom: 12px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-soft);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--primary-gradient);
+      transition: width 1s ease-out;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .activity-list {
+        gap: 16px;
+      }
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .activity-item {
+        gap: 16px;
+        padding: 20px;
+      }
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: var(--secondary);
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .activity-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+    }
+
+    .activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .activity-title {
+        font-size: 15px;
+      }
+    }
+
+    .activity-time {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* Calendar */
+    .calendar-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 992px) {
+      .calendar-container {
+        grid-template-columns: 1fr 400px;
+        gap: 32px;
+      }
+    }
+
+    .calendar-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .calendar-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+    }
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .calendar-grid {
+        gap: 10px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .calendar-grid {
+        gap: 12px;
+      }
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .calendar-day {
+        padding: 12px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .calendar-day {
+        padding: 16px;
+      }
+    }
+
+    .calendar-day.today {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--secondary);
+    }
+
+    .day-number {
+      font: 700 16px/1 'Poppins', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .day-number {
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .day-number {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+    }
+
+    /* Enhanced Family Members */
+    .family-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width: 576px) {
+      .family-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 992px) {
+      .family-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .family-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 32px;
+      }
+    }
+
+    .family-member {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .member-header {
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .member-header {
+        padding: 32px;
+      }
+    }
+
+    .member-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--secondary);
+      object-fit: cover;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (min-width: 768px) {
+      .member-avatar {
+        width: 100px;
+        height: 100px;
+        border-width: 4px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .member-avatar {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    .member-name {
+      font: 700 20px/1 'Poppins', sans-serif;
+      color: var(--secondary);
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (min-width: 768px) {
+      .member-name {
+        font-size: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .member-name {
+        font-size: 28px;
+      }
+    }
+
+    .member-role {
+      color: rgba(255,255,255,0.9);
+      position: relative;
+      z-index: 2;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .member-role {
+        font-size: 16px;
+      }
+    }
+
+    .member-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 20px;
+      background: var(--bg-soft);
+    }
+
+    @media (min-width: 768px) {
+      .member-stats {
+        gap: 16px;
+        padding: 24px;
+      }
+    }
+
+    .member-stat {
+      text-align: center;
+    }
+
+    .member-stat-value {
+      font: 700 20px/1 'Poppins', sans-serif;
+      color: var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .member-stat-value {
+        font-size: 24px;
+      }
+    }
+
+    .member-stat-label {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .member-stat-label {
+        font-size: 13px;
+      }
+    }
+
+    .member-actions {
+      display: flex;
+      gap: 8px;
+      padding: 20px;
+      background: var(--card);
+    }
+
+    @media (min-width: 768px) {
+      .member-actions {
+        gap: 12px;
+        padding: 24px;
+      }
+    }
+
+    /* Enhanced Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 16px;
+    }
+
+    @media (min-width: 576px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 992px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+      }
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 1;
+      transition: var(--transition);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 16px;
+      transform: translateY(100%);
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .gallery-overlay {
+        padding: 24px;
+      }
+    }
+
+    .gallery-title {
+      font: 600 16px/1 'Poppins', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .gallery-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+    }
+
+    /* Enhanced Rewards */
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width: 576px) {
+      .rewards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 992px) {
+      .rewards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .rewards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 32px;
+      }
+    }
+
+    .reward-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .reward-header {
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .reward-header {
+        padding: 32px;
+      }
+    }
+
+    .reward-icon {
+      font-size: 40px;
+      color: var(--secondary);
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .reward-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .reward-icon {
+        font-size: 56px;
+      }
+    }
+
+    .reward-name {
+      font: 700 20px/1 'Poppins', sans-serif;
+      color: var(--secondary);
+    }
+
+    @media (min-width: 768px) {
+      .reward-name {
+        font-size: 22px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .reward-name {
+        font-size: 24px;
+      }
+    }
+
+    .reward-content {
+      padding: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .reward-content {
+        padding: 32px;
+      }
+    }
+
+    .reward-desc {
+      color: var(--text-light);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .reward-desc {
+        font-size: 15px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .reward-cost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--secondary);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .reward-cost {
+        padding: 12px 24px;
+        font-size: 18px;
+      }
+    }
+
+    /* Enhanced Chat */
+    .chat-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      height: 500px;
+    }
+
+    @media (min-width: 992px) {
+      .chat-container {
+        grid-template-columns: 300px 1fr;
+        height: 600px;
+        gap: 32px;
+      }
+    }
+
+    .chat-sidebar {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 200px;
+    }
+
+    @media (min-width: 992px) {
+      .chat-sidebar {
+        height: auto;
+      }
+    }
+
+    .chat-users {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .chat-users {
+        padding: 20px;
+      }
+    }
+
+    .chat-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      .chat-user {
+        padding: 16px;
+        gap: 16px;
+      }
+    }
+
+    .chat-user.active {
+      background: var(--primary);
+      color: var(--secondary);
+    }
+
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 300px;
+    }
+
+    @media (min-width: 992px) {
+      .chat-main {
+        height: auto;
+      }
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .chat-messages {
+        padding: 24px;
+        gap: 16px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .chat-messages {
+        gap: 20px;
+      }
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px;
+      border-radius: var(--radius);
+      position: relative;
+      animation: messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    @media (min-width: 768px) {
+      .message {
+        padding: 16px;
+        gap: 8px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .message {
+        max-width: 70%;
+        padding: 20px;
+      }
+    }
+
+    .message.sent {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--secondary);
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received {
+      align-self: flex-start;
+      background: var(--bg-soft);
+      border: 2px solid var(--border);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .message-header {
+        font-size: 13px;
+        gap: 12px;
+      }
+    }
+
+    .message-sender {
+      font-weight: 600;
+    }
+
+    .message-time {
+      opacity: 0.7;
+      font-size: 11px;
+    }
+
+    @media (min-width: 768px) {
+      .message-time {
+        font-size: 12px;
+      }
+    }
+
+    .chat-input-area {
+      padding: 16px;
+      background: var(--bg-soft);
+      border-top: 2px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .chat-input-area {
+        padding: 20px;
+        gap: 16px;
+      }
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      resize: none;
+      transition: var(--transition);
+      min-height: 44px;
+    }
+
+    @media (min-width: 768px) {
+      .chat-input {
+        padding: 16px 24px;
+        font-size: 16px;
+      }
+    }
+
+    /* Goals Section */
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .goals-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .goals-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 32px;
+      }
+    }
+
+    .goal-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .goal-card {
+        padding: 32px;
+      }
+    }
+
+    .goal-progress {
+      height: 8px;
+      background: var(--bg-soft);
+      border-radius: 4px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .goal-progress {
+        margin: 20px 0;
+      }
+    }
+
+    .goal-progress-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 1s ease-out;
+    }
+
+    /* Budget Section */
+    .budget-overview {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .budget-overview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .budget-overview {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+      }
+    }
+
+    .budget-category {
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border-left: 4px solid var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .budget-category {
+        padding: 24px;
+      }
+    }
+
+    /* Meal Planner */
+    .meal-planner {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 16px;
+    }
+
+    @media (min-width: 576px) {
+      .meal-planner {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .meal-planner {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .meal-planner {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+      }
+    }
+
+    .meal-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .meal-card {
+        padding: 24px;
+      }
+    }
+
+    /* Achievements */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (min-width: 576px) {
+      .achievements-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .achievements-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .achievements-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 24px;
+      }
+    }
+
+    .achievement-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .achievement-card {
+        padding: 24px;
+      }
+    }
+
+    .achievement-card.unlocked {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: var(--secondary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes messageSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Toast Container */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: calc(100vw - 40px);
+    }
+
+    @media (min-width: 768px) {
+      .toast-container {
+        bottom: 32px;
+        right: 32px;
+        gap: 16px;
+        max-width: 400px;
+      }
+    }
+
+    .toast {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-xl);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(100%);
+      opacity: 0;
+      animation: toastSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      border-left: 4px solid var(--primary);
+      max-width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .toast {
+        padding: 20px;
+        gap: 16px;
+      }
+    }
+
+    @keyframes toastSlideIn {
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.warning { border-left-color: var(--warning); }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.info { border-left-color: var(--info); }
+
+    .toast-icon {
+      font-size: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .toast-icon {
+        font-size: 24px;
+      }
+    }
+
+    .toast-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .toast-title {
+        font-size: 15px;
+      }
+    }
+
+    .toast-message {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    @media (min-width: 768px) {
+      .toast-message {
+        font-size: 14px;
+      }
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 18px;
+      transition: var(--transition);
+      flex-shrink: 0;
+      padding: 4px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: grid;
+      place-items: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+      padding: 20px;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      animation: modalScaleIn 0.3s forwards;
+    }
+
+    @media (min-width: 768px) {
+      .modal {
+        padding: 32px;
+      }
+    }
+
+    @keyframes modalScaleIn {
+      to { transform: scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font: 600 20px/1 'Poppins', sans-serif;
+    }
+
+    @media (min-width: 768px) {
+      .modal-title {
+        font-size: 24px;
+      }
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 24px;
+      transition: var(--transition);
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .form-label {
+        font-size: 15px;
+      }
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .form-input {
+        padding: 16px;
+        font-size: 16px;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 768px) {
+      .form-actions {
+        margin-top: 32px;
+        gap: 16px;
+      }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    @media (min-width: 768px) {
+      .empty-state {
+        padding: 64px 32px;
+      }
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      color: var(--border);
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .empty-state-title {
+      font: 600 20px/1 'Poppins', sans-serif;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    @media (min-width: 768px) {
+      .empty-state-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+    }
+
+    .empty-state-description {
+      color: var(--text-light);
+      max-width: 400px;
+      margin: 0 auto 24px;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .empty-state-description {
+        font-size: 16px;
+        margin-bottom: 32px;
+      }
+    }
+
+    /* Tasks Management */
+    .tasks-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1200px) {
+      .tasks-container {
+        grid-template-columns: 1fr 350px;
+      }
+    }
+
+    .task-filters {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 576px) {
+      .task-filters {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      transition: var(--transition);
+    }
+
+    @media (min-width: 768px) {
+      .task-item {
+        gap: 16px;
+        padding: 20px;
+        align-items: center;
+      }
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .task-checkbox {
+        width: 24px;
+        height: 24px;
+        margin-top: 0;
+      }
+    }
+
+    .task-checkbox.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--secondary);
+    }
+
+    .task-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    @media (min-width: 768px) {
+      .task-title {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--text-light);
+      font-size: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .task-meta {
+        font-size: 13px;
+        gap: 12px;
+      }
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      top: 0;
+      opacity: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    /* Utility Classes */
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .mb-1 { margin-bottom: 4px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .p-1 { padding: 4px; }
+    .p-2 { padding: 8px; }
+    .p-3 { padding: 12px; }
+    .p-4 { padding: 16px; }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-soft);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    /* Focus States */
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Print Styles */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+      .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div class="welcome-screen" id="welcome-screen">
+    <div class="welcome-content">
+      <i class="fa-solid fa-house-chimney-heart welcome-icon"></i>
+      <div class="welcome-verse" id="welcome-verse">Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.</div>
+      <div class="welcome-reference" id="welcome-reference">Juan 3:16</div>
+      <h1 class="welcome-title">Familia Bendecida</h1>
+      <p class="welcome-subtitle">Centro Familiar Inteligente - Organización, Espiritualidad y Crecimiento</p>
+      <div class="loading-progress">
+        <div class="loading-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo" id="logo">
+        <i class="fa-solid fa-house-chimney-heart logo-icon"></i>
+        <div>
+          <h1 class="logo-text">Familia Bendecida</h1>
+          <div class="date-subtitle" id="current-date-header"></div>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="action-btn" id="notifications-btn" title="Notificaciones">
+          <i class="fa-solid fa-bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="action-btn" id="theme-toggle" title="Cambiar tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="action-btn" id="settings-btn" title="Ajustes">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+        
+        <div class="profile" id="profile-menu">
+          <img src="https://ui-avatars.com/api/?name=Admin+Familia&background=10B981&color=fff&size=400&font-size=0.5" 
+               alt="Admin" class="profile-avatar">
+          <div>
+            <div style="font-weight: 600;">Admin Familia</div>
+            <div style="font-size: 14px; opacity: 0.9;">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Enhanced Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="current-date" id="current-date"></div>
+          <div class="date-subtitle" id="current-week"></div>
+        </div>
+        
+        <nav class="nav">
+          <a href="#" class="nav-item active" data-section="dashboard">
+            <i class="fa-solid fa-table-columns nav-icon"></i>
+            <span>Dashboard</span>
+            <span class="nav-badge">6</span>
+          </a>
+          <a href="#" class="nav-item" data-section="calendar">
+            <i class="fa-solid fa-calendar-days nav-icon"></i>
+            <span>Calendario</span>
+          </a>
+          <a href="#" class="nav-item" data-section="tasks">
+            <i class="fa-solid fa-list-check nav-icon"></i>
+            <span>Tareas</span>
+            <span class="nav-badge">12</span>
+          </a>
+          <a href="#" class="nav-item" data-section="family">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span>Familia</span>
+          </a>
+          <a href="#" class="nav-item" data-section="goals">
+            <i class="fa-solid fa-bullseye nav-icon"></i>
+            <span>Metas</span>
+          </a>
+          <a href="#" class="nav-item" data-section="gallery">
+            <i class="fa-solid fa-images nav-icon"></i>
+            <span>Galería</span>
+            <span class="nav-badge">24</span>
+          </a>
+          <a href="#" class="nav-item" data-section="rewards">
+            <i class="fa-solid fa-gift nav-icon"></i>
+            <span>Recompensas</span>
+          </a>
+          <a href="#" class="nav-item" data-section="budget">
+            <i class="fa-solid fa-coins nav-icon"></i>
+            <span>Presupuesto</span>
+          </a>
+          <a href="#" class="nav-item" data-section="meals">
+            <i class="fa-solid fa-utensils nav-icon"></i>
+            <span>Comidas</span>
+          </a>
+          <a href="#" class="nav-item" data-section="chat">
+            <i class="fa-solid fa-comments nav-icon"></i>
+            <span>Chat</span>
+            <span class="nav-badge">5</span>
+          </a>
+          <a href="#" class="nav-item" data-section="achievements">
+            <i class="fa-solid fa-trophy nav-icon"></i>
+            <span>Logros</span>
+          </a>
+        </nav>
+        
+        <div class="sidebar-stats">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-tasks">12</div>
+              <div class="stat-label">Tareas Hoy</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-points">1,245</div>
+              <div class="stat-label">Puntos Totales</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-streak">21</div>
+              <div class="stat-label">Días Racha</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-goals">8/12</div>
+              <div class="stat-label">Metas</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content" id="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+          <div class="dashboard-grid">
+            <!-- Welcome Card -->
+            <div class="welcome-card">
+              <div class="welcome-content">
+                <h2>¡Bienvenidos, Familia Bendecida! 👨‍👩‍👧‍👦</h2>
+                <p>Hoy es un día para crecer juntos en amor, organización y fe. Cada tarea completada fortalece nuestro hogar y cada momento compartido edifica nuestra familia.</p>
+                <div class="welcome-stats">
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-tasks">12</div>
+                    <div class="welcome-stat-label">Tareas Pendientes</div>
+                  </div>
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-streak">21</div>
+                    <div class="welcome-stat-label">Días de Racha</div>
+                  </div>
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-goals">67%</div>
+                    <div class="welcome-stat-label">Metas Completadas</div>
+                  </div>
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-points">1,245</div>
+                    <div class="welcome-stat-label">Puntos Familia</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spiritual Section -->
+            <div class="spiritual-section">
+              <div class="card">
+                <div class="spiritual-tabs">
+                  <button class="tab-btn active" data-tab="verse">Versículo del Día</button>
+                  <button class="tab-btn" data-tab="prayer">Oración</button>
+                  <button class="tab-btn" data-tab="reflection">Reflexión</button>
+                </div>
+                
+                <div class="tab-content" id="verse-tab">
+                  <div class="verse-card">
+                    <i class="fa-solid fa-book-bible verse-icon"></i>
+                    <div class="verse-text" id="daily-verse">Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.</div>
+                    <div class="verse-reference" id="verse-reference">Jeremías 29:11</div>
+                    <button class="btn primary" id="new-verse-btn">
+                      <i class="fa-solid fa-shuffle"></i>
+                      Nuevo Versículo
+                    </button>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="prayer-tab" style="display: none;">
+                  <div class="prayer-card">
+                    <i class="fa-solid fa-hands-praying verse-icon"></i>
+                    <div class="verse-text">Señor, bendice nuestro hogar hoy. Ayúdanos a trabajar juntos con amor y paciencia, recordando que en Ti encontramos la fuerza para cada tarea y la gracia para cada desafío.</div>
+                    <div class="verse-reference">Oración Familiar</div>
+                  </div>
+                </div>
+
+                <div class="tab-content" id="reflection-tab" style="display: none;">
+                  <div class="prayer-card">
+                    <i class="fa-solid fa-lightbulb verse-icon"></i>
+                    <div class="verse-text">La familia que ora y trabaja unida, permanece unida. Cada esfuerzo compartido es una inversión en nuestro amor familiar.</div>
+                    <div class="verse-reference">Reflexión del Día</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-broom"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="stat-cleaning">85%</div>
+                  <div class="stat-label">Limpieza Completada</div>
+                </div>
+                <div class="progress-ring">
+                  <svg width="56" height="56" viewBox="0 0 56 56">
+                    <circle cx="28" cy="28" r="26" stroke="var(--bg-soft)" stroke-width="4" fill="none"/>
+                    <circle cx="28" cy="28" r="26" stroke="var(--primary)" stroke-width="4" fill="none" 
+                            stroke-dasharray="163.36" stroke-dashoffset="24.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-icon" style="background: var(--accent);">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="stat-participation">92%</div>
+                  <div class="stat-label">Participación Familiar</div>
+                </div>
+                <div class="progress-ring">
+                  <svg width="56" height="56" viewBox="0 0 56 56">
+                    <circle cx="28" cy="28" r="26" stroke="var(--bg-soft)" stroke-width="4" fill="none"/>
+                    <circle cx="28" cy="28" r="26" stroke="var(--accent)" stroke-width="4" fill="none" 
+                            stroke-dasharray="163.36" stroke-dashoffset="13.1" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-icon" style="background: var(--info);">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="stat-on-time">78%</div>
+                  <div class="stat-label">Tareas a Tiempo</div>
+                </div>
+                <div class="progress-ring">
+                  <svg width="56" height="56" viewBox="0 0 56 56">
+                    <circle cx="28" cy="28" r="26" stroke="var(--bg-soft)" stroke-width="4" fill="none"/>
+                    <circle cx="28" cy="28" r="26" stroke="var(--info)" stroke-width="4" fill="none" 
+                            stroke-dasharray="163.36" stroke-dashoffset="36" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tasks Overview -->
+            <div class="tasks-overview">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Tareas por Categoría</h3>
+                  <button class="btn-icon" onclick="FamilyManager.showAddTaskModal()">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+                <div class="task-progress">
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span>Limpieza</span>
+                      <span>85%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span>Cocina</span>
+                      <span>72%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 72%"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span>Compras</span>
+                      <span>45%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span>Organización</span>
+                      <span>91%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 91%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Actividad Reciente</h3>
+                  <button class="btn-icon" onclick="FamilyManager.refreshActivities()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                  </button>
+                </div>
+                <div class="activity-list" id="activity-list">
+                  <!-- Activities will be loaded dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section id="calendar" class="content-section">
+          <!-- Calendar content loaded dynamically -->
+        </section>
+
+        <!-- Tasks Section -->
+        <section id="tasks" class="content-section">
+          <!-- Tasks content loaded dynamically -->
+        </section>
+
+        <!-- Family Section -->
+        <section id="family" class="content-section">
+          <!-- Family content loaded dynamically -->
+        </section>
+
+        <!-- Goals Section -->
+        <section id="goals" class="content-section">
+          <!-- Goals content loaded dynamically -->
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="content-section">
+          <!-- Gallery content loaded dynamically -->
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards" class="content-section">
+          <!-- Rewards content loaded dynamically -->
+        </section>
+
+        <!-- Budget Section -->
+        <section id="budget" class="content-section">
+          <!-- Budget content loaded dynamically -->
+        </section>
+
+        <!-- Meals Section -->
+        <section id="meals" class="content-section">
+          <!-- Meals content loaded dynamically -->
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat" class="content-section">
+          <!-- Chat content loaded dynamically -->
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements" class="content-section">
+          <!-- Achievements content loaded dynamically -->
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Confetti Container -->
+  <div id="confetti-container"></div>
+
+  <!-- Modals will be injected here -->
+
+  <script>
+    // Bible verses array
+    const bibleVerses = [
+      { text: 'Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.', reference: 'Jeremías 29:11' },
+      { text: 'Todo lo puedo en Cristo que me fortalece.', reference: 'Filipenses 4:13' },
+      { text: 'El Señor es mi pastor, nada me faltará.', reference: 'Salmos 23:1' },
+      { text: 'Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.', reference: 'Juan 3:16' },
+      { text: 'Fiel es Dios, que no os dejará ser tentados más de lo que podéis resistir.', reference: '1 Corintios 10:13' },
+      { text: 'La paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.', reference: 'Filipenses 4:7' },
+      { text: 'Mas el fruto del Espíritu es amor, gozo, paz, paciencia, benignidad, bondad, fe, mansedumbre, templanza.', reference: 'Gálatas 5:22-23' },
+      { text: 'Y sabemos que a los que aman a Dios, todas las cosas les ayudan a bien, esto es, a los que conforme a su propósito son llamados.', reference: 'Romanos 8:28' },
+      { text: 'Antes bien, sed benignos unos con otros, misericordiosos, perdonándoos unos a otros, como Dios también os perdonó a vosotros en Cristo.', reference: 'Efesios 4:32' },
+      { text: 'Todas vuestras cosas sean hechas con amor.', reference: '1 Corintios 16:14' },
+      { text: 'Pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán.', reference: 'Isaías 40:31' },
+      { text: 'El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece.', reference: '1 Corintios 13:4' },
+      { text: 'Y sobre todas estas cosas vestíos de amor, que es el vínculo perfecto.', reference: 'Colosenses 3:14' },
+      { text: 'Así que, según tengamos oportunidad, hagamos bien a todos, y mayormente a los de la familia de la fe.', reference: 'Gálatas 6:10' },
+      { text: 'Encomienda a Jehová tu camino, y confía en él; y él hará.', reference: 'Salmos 37:5' },
+      { text: 'No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo.', reference: 'Isaías 41:10' },
+      { text: 'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias.', reference: 'Filipenses 4:6' },
+      { text: 'El nombre de Jehová es torre fuerte; a ella corre el justo, y está seguro.', reference: 'Proverbios 18:10' },
+      { text: 'Por la fe andamos, no por vista.', reference: '2 Corintios 5:7' },
+      { text: 'Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.', reference: '2 Timoteo 1:7' }
+    ];
+
+    // Main Family Manager
+    const FamilyManager = {
+      // Data storage
+      members: [],
+      tasks: [],
+      calendar: [],
+      rewards: [],
+      goals: [],
+      budget: [],
+      meals: [],
+      achievements: [],
+      chat: [],
+      activities: [],
+      
+      // Current state
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getFullYear(),
+      
+      // Initialize the app
+      init() {
+        this.loadData();
+        this.setupEventListeners();
+        this.updateUI();
+        this.renderDashboard();
+        
+        // Hide welcome screen after loading
+        setTimeout(() => {
+          document.getElementById('welcome-screen').style.display = 'none';
+        }, 3500);
+      },
+      
+      // Load data from localStorage
+      loadData() {
+        try {
+          this.members = JSON.parse(localStorage.getItem('fam_members')) || this.getDefaultMembers();
+          this.tasks = JSON.parse(localStorage.getItem('fam_tasks')) || this.getDefaultTasks();
+          this.calendar = JSON.parse(localStorage.getItem('fam_calendar')) || this.generateCalendar();
+          this.rewards = JSON.parse(localStorage.getItem('fam_rewards')) || this.getDefaultRewards();
+          this.goals = JSON.parse(localStorage.getItem('fam_goals')) || this.getDefaultGoals();
+          this.budget = JSON.parse(localStorage.getItem('fam_budget')) || this.getDefaultBudget();
+          this.meals = JSON.parse(localStorage.getItem('fam_meals')) || this.getDefaultMeals();
+          this.achievements = JSON.parse(localStorage.getItem('fam_achievements')) || this.getDefaultAchievements();
+          this.chat = JSON.parse(localStorage.getItem('fam_chat')) || this.getDefaultChat();
+          this.activities = JSON.parse(localStorage.getItem('fam_activities')) || this.getDefaultActivities();
+        } catch (error) {
+          console.error('Error loading data:', error);
+          this.initializeDefaultData();
+        }
+      },
+      
+      // Save data to localStorage
+      saveData() {
+        try {
+          localStorage.setItem('fam_members', JSON.stringify(this.members));
+          localStorage.setItem('fam_tasks', JSON.stringify(this.tasks));
+          localStorage.setItem('fam_calendar', JSON.stringify(this.calendar));
+          localStorage.setItem('fam_rewards', JSON.stringify(this.rewards));
+          localStorage.setItem('fam_goals', JSON.stringify(this.goals));
+          localStorage.setItem('fam_budget', JSON.stringify(this.budget));
+          localStorage.setItem('fam_meals', JSON.stringify(this.meals));
+          localStorage.setItem('fam_achievements', JSON.stringify(this.achievements));
+          localStorage.setItem('fam_chat', JSON.stringify(this.chat));
+          localStorage.setItem('fam_activities', JSON.stringify(this.activities));
+        } catch (error) {
+          console.error('Error saving data:', error);
+          this.showToast('Error', 'No se pudo guardar los datos', 'error');
+        }
+      },
+      
+      // Default data initialization
+      initializeDefaultData() {
+        this.members = this.getDefaultMembers();
+        this.tasks = this.getDefaultTasks();
+        this.calendar = this.generateCalendar();
+        this.rewards = this.getDefaultRewards();
+        this.goals = this.getDefaultGoals();
+        this.budget = this.getDefaultBudget();
+        this.meals = this.getDefaultMeals();
+        this.achievements = this.getDefaultAchievements();
+        this.chat = this.getDefaultChat();
+        this.activities = this.getDefaultActivities();
+        this.saveData();
+      },
+      
+      // Default data getters
+      getDefaultMembers() {
+        return [
+          {
+            id: 1,
+            name: 'Andres',
+            role: 'Padre',
+            avatar: 'https://ui-avatars.com/api/?name=Andres&background=10B981&color=fff&bold=true&size=400',
+            points: 350,
+            tasksCompleted: 42,
+            streak: 21,
+            color: '#10B981',
+            email: 'andres@familia.com'
+          },
+          {
+            id: 2,
+            name: 'Magda',
+            role: 'Madre',
+            avatar: 'https://ui-avatars.com/api/?name=Magda&background=8B5CF6&color=fff&bold=true&size=400',
+            points: 420,
+            tasksCompleted: 56,
+            streak: 18,
+            color: '#8B5CF6',
+            email: 'magda@familia.com'
+          },
+          {
+            id: 3,
+            name: 'Juan',
+            role: 'Hijo Mayor',
+            avatar: 'https://ui-avatars.com/api/?name=Juan&background=3B82F6&color=fff&bold=true&size=400',
+            points: 285,
+            tasksCompleted: 38,
+            streak: 14,
+            color: '#3B82F6',
+            email: 'juan@familia.com'
+          },
+          {
+            id: 4,
+            name: 'Ana',
+            role: 'Hija',
+            avatar: 'https://ui-avatars.com/api/?name=Ana&background=EC4899&color=fff&bold=true&size=400',
+            points: 320,
+            tasksCompleted: 45,
+            streak: 25,
+            color: '#EC4899',
+            email: 'ana@familia.com'
+          },
+          {
+            id: 5,
+            name: 'Carlos',
+            role: 'Hijo Menor',
+            avatar: 'https://ui-avatars.com/api/?name=Carlos&background=F59E0B&color=fff&bold=true&size=400',
+            points: 190,
+            tasksCompleted: 28,
+            streak: 7,
+            color: '#F59E0B',
+            email: 'carlos@familia.com'
+          }
+        ];
+      },
+      
+      getDefaultTasks() {
+        return [
+          {
+            id: 1,
+            title: 'Limpiar cocina',
+            description: 'Limpieza completa de cocina, incluyendo electrodomésticos',
+            category: 'limpieza',
+            priority: 'alta',
+            assignedTo: [1, 2],
+            dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            completed: true,
+            points: 25,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 2,
+            title: 'Hacer mercado semanal',
+            description: 'Comprar víveres para la semana',
+            category: 'compras',
+            priority: 'media',
+            assignedTo: [1],
+            dueDate: new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0],
+            completed: false,
+            points: 30,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 3,
+            title: 'Lavar ropa',
+            description: 'Lavar, secar y doblar la ropa',
+            category: 'limpieza',
+            priority: 'media',
+            assignedTo: [2, 4],
+            dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            completed: false,
+            points: 20,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 4,
+            title: 'Limpiar baños',
+            description: 'Limpieza profunda de todos los baños',
+            category: 'limpieza',
+            priority: 'alta',
+            assignedTo: [3],
+            dueDate: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+            completed: true,
+            points: 35,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 5,
+            title: 'Organizar garaje',
+            description: 'Organizar y limpiar el garaje',
+            category: 'organizacion',
+            priority: 'baja',
+            assignedTo: [1, 3, 5],
+            dueDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+            completed: false,
+            points: 50,
+            createdAt: new Date().toISOString()
+          }
+        ];
+      },
+      
+      generateCalendar() {
+        const calendar = [];
+        const today = new Date();
+        const currentMonth = today.getMonth();
+        const currentYear = today.getFullYear();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = new Date(currentYear, currentMonth, day);
+          const dayOfWeek = date.getDay();
+          
+          // Skip weekends for cleaning days
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            // Assign cleaning tasks on weekdays
+            const assignedMember = this.members[(day - 1) % this.members.length];
+            const completed = Math.random() > 0.3; // 70% completed
+            
+            calendar.push({
+              date: date.toISOString().split('T')[0],
+              type: 'limpieza',
+              title: 'Limpieza diaria',
+              assignedTo: assignedMember.id,
+              completed: completed,
+              points: 15
+            });
+          }
+          
+          // Add special events
+          if (day % 7 === 0) {
+            calendar.push({
+              date: date.toISOString().split('T')[0],
+              type: 'reunion',
+              title: 'Reunión familiar',
+              assignedTo: null,
+              completed: true,
+              points: 0
+            });
+          }
+        }
+        
+        return calendar;
+      },
+      
+      getDefaultRewards() {
+        return [
+          {
+            id: 1,
+            name: 'Elegir película',
+            icon: 'fa-solid fa-film',
+            cost: 50,
+            description: 'Derecho a elegir la película familiar del fin de semana',
+            category: 'entretenimiento'
+          },
+          {
+            id: 2,
+            name: 'Postre especial',
+            icon: 'fa-solid fa-ice-cream',
+            cost: 30,
+            description: 'Postre especial de su elección',
+            category: 'comida'
+          },
+          {
+            id: 3,
+            name: 'Noche de juego',
+            icon: 'fa-solid fa-dice',
+            cost: 40,
+            description: 'Elegir el juego de mesa para la noche familiar',
+            category: 'entretenimiento'
+          },
+          {
+            id: 4,
+            name: 'Día libre de tareas',
+            icon: 'fa-solid fa-couch',
+            cost: 60,
+            description: 'Un día libre de todas las tareas domésticas',
+            category: 'privilegios'
+          },
+          {
+            id: 5,
+            name: 'Cena favorita',
+            icon: 'fa-solid fa-utensils',
+            cost: 45,
+            description: 'Preparar su cena favorita',
+            category: 'comida'
+          },
+          {
+            id: 6,
+            name: 'Hora extra de pantalla',
+            icon: 'fa-solid fa-tv',
+            cost: 25,
+            description: 'Una hora extra de tiempo de pantalla',
+            category: 'entretenimiento'
+          }
+        ];
+      },
+      
+      getDefaultGoals() {
+        return [
+          {
+            id: 1,
+            title: 'Limpieza completa de la casa',
+            description: 'Completar todas las tareas de limpieza pendientes',
+            category: 'limpieza',
+            target: 20,
+            current: 15,
+            dueDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
+            points: 100,
+            completed: false
+          },
+          {
+            id: 2,
+            title: 'Organización del garaje',
+            description: 'Organizar completamente el garaje',
+            category: 'organizacion',
+            target: 1,
+            current: 0.7,
+            dueDate: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+            points: 150,
+            completed: false
+          },
+          {
+            id: 3,
+            title: 'Ahorro familiar',
+            description: 'Ahorrar $500 para vacaciones',
+            category: 'finanzas',
+            target: 500,
+            current: 320,
+            dueDate: new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
+            points: 200,
+            completed: false
+          },
+          {
+            id: 4,
+            title: 'Cenas familiares',
+            description: 'Realizar 10 cenas familiares completas',
+            category: 'familia',
+            target: 10,
+            current: 8,
+            dueDate: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+            points: 120,
+            completed: false
+          }
+        ];
+      },
+      
+      getDefaultBudget() {
+        return {
+          total: 4500,
+          categories: [
+            { name: 'Comida', budget: 1200, spent: 980, color: '#10B981' },
+            { name: 'Servicios', budget: 800, spent: 750, color: '#3B82F6' },
+            { name: 'Transporte', budget: 600, spent: 450, color: '#F59E0B' },
+            { name: 'Entretenimiento', budget: 400, spent: 320, color: '#8B5CF6' },
+            { name: 'Ahorros', budget: 1000, spent: 1000, color: '#EC4899' },
+            { name: 'Otros', budget: 500, spent: 310, color: '#6B7280' }
+          ],
+          monthlyGoal: 500
+        };
+      },
+      
+      getDefaultMeals() {
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        return days.map((day, index) => ({
+          id: index + 1,
+          day: day,
+          breakfast: ['Huevos', 'Pan tostado', 'Jugo de naranja'][index % 3],
+          lunch: ['Pollo asado', 'Arroz', 'Ensalada'][index % 3],
+          dinner: ['Sopa', 'Sándwiches', 'Pasta'][index % 3],
+          notes: index === 6 ? 'Cena especial familiar' : ''
+        }));
+      },
+      
+      getDefaultAchievements() {
+        return [
+          { id: 1, name: 'Primera Tarea', icon: 'fa-solid fa-star', description: 'Completar la primera tarea', unlocked: true },
+          { id: 2, name: 'Racha de 7 días', icon: 'fa-solid fa-fire', description: 'Completar tareas por 7 días seguidos', unlocked: true },
+          { id: 3, name: 'Limpiador Experto', icon: 'fa-solid fa-broom', description: 'Completar 50 tareas de limpieza', unlocked: false },
+          { id: 4, name: 'Organizador', icon: 'fa-solid fa-box-archive', description: 'Organizar 10 áreas diferentes', unlocked: false },
+          { id: 5, name: 'Ahorrador', icon: 'fa-solid fa-piggy-bank', description: 'Ahorrar $1000', unlocked: false },
+          { id: 6, name: 'Chef Familiar', icon: 'fa-solid fa-utensils', description: 'Preparar 20 comidas familiares', unlocked: false }
+        ];
+      },
+      
+      getDefaultChat() {
+        return [
+          {
+            id: 1,
+            sender: 1,
+            message: '¿Quién va a hacer las compras hoy?',
+            timestamp: new Date(Date.now() - 3600000).toISOString(),
+            type: 'text'
+          },
+          {
+            id: 2,
+            sender: 2,
+            message: 'Yo puedo ir después del trabajo',
+            timestamp: new Date(Date.now() - 3500000).toISOString(),
+            type: 'text'
+          },
+          {
+            id: 3,
+            sender: 3,
+            message: 'No olviden que mañana tenemos que limpiar el garaje',
+            timestamp: new Date(Date.now() - 3000000).toISOString(),
+            type: 'text'
+          },
+          {
+            id: 4,
+            sender: 4,
+            message: '¡Acabo de completar mi tarea de la semana! 🎉',
+            timestamp: new Date(Date.now() - 1800000).toISOString(),
+            type: 'text'
+          },
+          {
+            id: 5,
+            sender: 5,
+            message: '¿A qué hora es la cena?',
+            timestamp: new Date(Date.now() - 900000).toISOString(),
+            type: 'text'
+          }
+        ];
+      },
+      
+      getDefaultActivities() {
+        return [
+          { id: 1, type: 'task', memberId: 1, text: 'completó "Limpiar cocina"', points: 25, time: 'Hace 15 minutos' },
+          { id: 2, type: 'reward', memberId: 4, text: 'canjeó "Elegir película"', points: -50, time: 'Hace 2 horas' },
+          { id: 3, type: 'goal', memberId: null, text: 'Meta "Ahorro familiar" al 64%', points: 0, time: 'Hoy' },
+          { id: 4, type: 'task', memberId: 2, text: 'asignó "Organizar garaje" a Carlos', points: 0, time: 'Ayer' },
+          { id: 5, type: 'achievement', memberId: 3, text: 'desbloqueó "Racha de 7 días"', points: 100, time: 'Ayer' }
+        ];
+      },
+      
+      // Setup event listeners
+      setupEventListeners() {
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showSection(item.dataset.section);
+          });
+        });
+        
+        // Theme toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+          this.toggleTheme();
+        });
+        
+        // New verse button
+        document.getElementById('new-verse-btn').addEventListener('click', () => {
+          this.showRandomVerse();
+        });
+        
+        // Spiritual tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.switchTab(btn.dataset.tab);
+          });
+        });
+        
+        // Settings button
+        document.getElementById('settings-btn').addEventListener('click', () => {
+          this.showToast('Ajustes', 'Panel de ajustes (en desarrollo)', 'info');
+        });
+        
+        // Notifications button
+        document.getElementById('notifications-btn').addEventListener('click', () => {
+          this.showToast('Notificaciones', 'Tienes 3 notificaciones nuevas', 'info');
+        });
+      },
+      
+      // Show section
+      showSection(sectionId) {
+        // Update navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+          if (item.dataset.section === sectionId) {
+            item.classList.add('active');
+          }
+        });
+        
+        // Update content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+          if (section.id === sectionId) {
+            section.classList.add('active');
+            this.loadSectionContent(sectionId);
+          }
+        });
+        
+        // Update page title
+        const sectionTitle = document.querySelector(`[data-section="${sectionId}"] span`).textContent;
+        document.title = `Familia Bendecida - ${sectionTitle}`;
+      },
+      
+      // Load section content
+      loadSectionContent(sectionId) {
+        switch(sectionId) {
+          case 'dashboard':
+            this.renderDashboard();
+            break;
+          case 'calendar':
+            this.renderCalendar();
+            break;
+          case 'tasks':
+            this.renderTasks();
+            break;
+          case 'family':
+            this.renderFamily();
+            break;
+          case 'goals':
+            this.renderGoals();
+            break;
+          case 'gallery':
+            this.renderGallery();
+            break;
+          case 'rewards':
+            this.renderRewards();
+            break;
+          case 'budget':
+            this.renderBudget();
+            break;
+          case 'meals':
+            this.renderMeals();
+            break;
+          case 'chat':
+            this.renderChat();
+            break;
+          case 'achievements':
+            this.renderAchievements();
+            break;
+        }
+      },
+      
+      // Toggle theme
+      toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('fam_theme', newTheme);
+        
+        // Update icon
+        const icon = document.querySelector('#theme-toggle i');
+        icon.className = newTheme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        
+        this.showToast('Tema cambiado', `Modo ${newTheme === 'light' ? 'claro' : 'oscuro'} activado`, 'success');
+      },
+      
+      // Show random verse
+      showRandomVerse() {
+        const randomVerse = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+        document.getElementById('daily-verse').textContent = randomVerse.text;
+        document.getElementById('verse-reference').textContent = randomVerse.reference;
+        this.showToast('Versículo del día', 'Nuevo versículo cargado', 'info');
+      },
+      
+      // Switch tab in spiritual section
+      switchTab(tabId) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.tab === tabId) {
+            btn.classList.add('active');
+          }
+        });
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.style.display = 'none';
+        });
+        
+        const tabContent = document.getElementById(`${tabId}-tab`);
+        if (tabContent) {
+          tabContent.style.display = 'block';
+        }
+      },
+      
+      // Update UI elements
+      updateUI() {
+        // Update current date
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('es-ES', options);
+        const weekNumber = this.getWeekNumber(now);
+        
+        document.getElementById('current-date').textContent = dateStr;
+        document.getElementById('current-date-header').textContent = dateStr;
+        document.getElementById('current-week').textContent = `Semana ${weekNumber}`;
+        
+        // Update welcome verse
+        this.showRandomVerse();
+        
+        // Update stats
+        this.updateStats();
+      },
+      
+      // Update statistics
+      updateStats() {
+        const totalTasks = this.tasks.length;
+        const completedTasks = this.tasks.filter(t => t.completed).length;
+        const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        
+        // Calculate family points
+        const familyPoints = this.members.reduce((sum, member) => sum + member.points, 0);
+        
+        // Calculate streak (longest streak among members)
+        const longestStreak = Math.max(...this.members.map(m => m.streak));
+        
+        // Calculate goals progress
+        const totalGoals = this.goals.length;
+        const completedGoals = this.goals.filter(g => g.completed).length;
+        const goalsProgress = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+        
+        // Update sidebar stats
+        document.getElementById('sidebar-tasks').textContent = totalTasks;
+        document.getElementById('sidebar-points').textContent = familyPoints.toLocaleString();
+        document.getElementById('sidebar-streak').textContent = longestStreak;
+        document.getElementById('sidebar-goals').textContent = `${completedGoals}/${totalGoals}`;
+        
+        // Update welcome stats
+        document.getElementById('welcome-tasks').textContent = totalTasks;
+        document.getElementById('welcome-streak').textContent = longestStreak;
+        document.getElementById('welcome-points').textContent = familyPoints.toLocaleString();
+        document.getElementById('welcome-goals').textContent = `${goalsProgress}%`;
+        
+        // Update progress rings
+        this.updateProgressRings(completionRate);
+      },
+      
+      updateProgressRings(rate) {
+        // Update cleaning progress
+        const cleaningTasks = this.tasks.filter(t => t.category === 'limpieza');
+        const completedCleaning = cleaningTasks.filter(t => t.completed).length;
+        const cleaningRate = cleaningTasks.length > 0 ? Math.round((completedCleaning / cleaningTasks.length) * 100) : 0;
+        document.getElementById('stat-cleaning').textContent = `${cleaningRate}%`;
+        
+        // Update participation
+        const membersWithTasks = this.members.filter(m => 
+          this.tasks.some(t => t.assignedTo.includes(m.id))
+        ).length;
+        const participationRate = Math.round((membersWithTasks / this.members.length) * 100);
+        document.getElementById('stat-participation').textContent = `${participationRate}%`;
+        
+        // Update on-time completion
+        const today = new Date().toISOString().split('T')[0];
+        const overdueTasks = this.tasks.filter(t => 
+          !t.completed && t.dueDate < today
+        ).length;
+        const onTimeRate = totalTasks > 0 ? Math.round(((totalTasks - overdueTasks) / totalTasks) * 100) : 0;
+        document.getElementById('stat-on-time').textContent = `${onTimeRate}%`;
+      },
+      
+      getWeekNumber(d) {
+        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        return weekNo;
+      },
+      
+      // Toast notification system
+      showToast(title, message, type = 'info') {
+        const toastContainer = document.getElementById('toast-container');
+        const toastId = 'toast-' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        const icons = {
+          success: 'fa-circle-check',
+          error: 'fa-circle-exclamation',
+          warning: 'fa-triangle-exclamation',
+          info: 'fa-circle-info'
+        };
+        
+        toast.innerHTML = `
+          <i class="fa-solid ${icons[type] || 'fa-circle-info'} toast-icon"></i>
+          <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+          </div>
+          <button class="toast-close" onclick="document.getElementById('${toastId}').remove()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (document.getElementById(toastId)) {
+            document.getElementById(toastId).remove();
+          }
+        }, 5000);
+      },
+      
+      // Modal system
+      showModal(title, content, buttons = []) {
+        const modalId = 'modal-' + Date.now();
+        const modalHTML = `
+          <div class="modal-overlay" id="${modalId}">
+            <div class="modal">
+              <div class="modal-header">
+                <div class="modal-title">${title}</div>
+                <button class="modal-close" onclick="document.getElementById('${modalId}').remove()">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              ${content}
+              ${buttons.length > 0 ? `
+                <div class="form-actions">
+                  ${buttons.map(btn => `
+                    <button class="btn ${btn.type || ''}" onclick="${btn.onclick}">
+                      ${btn.icon ? `<i class="${btn.icon}"></i>` : ''}
+                      ${btn.text}
+                    </button>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+      },
+      
+      // Section rendering methods
+      
+      // Dashboard
+      renderDashboard() {
+        this.renderActivities();
+      },
+      
+      renderActivities() {
+        const activityList = document.getElementById('activity-list');
+        if (!activityList) return;
+        
+        activityList.innerHTML = this.activities.map(activity => {
+          const member = this.members.find(m => m.id === activity.memberId);
+          const iconColors = {
+            task: 'var(--primary)',
+            reward: 'var(--accent)',
+            goal: 'var(--info)',
+            achievement: 'var(--purple)'
+          };
+          
+          const icons = {
+            task: 'fa-check',
+            reward: 'fa-gift',
+            goal: 'fa-bullseye',
+            achievement: 'fa-trophy'
+          };
+          
+          return `
+            <div class="activity-item">
+              <div class="activity-icon" style="background: ${iconColors[activity.type] || 'var(--primary)'};">
+                <i class="fa-solid ${icons[activity.type] || 'fa-check'}"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">
+                  ${member ? `<strong>${member.name}</strong> ` : ''}
+                  ${activity.text}
+                  ${activity.points > 0 ? `<span style="color: var(--success);">+${activity.points} pts</span>` : ''}
+                  ${activity.points < 0 ? `<span style="color: var(--danger);">${activity.points} pts</span>` : ''}
+                </div>
+                <div class="activity-time">${activity.time}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+      
+      refreshActivities() {
+        // Add a new activity
+        const newActivity = {
+          id: this.activities.length + 1,
+          type: 'task',
+          memberId: 2,
+          text: 'actualizó la lista de tareas',
+          points: 0,
+          time: 'Ahora mismo'
+        };
+        
+        this.activities.unshift(newActivity);
+        if (this.activities.length > 5) {
+          this.activities.pop();
+        }
+        
+        this.saveData();
+        this.renderActivities();
+        this.showToast('Actividades', 'Lista de actividades actualizada', 'success');
+      },
+      
+      // Calendar
+      renderCalendar() {
+        const section = document.getElementById('calendar');
+        if (!section) return;
+        
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const currentMonthName = monthNames[this.currentMonth];
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-calendar-days section-title-icon"></i>
+              <span>Calendario Familiar</span>
+            </div>
+            <div class="calendar-nav">
+              <button class="btn-icon" onclick="FamilyManager.prevMonth()">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <h3 style="margin: 0 16px; font-size: 1.5rem;">${currentMonthName} ${this.currentYear}</h3>
+              <button class="btn-icon" onclick="FamilyManager.nextMonth()">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+              <button class="btn primary" onclick="FamilyManager.showAddEventModal()">
+                <i class="fa-solid fa-plus"></i>
+                Nuevo Evento
+              </button>
+            </div>
+          </div>
+          
+          <div class="calendar-container">
+            <div class="card">
+              <div class="calendar-grid" id="calendar-grid">
+                ${this.generateCalendarGrid()}
+              </div>
+            </div>
+            
+            <div class="card">
+              <h3 style="margin-bottom: 24px;">Eventos de esta semana</h3>
+              <div id="weekly-events">
+                ${this.generateWeeklyEvents()}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      generateCalendarGrid() {
+        const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+        const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDay = firstDay.getDay();
+        
+        const weekdays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        let html = '';
+        
+        // Add weekday headers
+        weekdays.forEach(day => {
+          html += `<div style="font-weight: 600; color: var(--text-light); padding: 8px; text-align: center;">${day}</div>`;
+        });
+        
+        // Add empty cells for days before the first day
+        for (let i = 0; i < startingDay; i++) {
+          html += '<div class="calendar-day" style="visibility: hidden;"></div>';
+        }
+        
+        // Add days of the month
+        const today = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = new Date(this.currentYear, this.currentMonth, day);
+          const dateStr = date.toISOString().split('T')[0];
+          const isToday = date.getDate() === today.getDate() && 
+                         date.getMonth() === today.getMonth() && 
+                         date.getFullYear() === today.getFullYear();
+          
+          const dayEvents = this.calendar.filter(event => 
+            new Date(event.date).toISOString().split('T')[0] === dateStr
+          );
+          
+          const hasCleaning = dayEvents.some(e => e.type === 'limpieza');
+          const isCompleted = dayEvents.some(e => e.type === 'limpieza' && e.completed);
+          
+          let className = 'calendar-day';
+          if (isToday) className += ' today';
+          if (hasCleaning) className += ' cleaning';
+          if (isCompleted) className += ' completed';
+          
+          html += `
+            <div class="${className}" onclick="FamilyManager.showDayDetails('${dateStr}')">
+              <div class="day-number">${day}</div>
+              ${hasCleaning ? '<div style="font-size: 10px; opacity: 0.8;">🧹</div>' : ''}
+              ${isCompleted ? '<div style="font-size: 10px; color: var(--success);">✓</div>' : ''}
+            </div>
+          `;
+        }
+        
+        return html;
+      },
+      
+      generateWeeklyEvents() {
+        const today = new Date();
+        const weekEvents = [];
+        
+        for (let i = 0; i < 7; i++) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + i);
+          const dateStr = date.toISOString().split('T')[0];
+          
+          const dayEvents = this.calendar.filter(event => 
+            new Date(event.date).toISOString().split('T')[0] === dateStr
+          );
+          
+          if (dayEvents.length > 0) {
+            const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
+            const dayNumber = date.getDate();
+            
+            dayEvents.forEach(event => {
+              const member = this.members.find(m => m.id === event.assignedTo);
+              weekEvents.push(`
+                <div style="padding: 12px; border-bottom: 1px solid var(--border);">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span style="font-weight: 600;">${dayName} ${dayNumber}</span>
+                    <span style="font-size: 12px; color: var(--text-light);">${event.type === 'limpieza' ? '🧹' : '👥'}</span>
+                  </div>
+                  <div style="font-size: 14px;">${event.title}</div>
+                  ${member ? `<div style="font-size: 12px; color: var(--text-light);">${member.name}</div>` : ''}
+                </div>
+              `);
+            });
+          }
+        }
+        
+        return weekEvents.length > 0 ? weekEvents.join('') : `
+          <div class="empty-state" style="padding: 20px;">
+            <i class="fa-solid fa-calendar-plus empty-state-icon"></i>
+            <div class="empty-state-title">No hay eventos esta semana</div>
+            <div class="empty-state-description">Agrega nuevos eventos para organizar mejor tu semana</div>
+            <button class="btn primary" onclick="FamilyManager.showAddEventModal()">
+              <i class="fa-solid fa-plus"></i>
+              Agregar Evento
+            </button>
+          </div>
+        `;
+      },
+      
+      prevMonth() {
+        this.currentMonth--;
+        if (this.currentMonth < 0) {
+          this.currentMonth = 11;
+          this.currentYear--;
+        }
+        this.renderCalendar();
+      },
+      
+      nextMonth() {
+        this.currentMonth++;
+        if (this.currentMonth > 11) {
+          this.currentMonth = 0;
+          this.currentYear++;
+        }
+        this.renderCalendar();
+      },
+      
+      showDayDetails(dateStr) {
+        const date = new Date(dateStr);
+        const formattedDate = date.toLocaleDateString('es-ES', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        
+        const dayEvents = this.calendar.filter(event => 
+          new Date(event.date).toISOString().split('T')[0] === dateStr
+        );
+        
+        let content = `
+          <p style="margin-bottom: 20px; color: var(--text-light);">${formattedDate}</p>
+        `;
+        
+        if (dayEvents.length > 0) {
+          content += dayEvents.map(event => {
+            const member = this.members.find(m => m.id === event.assignedTo);
+            return `
+              <div style="background: var(--bg-soft); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                  <div style="font-weight: 600;">${event.title}</div>
+                  <div style="font-size: 20px;">${event.type === 'limpieza' ? '🧹' : '👥'}</div>
+                </div>
+                ${member ? `<div style="color: var(--text-light); margin-bottom: 8px;">Asignado a: ${member.name}</div>` : ''}
+                <div style="color: var(--text-light); margin-bottom: 8px;">${event.completed ? '✅ Completado' : '⏳ Pendiente'}</div>
+                ${event.points ? `<div style="color: var(--primary); font-weight: 600;">${event.points} puntos</div>` : ''}
+              </div>
+            `;
+          }).join('');
+        } else {
+          content += `
+            <div class="empty-state" style="padding: 20px;">
+              <i class="fa-solid fa-calendar-day empty-state-icon"></i>
+              <div class="empty-state-title">No hay eventos programados</div>
+              <div class="empty-state-description">Este día no tiene eventos programados</div>
+            </div>
+          `;
+        }
+        
+        this.showModal('Detalles del Día', content, [
+          {
+            text: 'Agregar Evento',
+            icon: 'fa-solid fa-plus',
+            type: 'primary',
+            onclick: `FamilyManager.showAddEventModal('${dateStr}')`
+          },
+          {
+            text: 'Cerrar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      showAddEventModal(dateStr = null) {
+        const defaultDate = dateStr || new Date().toISOString().split('T')[0];
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Título del evento</label>
+            <input type="text" class="form-input" id="event-title" placeholder="Ej: Limpieza general">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="event-date" value="${defaultDate}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo de evento</label>
+            <select class="form-input" id="event-type">
+              <option value="limpieza">Limpieza</option>
+              <option value="reunion">Reunión familiar</option>
+              <option value="cumpleaños">Cumpleaños</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Asignar a</label>
+            <select class="form-input" id="event-assigned">
+              <option value="">Ninguno (todos)</option>
+              ${this.members.map(member => `
+                <option value="${member.id}">${member.name}</option>
+              `).join('')}
+            </select>
+          </div>
+        `;
+        
+        this.showModal('Agregar Evento', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveEvent()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveEvent() {
+        const title = document.getElementById('event-title').value;
+        const date = document.getElementById('event-date').value;
+        const type = document.getElementById('event-type').value;
+        const assignedTo = document.getElementById('event-assigned').value;
+        
+        if (!title || !date) {
+          this.showToast('Error', 'Por favor completa todos los campos', 'error');
+          return;
+        }
+        
+        const newEvent = {
+          id: this.calendar.length + 1,
+          title: title,
+          date: date,
+          type: type,
+          assignedTo: assignedTo ? parseInt(assignedTo) : null,
+          completed: false,
+          points: type === 'limpieza' ? 15 : 0
+        };
+        
+        this.calendar.push(newEvent);
+        this.saveData();
+        
+        document.querySelector('.modal-overlay').remove();
+        this.renderCalendar();
+        this.showToast('Éxito', 'Evento agregado correctamente', 'success');
+      },
+      
+      // Tasks
+      renderTasks() {
+        const section = document.getElementById('tasks');
+        if (!section) return;
+        
+        const pendingTasks = this.tasks.filter(t => !t.completed);
+        const completedTasks = this.tasks.filter(t => t.completed);
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-list-check section-title-icon"></i>
+              <span>Gestión de Tareas</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showAddTaskModal()">
+                <i class="fa-solid fa-plus"></i>
+                Nueva Tarea
+              </button>
+            </div>
+          </div>
+          
+          <div class="tasks-container">
+            <div class="card">
+              <div class="task-filters">
+                <input type="text" class="form-input" id="task-search" placeholder="Buscar tareas..." 
+                       oninput="FamilyManager.filterTasks()" style="flex: 1;">
+                <select class="form-input" id="task-category" onchange="FamilyManager.filterTasks()" style="min-width: 120px;">
+                  <option value="">Todas las categorías</option>
+                  <option value="limpieza">Limpieza</option>
+                  <option value="compras">Compras</option>
+                  <option value="organizacion">Organización</option>
+                  <option value="cocina">Cocina</option>
+                </select>
+                <select class="form-input" id="task-status" onchange="FamilyManager.filterTasks()" style="min-width: 120px;">
+                  <option value="pending">Pendientes</option>
+                  <option value="completed">Completadas</option>
+                  <option value="all">Todas</option>
+                </select>
+              </div>
+              
+              <div class="task-list" id="task-list">
+                ${this.renderTaskList(pendingTasks)}
+              </div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Estadísticas</h3>
+              </div>
+              <div style="margin-top: 16px;">
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                  <span>Tareas totales:</span>
+                  <span style="font-weight: 600;">${this.tasks.length}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                  <span>Completadas:</span>
+                  <span style="color: var(--success); font-weight: 600;">${completedTasks.length}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                  <span>Pendientes:</span>
+                  <span style="color: var(--warning); font-weight: 600;">${pendingTasks.length}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+                  <span>Puntos totales:</span>
+                  <span style="color: var(--primary); font-weight: 600;">${this.tasks.reduce((sum, task) => sum + (task.completed ? task.points : 0), 0)}</span>
+                </div>
+              </div>
+              
+              <div style="margin-top: 32px;">
+                <h4 style="margin-bottom: 16px;">Por miembro</h4>
+                ${this.members.map(member => {
+                  const memberTasks = this.tasks.filter(t => t.assignedTo.includes(member.id));
+                  const completed = memberTasks.filter(t => t.completed).length;
+                  return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <img src="${member.avatar}" alt="${member.name}" style="width: 24px; height: 24px; border-radius: 50%;">
+                        <span>${member.name}</span>
+                      </div>
+                      <span>${completed}/${memberTasks.length}</span>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      renderTaskList(tasks) {
+        if (tasks.length === 0) {
+          return `
+            <div class="empty-state" style="padding: 40px 20px;">
+              <i class="fa-solid fa-clipboard-check empty-state-icon"></i>
+              <div class="empty-state-title">No hay tareas</div>
+              <div class="empty-state-description">¡Agrega nuevas tareas para mantener la casa organizada!</div>
+              <button class="btn primary mt-3" onclick="FamilyManager.showAddTaskModal()">
+                <i class="fa-solid fa-plus"></i>
+                Agregar Tarea
+              </button>
+            </div>
+          `;
+        }
+        
+        return tasks.map(task => {
+          const dueDate = new Date(task.dueDate);
+          const today = new Date();
+          const isOverdue = dueDate < today && !task.completed;
+          const assignedMembers = this.members.filter(m => task.assignedTo.includes(m.id));
+          
+          return `
+            <div class="task-item" data-task-id="${task.id}">
+              <div class="task-checkbox ${task.completed ? 'checked' : ''}" 
+                   onclick="FamilyManager.toggleTask(${task.id})">
+                ${task.completed ? '<i class="fa-solid fa-check"></i>' : ''}
+              </div>
+              <div class="task-content">
+                <div class="task-title">${task.title}</div>
+                <div class="task-meta">
+                  <span><i class="fa-solid fa-tag"></i> ${task.category}</span>
+                  <span style="color: ${isOverdue ? 'var(--danger)' : 'var(--text-light)'}">
+                    <i class="fa-solid fa-calendar"></i> ${dueDate.toLocaleDateString('es-ES')}
+                  </span>
+                  <span><i class="fa-solid fa-star"></i> ${task.points} pts</span>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                  ${assignedMembers.map(member => `
+                    <span style="background: ${member.color}20; color: ${member.color}; 
+                          padding: 2px 8px; border-radius: 12px; font-size: 12px;">
+                      ${member.name}
+                    </span>
+                  `).join('')}
+                </div>
+                ${task.description ? `<div style="margin-top: 8px; color: var(--text-light); font-size: 14px;">${task.description}</div>` : ''}
+              </div>
+              <div class="task-actions">
+                <button class="btn-icon" onclick="FamilyManager.editTask(${task.id})" title="Editar">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="btn-icon" onclick="FamilyManager.deleteTask(${task.id})" title="Eliminar">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+      
+      filterTasks() {
+        const searchTerm = document.getElementById('task-search')?.value.toLowerCase() || '';
+        const category = document.getElementById('task-category')?.value || '';
+        const status = document.getElementById('task-status')?.value || 'pending';
+        
+        let filteredTasks = this.tasks;
+        
+        // Filter by search term
+        if (searchTerm) {
+          filteredTasks = filteredTasks.filter(task => 
+            task.title.toLowerCase().includes(searchTerm) || 
+            task.description?.toLowerCase().includes(searchTerm)
+          );
+        }
+        
+        // Filter by category
+        if (category) {
+          filteredTasks = filteredTasks.filter(task => task.category === category);
+        }
+        
+        // Filter by status
+        if (status === 'pending') {
+          filteredTasks = filteredTasks.filter(task => !task.completed);
+        } else if (status === 'completed') {
+          filteredTasks = filteredTasks.filter(task => task.completed);
+        }
+        // 'all' shows all tasks
+        
+        const taskList = document.getElementById('task-list');
+        if (taskList) {
+          taskList.innerHTML = this.renderTaskList(filteredTasks);
+        }
+      },
+      
+      toggleTask(taskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (!task) return;
+        
+        task.completed = !task.completed;
+        
+        // Award points to assigned members if completed
+        if (task.completed) {
+          task.assignedTo.forEach(memberId => {
+            const member = this.members.find(m => m.id === memberId);
+            if (member) {
+              member.points += task.points;
+              member.tasksCompleted += 1;
+              member.streak += 1;
+            }
+          });
+          
+          // Add activity
+          const assignedMembers = this.members.filter(m => task.assignedTo.includes(m.id));
+          const memberNames = assignedMembers.map(m => m.name).join(', ');
+          
+          this.activities.unshift({
+            id: this.activities.length + 1,
+            type: 'task',
+            memberId: assignedMembers[0]?.id,
+            text: `completó "${task.title}"`,
+            points: task.points,
+            time: 'Ahora mismo'
+          });
+          
+          if (this.activities.length > 10) {
+            this.activities.pop();
+          }
+        } else {
+          // Remove points if unmarked
+          task.assignedTo.forEach(memberId => {
+            const member = this.members.find(m => m.id === memberId);
+            if (member) {
+              member.points = Math.max(0, member.points - task.points);
+              member.tasksCompleted = Math.max(0, member.tasksCompleted - 1);
+              member.streak = Math.max(0, member.streak - 1);
+            }
+          });
+        }
+        
+        this.saveData();
+        this.updateUI();
+        this.renderTasks();
+        this.showToast('Tarea actualizada', task.completed ? '¡Tarea completada!' : 'Tarea marcada como pendiente', 'success');
+      },
+      
+      showAddTaskModal() {
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Título de la tarea</label>
+            <input type="text" class="form-input" id="task-title" placeholder="Ej: Limpiar la cocina">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-input" id="task-description" rows="3" placeholder="Descripción detallada de la tarea"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="task-category-modal">
+              <option value="limpieza">Limpieza</option>
+              <option value="compras">Compras</option>
+              <option value="organizacion">Organización</option>
+              <option value="cocina">Cocina</option>
+              <option value="otros">Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Asignar a</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+              ${this.members.map(member => `
+                <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="checkbox" value="${member.id}" class="task-assignee">
+                  <img src="${member.avatar}" alt="${member.name}" style="width: 24px; height: 24px; border-radius: 50%;">
+                  <span>${member.name}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha límite</label>
+            <input type="date" class="form-input" id="task-due" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Puntos</label>
+            <input type="number" class="form-input" id="task-points" value="10" min="1" max="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioridad</label>
+            <select class="form-input" id="task-priority">
+              <option value="baja">Baja</option>
+              <option value="media" selected>Media</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+        `;
+        
+        this.showModal('Nueva Tarea', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveTask()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveTask() {
+        const title = document.getElementById('task-title').value;
+        const description = document.getElementById('task-description').value;
+        const category = document.getElementById('task-category-modal').value;
+        const dueDate = document.getElementById('task-due').value;
+        const points = parseInt(document.getElementById('task-points').value) || 10;
+        const priority = document.getElementById('task-priority').value;
+        
+        const assigneeCheckboxes = document.querySelectorAll('.task-assignee:checked');
+        const assignedTo = Array.from(assigneeCheckboxes).map(cb => parseInt(cb.value));
+        
+        if (!title || !dueDate || assignedTo.length === 0) {
+          this.showToast('Error', 'Por favor completa los campos obligatorios', 'error');
+          return;
+        }
+        
+        const newTask = {
+          id: this.tasks.length > 0 ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1,
+          title: title,
+          description: description,
+          category: category,
+          priority: priority,
+          assignedTo: assignedTo,
+          dueDate: dueDate,
+          completed: false,
+          points: points,
+          createdAt: new Date().toISOString()
+        };
+        
+        this.tasks.push(newTask);
+        this.saveData();
+        
+        document.querySelector('.modal-overlay').remove();
+        this.renderTasks();
+        this.showToast('Éxito', 'Tarea creada correctamente', 'success');
+      },
+      
+      editTask(taskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (!task) return;
+        
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Título de la tarea</label>
+            <input type="text" class="form-input" id="edit-task-title" value="${task.title}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-input" id="edit-task-description" rows="3">${task.description || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="edit-task-category">
+              <option value="limpieza" ${task.category === 'limpieza' ? 'selected' : ''}>Limpieza</option>
+              <option value="compras" ${task.category === 'compras' ? 'selected' : ''}>Compras</option>
+              <option value="organizacion" ${task.category === 'organizacion' ? 'selected' : ''}>Organización</option>
+              <option value="cocina" ${task.category === 'cocina' ? 'selected' : ''}>Cocina</option>
+              <option value="otros" ${task.category === 'otros' ? 'selected' : ''}>Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Asignar a</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+              ${this.members.map(member => `
+                <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="checkbox" value="${member.id}" class="edit-task-assignee" 
+                         ${task.assignedTo.includes(member.id) ? 'checked' : ''}>
+                  <img src="${member.avatar}" alt="${member.name}" style="width: 24px; height: 24px; border-radius: 50%;">
+                  <span>${member.name}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha límite</label>
+            <input type="date" class="form-input" id="edit-task-due" value="${task.dueDate}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Puntos</label>
+            <input type="number" class="form-input" id="edit-task-points" value="${task.points}" min="1" max="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estado</label>
+            <select class="form-input" id="edit-task-completed">
+              <option value="false" ${!task.completed ? 'selected' : ''}>Pendiente</option>
+              <option value="true" ${task.completed ? 'selected' : ''}>Completada</option>
+            </select>
+          </div>
+        `;
+        
+        this.showModal('Editar Tarea', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.updateTask(${taskId})`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      updateTask(taskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (!task) return;
+        
+        const oldCompleted = task.completed;
+        
+        task.title = document.getElementById('edit-task-title').value;
+        task.description = document.getElementById('edit-task-description').value;
+        task.category = document.getElementById('edit-task-category').value;
+        task.dueDate = document.getElementById('edit-task-due').value;
+        task.points = parseInt(document.getElementById('edit-task-points').value) || 10;
+        task.completed = document.getElementById('edit-task-completed').value === 'true';
+        
+        const assigneeCheckboxes = document.querySelectorAll('.edit-task-assignee:checked');
+        task.assignedTo = Array.from(assigneeCheckboxes).map(cb => parseInt(cb.value));
+        
+        // Handle point adjustments if completion status changed
+        if (oldCompleted !== task.completed) {
+          if (task.completed) {
+            // Award points
+            task.assignedTo.forEach(memberId => {
+              const member = this.members.find(m => m.id === memberId);
+              if (member) {
+                member.points += task.points;
+                member.tasksCompleted += 1;
+              }
+            });
+          } else {
+            // Remove points
+            task.assignedTo.forEach(memberId => {
+              const member = this.members.find(m => m.id === memberId);
+              if (member) {
+                member.points = Math.max(0, member.points - task.points);
+                member.tasksCompleted = Math.max(0, member.tasksCompleted - 1);
+              }
+            });
+          }
+        }
+        
+        this.saveData();
+        document.querySelector('.modal-overlay').remove();
+        this.renderTasks();
+        this.showToast('Éxito', 'Tarea actualizada correctamente', 'success');
+      },
+      
+      deleteTask(taskId) {
+        if (!confirm('¿Estás seguro de que quieres eliminar esta tarea?')) return;
+        
+        const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) return;
+        
+        const task = this.tasks[taskIndex];
+        
+        // Remove points if task was completed
+        if (task.completed) {
+          task.assignedTo.forEach(memberId => {
+            const member = this.members.find(m => m.id === memberId);
+            if (member) {
+              member.points = Math.max(0, member.points - task.points);
+              member.tasksCompleted = Math.max(0, member.tasksCompleted - 1);
+            }
+          });
+        }
+        
+        this.tasks.splice(taskIndex, 1);
+        this.saveData();
+        this.renderTasks();
+        this.showToast('Tarea eliminada', 'La tarea ha sido eliminada', 'info');
+      },
+      
+      // Family Members
+      renderFamily() {
+        const section = document.getElementById('family');
+        if (!section) return;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-users section-title-icon"></i>
+              <span>Miembros de la Familia</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showAddMemberModal()">
+                <i class="fa-solid fa-user-plus"></i>
+                Agregar Miembro
+              </button>
+            </div>
+          </div>
+          
+          <div class="family-grid" id="family-grid">
+            ${this.members.map(member => this.renderFamilyMemberCard(member)).join('')}
+          </div>
+        `;
+      },
+      
+      renderFamilyMemberCard(member) {
+        const assignedTasks = this.tasks.filter(t => t.assignedTo.includes(member.id));
+        const completedTasks = assignedTasks.filter(t => t.completed).length;
+        
+        return `
+          <div class="family-member">
+            <div class="member-header" style="background: linear-gradient(135deg, ${member.color}, ${member.color}dd)">
+              <img src="${member.avatar}" alt="${member.name}" class="member-avatar">
+              <div class="member-name">${member.name}</div>
+              <div class="member-role">${member.role}</div>
+            </div>
+            <div class="member-stats">
+              <div class="member-stat">
+                <div class="member-stat-value">${member.points}</div>
+                <div class="member-stat-label">Puntos</div>
+              </div>
+              <div class="member-stat">
+                <div class="member-stat-value">${completedTasks}</div>
+                <div class="member-stat-label">Tareas</div>
+              </div>
+              <div class="member-stat">
+                <div class="member-stat-value">${member.streak}</div>
+                <div class="member-stat-label">Días</div>
+              </div>
+            </div>
+            <div class="member-actions">
+              <button class="btn" onclick="FamilyManager.showMemberDetails(${member.id})">
+                <i class="fa-solid fa-eye"></i> Ver
+              </button>
+              <button class="btn" onclick="FamilyManager.editMember(${member.id})">
+                <i class="fa-solid fa-pen"></i> Editar
+              </button>
+            </div>
+          </div>
+        `;
+      },
+      
+      showMemberDetails(memberId) {
+        const member = this.members.find(m => m.id === memberId);
+        if (!member) return;
+        
+        const assignedTasks = this.tasks.filter(t => t.assignedTo.includes(member.id));
+        const completedTasks = assignedTasks.filter(t => t.completed);
+        const pendingTasks = assignedTasks.filter(t => !t.completed);
+        
+        const content = `
+          <div style="text-align: center; margin-bottom: 24px;">
+            <img src="${member.avatar}" alt="${member.name}" 
+                 style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid ${member.color}; margin-bottom: 16px;">
+            <h3 style="margin-bottom: 8px;">${member.name}</h3>
+            <p style="color: var(--text-light); margin-bottom: 24px;">${member.role}</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div style="background: var(--bg-soft); padding: 16px; border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--primary);">${member.points}</div>
+              <div style="font-size: 14px; color: var(--text-light);">Puntos</div>
+            </div>
+            <div style="background: var(--bg-soft); padding: 16px; border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--accent);">${member.streak}</div>
+              <div style="font-size: 14px; color: var(--text-light);">Días de racha</div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 24px;">
+            <h4 style="margin-bottom: 16px;">Estadísticas de tareas</h4>
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+              <span>Tareas asignadas:</span>
+              <span>${assignedTasks.length}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+              <span>Tareas completadas:</span>
+              <span style="color: var(--success);">${completedTasks.length}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+              <span>Tareas pendientes:</span>
+              <span style="color: var(--warning);">${pendingTasks.length}</span>
+            </div>
+          </div>
+          
+          ${pendingTasks.length > 0 ? `
+            <div style="margin-bottom: 24px;">
+              <h4 style="margin-bottom: 16px;">Tareas pendientes</h4>
+              ${pendingTasks.map(task => `
+                <div style="background: var(--bg-soft); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px;">
+                  <div style="font-weight: 600; margin-bottom: 4px;">${task.title}</div>
+                  <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--text-light);">
+                    <span>Vence: ${new Date(task.dueDate).toLocaleDateString('es-ES')}</span>
+                    <span>${task.points} pts</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        `;
+        
+        this.showModal(`Detalles de ${member.name}`, content, [
+          {
+            text: 'Cerrar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      showAddMemberModal() {
+        const colors = ['#10B981', '#8B5CF6', '#3B82F6', '#EC4899', '#F59E0B', '#EF4444', '#6B7280'];
+        const roles = ['Padre', 'Madre', 'Hijo', 'Hija', 'Abuelo', 'Abuela', 'Otro'];
+        
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-input" id="member-name" placeholder="Nombre del miembro">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rol en la familia</label>
+            <select class="form-input" id="member-role">
+              ${roles.map(role => `<option value="${role}">${role}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color asignado</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+              ${colors.map(color => `
+                <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="radio" name="member-color" value="${color}" ${color === '#10B981' ? 'checked' : ''}>
+                  <div style="width: 24px; height: 24px; border-radius: 50%; background: ${color}; border: 2px solid var(--border);"></div>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (opcional)</label>
+            <input type="email" class="form-input" id="member-email" placeholder="email@ejemplo.com">
+          </div>
+        `;
+        
+        this.showModal('Agregar Miembro', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveMember()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveMember() {
+        const name = document.getElementById('member-name').value;
+        const role = document.getElementById('member-role').value;
+        const color = document.querySelector('input[name="member-color"]:checked')?.value || '#10B981';
+        const email = document.getElementById('member-email').value;
+        
+        if (!name || !role) {
+          this.showToast('Error', 'Por favor completa los campos obligatorios', 'error');
+          return;
+        }
+        
+        // Generate avatar URL
+        const avatarName = name.replace(/\s+/g, '+');
+        const avatarColor = color.replace('#', '');
+        const avatar = `https://ui-avatars.com/api/?name=${avatarName}&background=${avatarColor}&color=fff&bold=true&size=400`;
+        
+        const newMember = {
+          id: this.members.length > 0 ? Math.max(...this.members.map(m => m.id)) + 1 : 1,
+          name: name,
+          role: role,
+          avatar: avatar,
+          points: 0,
+          tasksCompleted: 0,
+          streak: 0,
+          color: color,
+          email: email || null
+        };
+        
+        this.members.push(newMember);
+        this.saveData();
+        
+        document.querySelector('.modal-overlay').remove();
+        this.renderFamily();
+        this.showToast('Éxito', 'Miembro agregado correctamente', 'success');
+      },
+      
+      editMember(memberId) {
+        const member = this.members.find(m => m.id === memberId);
+        if (!member) return;
+        
+        const colors = ['#10B981', '#8B5CF6', '#3B82F6', '#EC4899', '#F59E0B', '#EF4444', '#6B7280'];
+        const roles = ['Padre', 'Madre', 'Hijo', 'Hija', 'Abuelo', 'Abuela', 'Otro'];
+        
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-input" id="edit-member-name" value="${member.name}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rol en la familia</label>
+            <select class="form-input" id="edit-member-role">
+              ${roles.map(role => `
+                <option value="${role}" ${member.role === role ? 'selected' : ''}>${role}</option>
+              `).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color asignado</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+              ${colors.map(color => `
+                <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="radio" name="edit-member-color" value="${color}" ${member.color === color ? 'checked' : ''}>
+                  <div style="width: 24px; height: 24px; border-radius: 50%; background: ${color}; border: 2px solid var(--border);"></div>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="edit-member-email" value="${member.email || ''}" placeholder="email@ejemplo.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Puntos actuales</label>
+            <input type="number" class="form-input" id="edit-member-points" value="${member.points}">
+          </div>
+        `;
+        
+        this.showModal('Editar Miembro', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.updateMember(${memberId})`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      updateMember(memberId) {
+        const member = this.members.find(m => m.id === memberId);
+        if (!member) return;
+        
+        member.name = document.getElementById('edit-member-name').value;
+        member.role = document.getElementById('edit-member-role').value;
+        member.color = document.querySelector('input[name="edit-member-color"]:checked')?.value || member.color;
+        member.email = document.getElementById('edit-member-email').value || null;
+        member.points = parseInt(document.getElementById('edit-member-points').value) || member.points;
+        
+        // Update avatar if name or color changed
+        const avatarName = member.name.replace(/\s+/g, '+');
+        const avatarColor = member.color.replace('#', '');
+        member.avatar = `https://ui-avatars.com/api/?name=${avatarName}&background=${avatarColor}&color=fff&bold=true&size=400`;
+        
+        this.saveData();
+        document.querySelector('.modal-overlay').remove();
+        this.renderFamily();
+        this.showToast('Éxito', 'Miembro actualizado correctamente', 'success');
+      },
+      
+      // Goals
+      renderGoals() {
+        const section = document.getElementById('goals');
+        if (!section) return;
+        
+        const totalGoals = this.goals.length;
+        const completedGoals = this.goals.filter(g => g.completed).length;
+        const progress = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-bullseye section-title-icon"></i>
+              <span>Metas Familiares</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showAddGoalModal()">
+                <i class="fa-solid fa-plus"></i>
+                Nueva Meta
+              </button>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <div style="background: var(--card); border-radius: var(--radius); padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div>
+                  <h3 style="margin-bottom: 4px;">Progreso general</h3>
+                  <p style="color: var(--text-light);">${completedGoals} de ${totalGoals} metas completadas</p>
+                </div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--primary);">${progress}%</div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progress}%"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="goals-grid" id="goals-grid">
+            ${this.goals.map(goal => this.renderGoalCard(goal)).join('')}
+          </div>
+        `;
+      },
+      
+      renderGoalCard(goal) {
+        const progress = (goal.current / goal.target) * 100;
+        const dueDate = new Date(goal.dueDate);
+        const today = new Date();
+        const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+        
+        return `
+          <div class="goal-card">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+              <div>
+                <h4 style="margin-bottom: 4px;">${goal.title}</h4>
+                <p style="color: var(--text-light); font-size: 14px;">${goal.description}</p>
+              </div>
+              <div style="background: ${goal.completed ? 'var(--success)' : 'var(--accent)'}; 
+                   color: var(--secondary); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                ${goal.completed ? '✅ Completada' : '🎯 En progreso'}
+              </div>
+            </div>
+            
+            <div class="goal-progress">
+              <div class="goal-progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin: 12px 0; font-size: 14px;">
+              <span>Progreso: ${Math.round(progress)}%</span>
+              <span>${goal.current}/${goal.target}</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+              <div>
+                <div style="font-size: 12px; color: var(--text-light);">Fecha límite</div>
+                <div style="font-size: 14px; font-weight: 600;">${dueDate.toLocaleDateString('es-ES')}</div>
+                <div style="font-size: 12px; color: ${daysLeft < 0 ? 'var(--danger)' : daysLeft < 7 ? 'var(--warning)' : 'var(--text-light)'};">
+                  ${daysLeft < 0 ? 'Vencida' : daysLeft === 0 ? 'Hoy' : `${daysLeft} días restantes`}
+                </div>
+              </div>
+              
+              <div>
+                <div style="font-size: 12px; color: var(--text-light); text-align: right;">Recompensa</div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--primary);">${goal.points} pts</div>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 8px; margin-top: 20px;">
+              <button class="btn" onclick="FamilyManager.updateGoalProgress(${goal.id})" style="flex: 1;">
+                <i class="fa-solid fa-plus"></i> Avanzar
+              </button>
+              <button class="btn" onclick="FamilyManager.editGoal(${goal.id})">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      },
+      
+      showAddGoalModal() {
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Título de la meta</label>
+            <input type="text" class="form-input" id="goal-title" placeholder="Ej: Limpieza completa de la casa">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-input" id="goal-description" rows="3" placeholder="Descripción detallada de la meta"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="goal-category">
+              <option value="limpieza">Limpieza</option>
+              <option value="organizacion">Organización</option>
+              <option value="finanzas">Finanzas</option>
+              <option value="familia">Familia</option>
+              <option value="salud">Salud</option>
+              <option value="otros">Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Objetivo (cantidad total)</label>
+            <input type="number" class="form-input" id="goal-target" value="1" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Progreso actual</label>
+            <input type="number" class="form-input" id="goal-current" value="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha límite</label>
+            <input type="date" class="form-input" id="goal-due" value="${new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Puntos de recompensa</label>
+            <input type="number" class="form-input" id="goal-points" value="100" min="1">
+          </div>
+        `;
+        
+        this.showModal('Nueva Meta', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveGoal()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveGoal() {
+        const title = document.getElementById('goal-title').value;
+        const description = document.getElementById('goal-description').value;
+        const category = document.getElementById('goal-category').value;
+        const target = parseInt(document.getElementById('goal-target').value) || 1;
+        const current = parseInt(document.getElementById('goal-current').value) || 0;
+        const dueDate = document.getElementById('goal-due').value;
+        const points = parseInt(document.getElementById('goal-points').value) || 100;
+        
+        if (!title || !dueDate || target <= 0) {
+          this.showToast('Error', 'Por favor completa los campos obligatorios', 'error');
+          return;
+        }
+        
+        const newGoal = {
+          id: this.goals.length > 0 ? Math.max(...this.goals.map(g => g.id)) + 1 : 1,
+          title: title,
+          description: description,
+          category: category,
+          target: target,
+          current: Math.min(current, target),
+          dueDate: dueDate,
+          points: points,
+          completed: current >= target
+        };
+        
+        this.goals.push(newGoal);
+        this.saveData();
+        
+        document.querySelector('.modal-overlay').remove();
+        this.renderGoals();
+        this.showToast('Éxito', 'Meta creada correctamente', 'success');
+      },
+      
+      updateGoalProgress(goalId) {
+        const goal = this.goals.find(g => g.id === goalId);
+        if (!goal || goal.completed) return;
+        
+        const newProgress = Math.min(goal.current + 1, goal.target);
+        goal.current = newProgress;
+        
+        if (newProgress >= goal.target) {
+          goal.completed = true;
+          
+          // Award points to all family members
+          this.members.forEach(member => {
+            member.points += goal.points;
+          });
+          
+          // Add activity
+          this.activities.unshift({
+            id: this.activities.length + 1,
+            type: 'goal',
+            memberId: null,
+            text: `¡Meta "${goal.title}" completada!`,
+            points: goal.points * this.members.length,
+            time: 'Ahora mismo'
+          });
+          
+          if (this.activities.length > 10) {
+            this.activities.pop();
+          }
+          
+          this.showToast('¡Felicidades!', `Meta "${goal.title}" completada. ¡${goal.points} puntos para cada miembro!`, 'success');
+          this.createConfetti();
+        }
+        
+        this.saveData();
+        this.renderGoals();
+        this.updateUI();
+      },
+      
+      editGoal(goalId) {
+        const goal = this.goals.find(g => g.id === goalId);
+        if (!goal) return;
+        
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Título de la meta</label>
+            <input type="text" class="form-input" id="edit-goal-title" value="${goal.title}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-input" id="edit-goal-description" rows="3">${goal.description}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Objetivo (cantidad total)</label>
+            <input type="number" class="form-input" id="edit-goal-target" value="${goal.target}" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Progreso actual</label>
+            <input type="number" class="form-input" id="edit-goal-current" value="${goal.current}" min="0" max="${goal.target}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha límite</label>
+            <input type="date" class="form-input" id="edit-goal-due" value="${goal.dueDate}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Puntos de recompensa</label>
+            <input type="number" class="form-input" id="edit-goal-points" value="${goal.points}" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estado</label>
+            <select class="form-input" id="edit-goal-completed">
+              <option value="false" ${!goal.completed ? 'selected' : ''}>En progreso</option>
+              <option value="true" ${goal.completed ? 'selected' : ''}>Completada</option>
+            </select>
+          </div>
+        `;
+        
+        this.showModal('Editar Meta', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.updateGoal(${goalId})`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      updateGoal(goalId) {
+        const goal = this.goals.find(g => g.id === goalId);
+        if (!goal) return;
+        
+        const oldCompleted = goal.completed;
+        
+        goal.title = document.getElementById('edit-goal-title').value;
+        goal.description = document.getElementById('edit-goal-description').value;
+        goal.target = parseInt(document.getElementById('edit-goal-target').value) || goal.target;
+        goal.current = parseInt(document.getElementById('edit-goal-current').value) || goal.current;
+        goal.dueDate = document.getElementById('edit-goal-due').value;
+        goal.points = parseInt(document.getElementById('edit-goal-points').value) || goal.points;
+        goal.completed = document.getElementById('edit-goal-completed').value === 'true';
+        
+        // Handle completion status change
+        if (!oldCompleted && goal.completed) {
+          // Award points if newly completed
+          this.members.forEach(member => {
+            member.points += goal.points;
+          });
+          
+          this.showToast('¡Felicidades!', `Meta "${goal.title}" marcada como completada. ¡${goal.points} puntos para cada miembro!`, 'success');
+        } else if (oldCompleted && !goal.completed) {
+          // Remove points if unmarked
+          this.members.forEach(member => {
+            member.points = Math.max(0, member.points - goal.points);
+          });
+        }
+        
+        this.saveData();
+        document.querySelector('.modal-overlay').remove();
+        this.renderGoals();
+        this.updateUI();
+        this.showToast('Éxito', 'Meta actualizada correctamente', 'success');
+      },
+      
+      // Gallery
+      renderGallery() {
+        const section = document.getElementById('gallery');
+        if (!section) return;
+        
+        const sampleImages = [
+          { id: 1, src: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80', caption: 'Trabajo en equipo en la limpieza' },
+          { id: 2, src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd7f?auto=format&fit=crop&w=600&q=80', caption: 'Familia unida' },
+          { id: 3, src: 'https://images.unsplash.com/photo-1600490815788-6e5c6a6c6b6c?auto=format&fit=crop&w=600&q=80', caption: 'Cocina organizada' },
+          { id: 4, src: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80', caption: 'Jardín cuidado' },
+          { id: 5, src: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=600&q=80', caption: 'Momento especial' },
+          { id: 6, src: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80', caption: 'Logro familiar' }
+        ];
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-images section-title-icon"></i>
+              <span>Galería Familiar</span>
+            </div>
+            <div>
+              <label class="btn primary">
+                <i class="fa-solid fa-upload"></i>
+                Subir Imagen
+                <input type="file" id="upload-image" accept="image/*" style="display: none;" 
+                       onchange="FamilyManager.handleImageUpload(event)">
+              </label>
+            </div>
+          </div>
+          
+          <div class="gallery-grid" id="gallery-grid">
+            ${sampleImages.map(img => `
+              <div class="gallery-item">
+                <img src="${img.src}" alt="${img.caption}" loading="lazy">
+                <div class="gallery-overlay">
+                  <div class="gallery-title">${img.caption}</div>
+                  <div style="font-size: 14px; opacity: 0.9;">Familia Bendecida</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      },
+      
+      handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        // In a real app, you would upload to a server
+        // For demo purposes, we'll simulate upload
+        this.showToast('Imagen subida', 'La imagen se ha agregado a la galería (simulado)', 'success');
+        
+        // Reset file input
+        event.target.value = '';
+      },
+      
+      // Rewards
+      renderRewards() {
+        const section = document.getElementById('rewards');
+        if (!section) return;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-gift section-title-icon"></i>
+              <span>Sistema de Recompensas</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showAddRewardModal()">
+                <i class="fa-solid fa-plus"></i>
+                Nueva Recompensa
+              </button>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <div style="background: var(--card); border-radius: var(--radius); padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h3 style="margin-bottom: 4px;">Puntos familiares disponibles</h3>
+                  <p style="color: var(--text-light);">Total de puntos acumulados por todos los miembros</p>
+                </div>
+                <div style="font-size: 40px; font-weight: 700; color: var(--accent);">
+                  ${this.members.reduce((sum, member) => sum + member.points, 0)}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="rewards-grid" id="rewards-grid">
+            ${this.rewards.map(reward => this.renderRewardCard(reward)).join('')}
+          </div>
+        `;
+      },
+      
+      renderRewardCard(reward) {
+        const totalPoints = this.members.reduce((sum, member) => sum + member.points, 0);
+        const canAfford = totalPoints >= reward.cost;
+        
+        return `
+          <div class="reward-card">
+            <div class="reward-header">
+              <i class="${reward.icon} reward-icon"></i>
+              <div class="reward-name">${reward.name}</div>
+            </div>
+            <div class="reward-content">
+              <div class="reward-desc">${reward.description}</div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="reward-cost">
+                  <i class="fa-solid fa-coins"></i>
+                  ${reward.cost} pts
+                </div>
+                <button class="btn primary" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''} 
+                        onclick="FamilyManager.redeemReward(${reward.id})">
+                  ${canAfford ? 'Canjear' : 'Puntos insuficientes'}
+                </button>
+              </div>
+              ${!canAfford ? `
+                <div style="margin-top: 12px; font-size: 14px; color: var(--text-light); text-align: center;">
+                  Necesitas ${reward.cost - totalPoints} puntos más
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      },
+      
+      showAddRewardModal() {
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Nombre de la recompensa</label>
+            <input type="text" class="form-input" id="reward-name" placeholder="Ej: Elegir película">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-input" id="reward-description" rows="3" placeholder="Descripción de la recompensa"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Icono</label>
+            <select class="form-input" id="reward-icon">
+              <option value="fa-solid fa-film">🎬 Película</option>
+              <option value="fa-solid fa-ice-cream">🍦 Helado</option>
+              <option value="fa-solid fa-dice">🎲 Juego</option>
+              <option value="fa-solid fa-couch">🛋️ Descanso</option>
+              <option value="fa-solid fa-utensils">🍽️ Cena</option>
+              <option value="fa-solid fa-tv">📺 TV</option>
+              <option value="fa-solid fa-gamepad">🎮 Videojuego</option>
+              <option value="fa-solid fa-cookie">🍪 Postre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="reward-category">
+              <option value="entretenimiento">Entretenimiento</option>
+              <option value="comida">Comida</option>
+              <option value="privilegios">Privilegios</option>
+              <option value="otros">Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Costo en puntos</label>
+            <input type="number" class="form-input" id="reward-cost" value="50" min="1">
+          </div>
+        `;
+        
+        this.showModal('Nueva Recompensa', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveReward()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveReward() {
+        const name = document.getElementById('reward-name').value;
+        const description = document.getElementById('reward-description').value;
+        const icon = document.getElementById('reward-icon').value;
+        const category = document.getElementById('reward-category').value;
+        const cost = parseInt(document.getElementById('reward-cost').value) || 50;
+        
+        if (!name || !description || cost <= 0) {
+          this.showToast('Error', 'Por favor completa los campos obligatorios', 'error');
+          return;
+        }
+        
+        const newReward = {
+          id: this.rewards.length > 0 ? Math.max(...this.rewards.map(r => r.id)) + 1 : 1,
+          name: name,
+          description: description,
+          icon: icon,
+          category: category,
+          cost: cost
+        };
+        
+        this.rewards.push(newReward);
+        this.saveData();
+        
+        document.querySelector('.modal-overlay').remove();
+        this.renderRewards();
+        this.showToast('Éxito', 'Recompensa creada correctamente', 'success');
+      },
+      
+      redeemReward(rewardId) {
+        const reward = this.rewards.find(r => r.id === rewardId);
+        if (!reward) return;
+        
+        const totalPoints = this.members.reduce((sum, member) => sum + member.points, 0);
+        if (totalPoints < reward.cost) {
+          this.showToast('Puntos insuficientes', `Necesitas ${reward.cost} puntos, tienes ${totalPoints}`, 'error');
+          return;
+        }
+        
+        if (!confirm(`¿Estás seguro de canjear "${reward.name}" por ${reward.cost} puntos?`)) {
+          return;
+        }
+        
+        // Distribute cost among members proportionally
+        const pointsPerMember = Math.ceil(reward.cost / this.members.length);
+        
+        this.members.forEach(member => {
+          member.points = Math.max(0, member.points - pointsPerMember);
+        });
+        
+        // Add activity
+        this.activities.unshift({
+          id: this.activities.length + 1,
+          type: 'reward',
+          memberId: null,
+          text: `canjeó "${reward.name}"`,
+          points: -reward.cost,
+          time: 'Ahora mismo'
+        });
+        
+        if (this.activities.length > 10) {
+          this.activities.pop();
+        }
+        
+        this.saveData();
+        this.renderRewards();
+        this.updateUI();
+        this.showToast('¡Felicidades!', `Recompensa "${reward.name}" canjeada`, 'success');
+      },
+      
+      // Budget
+      renderBudget() {
+        const section = document.getElementById('budget');
+        if (!section) return;
+        
+        const budget = this.budget;
+        const totalSpent = budget.categories.reduce((sum, cat) => sum + cat.spent, 0);
+        const remaining = budget.total - totalSpent;
+        const progress = (totalSpent / budget.total) * 100;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-coins section-title-icon"></i>
+              <span>Presupuesto Familiar</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showAddBudgetModal()">
+                <i class="fa-solid fa-plus"></i>
+                Agregar Gasto
+              </button>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <div style="background: var(--card); border-radius: var(--radius); padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                  <h3 style="margin-bottom: 4px;">Presupuesto mensual</h3>
+                  <p style="color: var(--text-light);">${new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}</p>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 32px; font-weight: 700; color: var(--primary);">$${budget.total.toLocaleString()}</div>
+                  <div style="font-size: 14px; color: var(--text-light);">Total asignado</div>
+                </div>
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                  <span>Gastado: $${totalSpent.toLocaleString()}</span>
+                  <span>Restante: $${remaining.toLocaleString()}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+                </div>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                <div>
+                  <div style="color: var(--text-light);">Meta de ahorro</div>
+                  <div style="font-weight: 600; color: var(--success);">$${budget.monthlyGoal.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div style="color: var(--text-light);">Ahorro actual</div>
+                  <div style="font-weight: 600; color: ${budget.categories.find(c => c.name === 'Ahorros')?.spent >= budget.monthlyGoal ? 'var(--success)' : 'var(--warning)'}">
+                    $${budget.categories.find(c => c.name === 'Ahorros')?.spent.toLocaleString() || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="budget-overview" id="budget-overview">
+            ${budget.categories.map(category => {
+              const categoryProgress = (category.spent / category.budget) * 100;
+              return `
+                <div class="budget-category" style="border-left-color: ${category.color};">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <h4 style="margin-bottom: 4px;">${category.name}</h4>
+                      <div style="font-size: 14px; color: var(--text-light);">
+                        $${category.spent.toLocaleString()} de $${category.budget.toLocaleString()}
+                      </div>
+                    </div>
+                    <div style="font-size: 24px; font-weight: 700; color: ${category.color};">${Math.round(categoryProgress)}%</div>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${Math.min(categoryProgress, 100)}%; background: ${category.color};"></div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                    <span>Presupuesto: $${category.budget.toLocaleString()}</span>
+                    <span>${category.spent >= category.budget ? '💸 Excedido' : '💰 En control'}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      },
+      
+      showAddBudgetModal() {
+        const categories = this.budget.categories;
+        
+        const content = `
+          <div class="form-group">
+            <label class="form-label">Descripción del gasto</label>
+            <input type="text" class="form-input" id="expense-description" placeholder="Ej: Supermercado semanal">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="expense-category">
+              ${categories.map(cat => `
+                <option value="${cat.name}">${cat.name}</option>
+              `).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monto</label>
+            <div style="position: relative;">
+              <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light);">$</span>
+              <input type="number" class="form-input" id="expense-amount" value="0" min="0" step="0.01" style="padding-left: 30px;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="expense-date" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notas (opcional)</label>
+            <textarea class="form-input" id="expense-notes" rows="2" placeholder="Notas adicionales"></textarea>
+          </div>
+        `;
+        
+        this.showModal('Agregar Gasto', content, [
+          {
+            text: 'Guardar',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveExpense()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveExpense() {
+        const description = document.getElementById('expense-description').value;
+        const category = document.getElementById('expense-category').value;
+        const amount = parseFloat(document.getElementById('expense-amount').value) || 0;
+        const date = document.getElementById('expense-date').value;
+        const notes = document.getElementById('expense-notes').value;
+        
+        if (!description || amount <= 0) {
+          this.showToast('Error', 'Por favor completa los campos obligatorios', 'error');
+          return;
+        }
+        
+        // Update budget category
+        const budgetCategory = this.budget.categories.find(c => c.name === category);
+        if (budgetCategory) {
+          budgetCategory.spent += amount;
+          
+          // Check if exceeded budget
+          if (budgetCategory.spent > budgetCategory.budget) {
+            this.showToast('Atención', `¡Has excedido el presupuesto de ${category}!`, 'warning');
+          }
+        }
+        
+        this.saveData();
+        document.querySelector('.modal-overlay').remove();
+        this.renderBudget();
+        this.showToast('Gasto registrado', 'El gasto se ha registrado correctamente', 'success');
+      },
+      
+      // Meals
+      renderMeals() {
+        const section = document.getElementById('meals');
+        if (!section) return;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-utensils section-title-icon"></i>
+              <span>Planificador de Comidas</span>
+            </div>
+            <div>
+              <button class="btn primary" onclick="FamilyManager.showMealPlanModal()">
+                <i class="fa-solid fa-calendar-plus"></i>
+                Planificar Semana
+              </button>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <div style="background: var(--card); border-radius: var(--radius); padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h3 style="margin-bottom: 4px;">Plan semanal</h3>
+                  <p style="color: var(--text-light);">${new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 32px; font-weight: 700; color: var(--primary);">${this.meals.length}</div>
+                  <div style="font-size: 14px; color: var(--text-light);">Días planificados</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="meal-planner" id="meal-planner">
+            ${this.meals.map(meal => this.renderMealCard(meal)).join('')}
+          </div>
+          
+          <div style="margin-top: 32px; background: var(--card); border-radius: var(--radius); padding: 24px;">
+            <h4 style="margin-bottom: 16px;">Lista de compras sugerida</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+              <div style="background: var(--bg-soft); padding: 12px; border-radius: var(--radius-sm);">
+                <div style="font-weight: 600; margin-bottom: 4px;">Frutas y verduras</div>
+                <div style="font-size: 14px; color: var(--text-light);">Manzanas, plátanos, lechuga, tomates</div>
+              </div>
+              <div style="background: var(--bg-soft); padding: 12px; border-radius: var(--radius-sm);">
+                <div style="font-weight: 600; margin-bottom: 4px;">Proteínas</div>
+                <div style="font-size: 14px; color: var(--text-light);">Pollo, carne molida, huevos, pescado</div>
+              </div>
+              <div style="background: var(--bg-soft); padding: 12px; border-radius: var(--radius-sm);">
+                <div style="font-weight: 600; margin-bottom: 4px;">Lácteos</div>
+                <div style="font-size: 14px; color: var(--text-light);">Leche, queso, yogurt, mantequilla</div>
+              </div>
+              <div style="background: var(--bg-soft); padding: 12px; border-radius: var(--radius-sm);">
+                <div style="font-weight: 600; margin-bottom: 4px;">Granos</div>
+                <div style="font-size: 14px; color: var(--text-light);">Arroz, pasta, pan, cereal</div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      renderMealCard(meal) {
+        return `
+          <div class="meal-card">
+            <div style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 16px;">${meal.day}</div>
+            <div style="margin-bottom: 20px;">
+              <div style="margin-bottom: 12px;">
+                <div style="font-size: 12px; color: var(--text-light); margin-bottom: 4px;">Desayuno</div>
+                <div style="font-weight: 600;">${meal.breakfast}</div>
+              </div>
+              <div style="margin-bottom: 12px;">
+                <div style="font-size: 12px; color: var(--text-light); margin-bottom: 4px;">Almuerzo</div>
+                <div style="font-weight: 600;">${meal.lunch}</div>
+              </div>
+              <div>
+                <div style="font-size: 12px; color: var(--text-light); margin-bottom: 4px;">Cena</div>
+                <div style="font-weight: 600;">${meal.dinner}</div>
+              </div>
+            </div>
+            ${meal.notes ? `
+              <div style="background: var(--bg-soft); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 14px;">
+                <i class="fa-solid fa-note-sticky" style="margin-right: 6px;"></i>
+                ${meal.notes}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      },
+      
+      showMealPlanModal() {
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        const breakfastOptions = ['Huevos y tostadas', 'Cereal con fruta', 'Avena con frutos secos', 'Smoothie de frutas', 'Yogurt con granola'];
+        const lunchOptions = ['Pollo con arroz', 'Ensalada de atún', 'Sopa de verduras', 'Pasta con salsa', 'Sándwiches variados'];
+        const dinnerOptions = ['Pescado al horno', 'Carne asada', 'Pizza casera', 'Tacos de pollo', 'Lasagna vegetariana'];
+        
+        let content = '<div style="max-height: 60vh; overflow-y: auto;">';
+        
+        days.forEach((day, index) => {
+          const meal = this.meals[index] || {
+            breakfast: breakfastOptions[index % breakfastOptions.length],
+            lunch: lunchOptions[index % lunchOptions.length],
+            dinner: dinnerOptions[index % dinnerOptions.length],
+            notes: ''
+          };
+          
+          content += `
+            <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border);">
+              <h4 style="margin-bottom: 16px; color: var(--primary);">${day}</h4>
+              <div class="form-group">
+                <label class="form-label">Desayuno</label>
+                <input type="text" class="form-input" id="meal-breakfast-${index}" value="${meal.breakfast}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Almuerzo</label>
+                <input type="text" class="form-input" id="meal-lunch-${index}" value="${meal.lunch}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cena</label>
+                <input type="text" class="form-input" id="meal-dinner-${index}" value="${meal.dinner}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Notas (opcional)</label>
+                <textarea class="form-input" id="meal-notes-${index}" rows="2">${meal.notes || ''}</textarea>
+              </div>
+            </div>
+          `;
+        });
+        
+        content += '</div>';
+        
+        this.showModal('Planificar Comidas Semanales', content, [
+          {
+            text: 'Guardar Plan',
+            icon: 'fa-solid fa-save',
+            type: 'primary',
+            onclick: `FamilyManager.saveMealPlan()`
+          },
+          {
+            text: 'Cancelar',
+            onclick: `document.querySelector('.modal-overlay').remove()`
+          }
+        ]);
+      },
+      
+      saveMealPlan() {
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        const updatedMeals = [];
+        
+        days.forEach((day, index) => {
+          updatedMeals.push({
+            id: index + 1,
+            day: day,
+            breakfast: document.getElementById(`meal-breakfast-${index}`).value,
+            lunch: document.getElementById(`meal-lunch-${index}`).value,
+            dinner: document.getElementById(`meal-dinner-${index}`).value,
+            notes: document.getElementById(`meal-notes-${index}`).value
+          });
+        });
+        
+        this.meals = updatedMeals;
+        this.saveData();
+        document.querySelector('.modal-overlay').remove();
+        this.renderMeals();
+        this.showToast('Plan guardado', 'Plan de comidas actualizado correctamente', 'success');
+      },
+      
+      // Chat
+      renderChat() {
+        const section = document.getElementById('chat');
+        if (!section) return;
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-comments section-title-icon"></i>
+              <span>Chat Familiar</span>
+            </div>
+          </div>
+          
+          <div class="chat-container">
+            <div class="chat-sidebar">
+              <div style="padding: 20px; border-bottom: 1px solid var(--border);">
+                <h4 style="margin-bottom: 8px;">Miembros en línea</h4>
+                <p style="color: var(--text-light); font-size: 14px;">${this.members.length} miembros conectados</p>
+              </div>
+              <div class="chat-users">
+                ${this.members.map(member => `
+                  <div class="chat-user active">
+                    <img src="${member.avatar}" alt="${member.name}" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <div>
+                      <div style="font-weight: 600;">${member.name}</div>
+                      <div style="font-size: 12px; color: var(--text-light);">En línea</div>
+                    </div>
+                    <div style="margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            
+            <div class="chat-main">
+              <div class="chat-messages" id="chat-messages">
+                ${this.chat.map(message => {
+                  const sender = this.members.find(m => m.id === message.sender);
+                  const time = new Date(message.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                  
+                  return `
+                    <div class="message ${message.sender === 1 ? 'sent' : 'received'}">
+                      <div class="message-header">
+                        <img src="${sender?.avatar || 'https://ui-avatars.com/api/?name=Usuario&background=6B7280&color=fff'}" 
+                             alt="${sender?.name || 'Usuario'}" style="width: 24px; height: 24px; border-radius: 50%;">
+                        <div class="message-sender">${sender?.name || 'Usuario'}</div>
+                        <div class="message-time">${time}</div>
+                      </div>
+                      <div class="message-content">${message.message}</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Escribe un mensaje..." 
+                       onkeypress="if(event.key === 'Enter') FamilyManager.sendMessage()">
+                <button class="btn primary" onclick="FamilyManager.sendMessage()">
+                  <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Scroll to bottom of chat
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      },
+      
+      sendMessage() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        const newMessage = {
+          id: this.chat.length + 1,
+          sender: 1, // Admin user
+          message: message,
+          timestamp: new Date().toISOString(),
+          type: 'text'
+        };
+        
+        this.chat.push(newMessage);
+        this.saveData();
+        
+        input.value = '';
+        this.renderChat();
+        
+        // Simulate a reply after 2 seconds
+        setTimeout(() => {
+          const replies = [
+            '¡Excelente!',
+            'Entendido 👍',
+            'Gracias por la información',
+            '¿Necesitas ayuda con algo más?',
+            'Perfecto, lo tendré en cuenta'
+          ];
+          
+          const randomReply = replies[Math.floor(Math.random() * replies.length)];
+          const randomMember = this.members[Math.floor(Math.random() * this.members.length)];
+          
+          const replyMessage = {
+            id: this.chat.length + 1,
+            sender: randomMember.id,
+            message: randomReply,
+            timestamp: new Date().toISOString(),
+            type: 'text'
+          };
+          
+          this.chat.push(replyMessage);
+          this.saveData();
+          this.renderChat();
+        }, 2000);
+      },
+      
+      // Achievements
+      renderAchievements() {
+        const section = document.getElementById('achievements');
+        if (!section) return;
+        
+        const unlockedCount = this.achievements.filter(a => a.unlocked).length;
+        const totalCount = this.achievements.length;
+        const progress = Math.round((unlockedCount / totalCount) * 100);
+        
+        section.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fa-solid fa-trophy section-title-icon"></i>
+              <span>Logros Familiares</span>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+            <div style="background: var(--card); border-radius: var(--radius); padding: 24px; text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+              <h3 style="margin-bottom: 8px;">${unlockedCount} de ${totalCount} logros desbloqueados</h3>
+              <p style="color: var(--text-light); margin-bottom: 20px;">¡Sigan trabajando juntos para desbloquear más logros!</p>
+              <div class="progress-bar" style="max-width: 300px; margin: 0 auto;">
+                <div class="progress-fill" style="width: ${progress}%"></div>
+              </div>
+              <div style="margin-top: 8px; font-size: 14px; color: var(--text-light);">${progress}% completado</div>
+            </div>
+          </div>
+          
+          <div class="achievements-grid" id="achievements-grid">
+            ${this.achievements.map(achievement => this.renderAchievementCard(achievement)).join('')}
+          </div>
+        `;
+      },
+      
+      renderAchievementCard(achievement) {
+        return `
+          <div class="achievement-card ${achievement.unlocked ? 'unlocked' : ''}">
+            <div style="font-size: 40px; margin-bottom: 16px;">
+              <i class="${achievement.icon}"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 8px;">${achievement.name}</div>
+            <div style="font-size: 14px; color: ${achievement.unlocked ? 'rgba(255,255,255,0.9)' : 'var(--text-light)'}; 
+                 margin-bottom: 16px;">${achievement.description}</div>
+            <div style="font-size: 12px; ${achievement.unlocked ? 'color: rgba(255,255,255,0.7);' : 'color: var(--text-light);'}">
+              ${achievement.unlocked ? '✅ Desbloqueado' : '🔒 Por desbloquear'}
+            </div>
+          </div>
+        `;
+      },
+      
+      // Confetti animation
+      createConfetti() {
+        const container = document.getElementById('confetti-container');
+        if (!container) return;
+        
+        const colors = ['#10B981', '#8B5CF6', '#3B82F6', '#EC4899', '#F59E0B', '#EF4444'];
+        
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animation = `fall ${Math.random() * 2 + 1}s linear forwards`;
+          
+          container.appendChild(confetti);
+          
+          // Remove after animation
+          setTimeout(() => {
+            if (confetti.parentNode === container) {
+              container.removeChild(confetti);
+            }
+          }, 3000);
+        }
+      }
+    };
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Apply saved theme
+      const savedTheme = localStorage.getItem('fam_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      // Update theme icon
+      const themeIcon = document.querySelector('#theme-toggle i');
+      if (savedTheme === 'dark') {
+        themeIcon.className = 'fa-solid fa-sun';
+      }
+      
+      // Set welcome screen verse
+      const welcomeVerse = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+      document.getElementById('welcome-verse').textContent = welcomeVerse.text;
+      document.getElementById('welcome-reference').textContent = welcomeVerse.reference;
+      
+      // Initialize family manager
+      FamilyManager.init();
+      
+      // Add confetti CSS
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fall {
+          0% {
+            transform: translateY(-100px) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+
+    // Make FamilyManager available globally
+    window.FamilyManager = FamilyManager;
+  </script>
+</body>
+</html>

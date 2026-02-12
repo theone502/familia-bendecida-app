@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ANDRES APP V3.0 - FAMILIA BENDECIDA ✨</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div class="welcome-screen" id="welcome-screen">
+    <div class="welcome-content">
+      <i class="fa-solid fa-house-chimney-heart welcome-icon"></i>
+      <div class="welcome-verse" id="welcome-verse">Cargando...</div>
+      <div class="welcome-reference" id="welcome-reference"></div>
+      <h1 class="welcome-title">ANDRES APP V3.0</h1>
+      <p class="welcome-subtitle">FAMILIA BENDECIDA ✨</p>
+      <div class="loading-progress">
+        <div class="loading-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo" id="logo">
+        <i class="fa-solid fa-house-chimney-heart logo-icon"></i>
+        <div>
+          <h1 class="logo-text">ANDRES APP V3.0</h1>
+          <div class="date-subtitle" id="current-date-header"></div>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="action-btn" id="theme-toggle" title="Cambiar tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        
+        <div class="profile" id="profile-menu">
+          <img src="https://ui-avatars.com/api/?name=Admin&background=10B981&color=fff" 
+               alt="User" class="profile-avatar">
+          <div>
+            <div style="font-weight: 600;">Mi Perfil</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="current-date" id="current-date"></div>
+        </div>
+        
+        <nav class="nav">
+          <a href="#" class="nav-item active" data-section="dashboard">
+            <i class="fa-solid fa-table-columns nav-icon"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" data-section="tasks">
+            <i class="fa-solid fa-list-check nav-icon"></i>
+            <span>Tareas</span>
+          </a>
+          <a href="#" class="nav-item" data-section="chat">
+            <i class="fa-solid fa-comments nav-icon"></i>
+            <span>Chat</span>
+          </a>
+          <!-- Other links... -->
+          <a href="#" class="nav-item" data-section="calendar">
+            <i class="fa-solid fa-calendar-days nav-icon"></i>
+            <span>Calendario</span>
+          </a>
+          <a href="#" class="nav-item" data-section="goals">
+            <i class="fa-solid fa-bullseye nav-icon"></i>
+            <span>Metas</span>
+          </a>
+        </nav>
+        
+        <div class="sidebar-stats">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-tasks">0</div>
+              <div class="stat-label">Tareas</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="sidebar-points">0</div>
+              <div class="stat-label">Puntos</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content" id="main-content">
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+          <div class="dashboard-grid">
+            <div class="welcome-card">
+              <div class="welcome-content">
+                <h2>¡Bienvenidos! 👨‍👩‍👧‍👦</h2>
+                <div class="welcome-stats">
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-tasks">0</div>
+                    <div class="welcome-stat-label">Tareas</div>
+                  </div>
+                  <div class="welcome-stat">
+                    <div class="welcome-stat-value" id="welcome-points">0</div>
+                    <div class="welcome-stat-label">Puntos</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spiritual Section -->
+            <div class="spiritual-section">
+                <div class="card">
+                    <div class="spiritual-tabs">
+                        <button class="tab-btn active" data-tab="verse">Versículo</button>
+                    </div>
+                    <div class="tab-content" id="verse-tab">
+                        <div class="verse-card">
+                            <i class="fa-solid fa-book-bible verse-icon"></i>
+                            <div class="verse-text" id="daily-verse">Cargando...</div>
+                            <div class="verse-reference" id="verse-reference"></div>
+                            <button class="btn primary" id="new-verse-btn">Nuevo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-activity" style="grid-column: span 12;">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Actividad Reciente</h3>
+                </div>
+                <div class="activity-list" id="activity-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Other Sections Containers -->
+        <section id="tasks" class="content-section"></section>
+        <section id="calendar" class="content-section"></section>
+        <section id="family" class="content-section"></section>
+        <section id="goals" class="content-section"></section>
+        <section id="gallery" class="content-section"></section>
+        <section id="rewards" class="content-section"></section>
+        <section id="budget" class="content-section"></section>
+        <section id="meals" class="content-section"></section>
+        <section id="chat" class="content-section"></section>
+        <section id="achievements" class="content-section"></section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <div id="confetti-container"></div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
