@@ -20,6 +20,10 @@ const FamilyManager = {
   currentUser: null,
   cleaningFrequency: 2, // Default
 
+  isAdmin() {
+    return this.currentUser && this.currentUser.is_admin === 1;
+  },
+
   init() {
     this.checkAuth();
     this.setupEventListeners();
@@ -420,7 +424,7 @@ const FamilyManager = {
               <div class="welcome-content">
                 <div style="display:flex; justify-content:space-between; align-items:start;">
                     <h2>ANDRES APP V3.0 ✨</h2>
-                    <button class="btn-icon" onclick="FamilyManager.showSettingsModal()" style="background:rgba(255,255,255,0.2); color:white; border:none;"><i class="fa-solid fa-gear"></i></button>
+                    ${this.isAdmin() ? '<button class="btn-icon" onclick="FamilyManager.showSettingsModal()" style="background:rgba(255,255,255,0.2); color:white; border:none;"><i class="fa-solid fa-gear"></i></button>' : ''}
                 </div>
                 <p>Bienvenido, ${this.currentUser.name}</p>
               </div>
@@ -513,7 +517,7 @@ const FamilyManager = {
                         </p>
                     </div>
                 </div>
-                <button class="btn" style="width:100%; background:#B91C1C; color:white;" onclick="FamilyManager.showReportModal()">REPORTAR INCUMPLIMIENTO</button>
+                ${this.isAdmin() ? '<button class="btn" style="width:100%; background:#B91C1C; color:white;" onclick="FamilyManager.showReportModal()">REPORTAR INCUMPLIMIENTO</button>' : ''}
             </div>
 
             <!-- URGENT ALERTS -->
@@ -626,16 +630,16 @@ const FamilyManager = {
             <div class="section-title"><i class="fa-solid fa-cart-shopping section-title-icon"></i><span>Lista de Compras</span></div>
         </div>
         <div class="card">
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
+            ${this.isAdmin() ? `<div style="display:flex; gap:10px; margin-bottom:20px;">
                 <input type="text" id="shop-item" class="form-input" placeholder="Agregar artículo (ej. Leche, Pan)" style="margin-bottom:0;">
                 <button class="btn primary" onclick="FamilyManager.addShoppingItem()">Agregar</button>
-            </div>
+            </div>` : ''}
             <div class="shopping-list">
-                ${this.shoppingList.length === 0 ? '<div class="empty-state">Lista vacía</div>' : 
+                ${this.shoppingList.length === 0 ? '<div class="empty-state">Lista vacía</div>' :
                   this.shoppingList.map(item => `
                     <div class="shopping-item">
                         <span>${item.item}</span>
-                        <button class="btn-icon" onclick="FamilyManager.deleteShoppingItem(${item.id})"><i class="fa-solid fa-check"></i></button>
+                        ${this.isAdmin() ? `<button class="btn-icon" onclick="FamilyManager.deleteShoppingItem(${item.id})"><i class="fa-solid fa-check"></i></button>` : ''}
                     </div>
                   `).join('')
                 }
@@ -674,7 +678,7 @@ const FamilyManager = {
     section.innerHTML = `
       <div class="section-header">
         <div class="section-title"><i class="fa-solid fa-calendar-days section-title-icon"></i><span>Calendario</span></div>
-        <div><button class="btn primary" onclick="FamilyManager.showAddEventModal()"><i class="fa-solid fa-plus"></i> Nuevo Evento</button></div>
+        ${this.isAdmin() ? '<div><button class="btn primary" onclick="FamilyManager.showAddEventModal()"><i class="fa-solid fa-plus"></i> Nuevo Evento</button></div>' : ''}
       </div>
       <div class="calendar-container">
         <div class="card" style="grid-column: span 2;">
@@ -769,7 +773,7 @@ const FamilyManager = {
                             <div style="text-align:center;"><div style="font-weight:bold; color:var(--primary);">${m.points}</div><div style="font-size:0.8rem;">Puntos</div></div>
                             <div style="text-align:center;"><div style="font-weight:bold; color:var(--primary);">${m.tasks_completed}</div><div style="font-size:0.8rem;">Tareas</div></div>
                         </div>
-                        <button class="btn" style="width:100%; margin-top:1rem; border:1px solid var(--border);" onclick="FamilyManager.showEditMember(${m.id})">Editar Perfil</button>
+                        ${this.isAdmin() ? `<button class="btn" style="width:100%; margin-top:1rem; border:1px solid var(--border);" onclick="FamilyManager.showEditMember(${m.id})">Editar Perfil</button>` : ''}
                     </div>
                 </div>
             `).join('')}
@@ -821,10 +825,10 @@ const FamilyManager = {
       section.innerHTML = `
         <div class="section-header">
             <div class="section-title"><i class="fa-solid fa-images section-title-icon"></i><span>Galería Familiar</span></div>
-            <button class="btn primary" onclick="document.getElementById('file-upload').click()">
+            ${this.isAdmin() ? `<button class="btn primary" onclick="document.getElementById('file-upload').click()">
                 <i class="fa-solid fa-upload"></i> Subir Foto
             </button>
-            <input type="file" id="file-upload" style="display:none;" onchange="FamilyManager.handleFileUpload(this)">
+            <input type="file" id="file-upload" style="display:none;" onchange="FamilyManager.handleFileUpload(this)">` : ''}
         </div>
         <div class="gallery-grid" id="gallery-grid">
            ${photos.map(p => `
@@ -859,16 +863,16 @@ const FamilyManager = {
   renderTasks() {
     const section = document.getElementById('tasks'); if(!section) return;
     const pendingTasks = this.tasks.filter(t => !t.completed);
-    section.innerHTML = `<div class="section-header"><div class="section-title"><i class="fa-solid fa-list-check section-title-icon"></i><span>Gestión de Tareas</span></div><button class="btn primary" onclick="FamilyManager.showAddTaskModal()"><i class="fa-solid fa-plus"></i> Nueva Tarea</button></div><div class="dashboard-grid"><div class="card" style="grid-column: span 2;"><div class="task-list" id="task-list">${this.renderTaskList(pendingTasks)}</div></div></div>`;
+    section.innerHTML = `<div class="section-header"><div class="section-title"><i class="fa-solid fa-list-check section-title-icon"></i><span>Gestión de Tareas</span></div>${this.isAdmin() ? '<button class="btn primary" onclick="FamilyManager.showAddTaskModal()"><i class="fa-solid fa-plus"></i> Nueva Tarea</button>' : ''}</div><div class="dashboard-grid"><div class="card" style="grid-column: span 2;"><div class="task-list" id="task-list">${this.renderTaskList(pendingTasks)}</div></div></div>`;
   },
-  renderTaskList(tasks) { if (tasks.length === 0) return '<div class="empty-state">No hay tareas pendientes</div>'; return tasks.map(task => `<div class="task-item"><div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="FamilyManager.toggleTask(${task.id}, ${!task.completed})">${task.completed ? '<i class="fa-solid fa-check"></i>' : ''}</div><div class="task-content"><div class="task-title">${task.title}</div><div class="task-meta"><i class="fa-solid fa-star"></i> ${task.points} pts</div></div><div class="task-actions"><button class="btn-icon" onclick="FamilyManager.deleteTask(${task.id})"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''); },
+  renderTaskList(tasks) { if (tasks.length === 0) return '<div class="empty-state">No hay tareas pendientes</div>'; return tasks.map(task => `<div class="task-item"><div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="FamilyManager.toggleTask(${task.id}, ${!task.completed})">${task.completed ? '<i class="fa-solid fa-check"></i>' : ''}</div><div class="task-content"><div class="task-title">${task.title}</div><div class="task-meta"><i class="fa-solid fa-star"></i> ${task.points} pts</div></div>${this.isAdmin() ? '<div class="task-actions"><button class="btn-icon" onclick="FamilyManager.deleteTask('+task.id+')"><i class="fa-solid fa-trash"></i></button></div>' : ''}</div>`).join(''); },
   async toggleTask(id, c) { const t=this.tasks.find(x=>x.id===id); if(!t)return; try{await this.apiCall(`/api/tasks/${id}`,'PUT',{...t,completed:c}); if(c && t.assignedTo) { for(let uid of t.assignedTo) { const m=this.members.find(x=>x.id===uid); if(m) await this.apiCall(`/api/users/${uid}`,'PUT',{points:m.points+t.points}); } } this.loadData(); }catch(e){} },
   async deleteTask(id) { if(!confirm('?'))return; try{await this.apiCall(`/api/tasks/${id}`,'DELETE');this.loadData();}catch(e){} },
   showAddTaskModal() { this.showModal('Nueva Tarea', `<div class="form-group"><label class="form-label">Título</label><input type="text" class="form-input" id="task-title"></div><div class="form-group"><label class="form-label">Puntos</label><input type="number" class="form-input" id="task-points" value="10"></div>`, [{text:'Guardar', type:'primary', onclick:'FamilyManager.saveTask()'}]); },
   async saveTask() { const t=document.getElementById('task-title').value; const p=document.getElementById('task-points').value; if(!t)return; await this.apiCall('/api/tasks','POST',{title:t, points:p, category:'limpieza', priority:'media', due_date:new Date().toISOString().split('T')[0], assignedTo:[this.currentUser.id]}); document.querySelector('.modal-overlay').remove(); this.loadData(); },
 
   // --- GOALS, REWARDS, ETC (Simplified) ---
-  renderGoals() { const s=document.getElementById('goals'); if(s) s.innerHTML = `<div class="section-header"><div class="section-title"><i class="fa-solid fa-bullseye section-title-icon"></i><span>Metas</span></div><button class="btn primary" onclick="FamilyManager.showAddGoalModal()"><i class="fa-solid fa-plus"></i> Nueva</button></div><div class="goals-grid">${this.goals.map(g => `<div class="goal-card"><h4>${g.title}</h4><div class="goal-progress"><div class="goal-progress-fill" style="width:${(g.current/g.target)*100}%"></div></div><div style="display:flex; justify-content:space-between;"><span>${g.current}/${g.target}</span><span>${g.points} pts</span></div><button class="btn mt-3" style="width:100%" onclick="FamilyManager.advanceGoal(${g.id})">Avanzar</button></div>`).join('')}</div>`; },
+  renderGoals() { const s=document.getElementById('goals'); if(s) s.innerHTML = `<div class="section-header"><div class="section-title"><i class="fa-solid fa-bullseye section-title-icon"></i><span>Metas</span></div>${this.isAdmin() ? '<button class="btn primary" onclick="FamilyManager.showAddGoalModal()"><i class="fa-solid fa-plus"></i> Nueva</button>' : ''}</div><div class="goals-grid">${this.goals.map(g => `<div class="goal-card"><h4>${g.title}</h4><div class="goal-progress"><div class="goal-progress-fill" style="width:${(g.current/g.target)*100}%"></div></div><div style="display:flex; justify-content:space-between;"><span>${g.current}/${g.target}</span><span>${g.points} pts</span></div>${this.isAdmin() ? `<button class="btn mt-3" style="width:100%" onclick="FamilyManager.advanceGoal(${g.id})">Avanzar</button>` : ''}</div>`).join('')}</div>`; },
   async advanceGoal(id) { const g=this.goals.find(x=>x.id===id); if(g) { await this.apiCall(`/api/goals/${id}`,'PUT',{...g, current:g.current+1}); this.loadData(); } },
   showAddGoalModal() { this.showModal('Nueva Meta', `<div class="form-group"><label class="form-label">Título</label><input type="text" class="form-input" id="goal-title"></div><div class="form-group"><label class="form-label">Meta</label><input type="number" class="form-input" id="goal-target" value="10"></div>`, [{text:'Guardar', type:'primary', onclick:'FamilyManager.saveGoal()'}]); },
   async saveGoal() { const t=document.getElementById('goal-title').value; const ta=document.getElementById('goal-target').value; if(t) { await this.apiCall('/api/goals','POST',{title:t, target:ta, points:100}); document.querySelector('.modal-overlay').remove(); this.loadData(); } },

@@ -2,9 +2,30 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../database'); // This now has .get (async) and raw .db
+const db = require('../database');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'familia_bendecida_default_secret_key_change_me';
+
+// Middleware: Verify JWT token
+function verifyToken(req, res, next) {
+  const token = req.headers['x-access-token'];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(401).json({ error: 'Invalid token' });
+    req.userId = decoded.id;
+    req.isAdmin = decoded.is_admin;
+    next();
+  });
+}
+
+// Middleware: Require admin role
+function requireAdmin(req, res, next) {
+  if (!req.isAdmin) {
+    return res.status(403).json({ error: 'Solo el administrador puede realizar esta acción' });
+  }
+  next();
+}
 
 // Login
 router.post('/login', async (req, res) => {
@@ -17,9 +38,8 @@ router.post('/login', async (req, res) => {
     const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (!passwordIsValid) return res.status(401).json({ error: 'Invalid password' });
 
-    const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: 86400 }); // 24 hours
+    const token = jwt.sign({ id: user.id, is_admin: user.is_admin || 0 }, SECRET_KEY, { expiresIn: 86400 });
 
-    // Don't send password hash to client
     const { password: _, ...safeUser } = user;
     res.status(200).json({ auth: true, token: token, user: safeUser });
   } catch (err) {
@@ -38,11 +58,11 @@ router.post('/register', async (req, res) => {
 
   try {
     const result = await db.run(
-      `INSERT INTO users (name, email, password, role, color, avatar) VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (name, email, password, role, color, avatar, is_admin) VALUES (?, ?, ?, ?, ?, ?, 0)`,
       [name, email, hashedPassword, role, color || '#10B981', avatar]
     );
 
-    const token = jwt.sign({ id: result.lastID }, SECRET_KEY, { expiresIn: 86400 });
+    const token = jwt.sign({ id: result.lastID, is_admin: 0 }, SECRET_KEY, { expiresIn: 86400 });
 
     const newUser = {
       id: result.lastID,
@@ -53,7 +73,8 @@ router.post('/register', async (req, res) => {
       avatar,
       points: 0,
       tasks_completed: 0,
-      streak: 0
+      streak: 0,
+      is_admin: 0
     };
     res.status(200).json({ auth: true, token: token, user: newUser });
   } catch (err) {
@@ -62,3 +83,5 @@ router.post('/register', async (req, res) => {
 });
 
 module.exports = router;
+module.exports.verifyToken = verifyToken;
+module.exports.requireAdmin = requireAdmin;

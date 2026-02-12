@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
+const { verifyToken, requireAdmin } = require('./auth');
 
 module.exports = (io) => {
+  // All routes require authentication
+  router.use(verifyToken);
+
   // USERS
   router.get('/users', async (req, res) => {
     try {
@@ -18,7 +22,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/users/:id', async (req, res) => {
+  router.put('/users/:id', requireAdmin, async (req, res) => {
     const { name, role, color, email, points, tasks_completed, streak, birthday, job, debt } = req.body;
     const id = req.params.id;
 
@@ -56,7 +60,7 @@ module.exports = (io) => {
     }
   });
 
-  router.delete('/users/:id', async (req, res) => {
+  router.delete('/users/:id', requireAdmin, async (req, res) => {
     try {
       await db.run("DELETE FROM users WHERE id = ?", [req.params.id]);
       io.emit('updateData');
@@ -76,7 +80,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/shopping', async (req, res) => {
+  router.post('/shopping', requireAdmin, async (req, res) => {
     const { item, added_by } = req.body;
     const created_at = new Date().toISOString();
     try {
@@ -89,7 +93,7 @@ module.exports = (io) => {
     }
   });
 
-  router.delete('/shopping/:id', async (req, res) => {
+  router.delete('/shopping/:id', requireAdmin, async (req, res) => {
     try {
       await db.run("DELETE FROM shopping_list WHERE id = ?", [req.params.id]);
       io.emit('shoppingUpdated', { type: 'delete', id: req.params.id });
@@ -116,7 +120,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/tasks', async (req, res) => {
+  router.post('/tasks', requireAdmin, async (req, res) => {
     const { title, description, category, priority, due_date, points, assignedTo } = req.body;
     const created_at = new Date().toISOString();
 
@@ -142,7 +146,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/tasks/:id', async (req, res) => {
+  router.put('/tasks/:id', requireAdmin, async (req, res) => {
     const { title, description, category, priority, due_date, points, completed, assignedTo } = req.body;
     const id = req.params.id;
 
@@ -168,7 +172,7 @@ module.exports = (io) => {
     }
   });
 
-  router.delete('/tasks/:id', async (req, res) => {
+  router.delete('/tasks/:id', requireAdmin, async (req, res) => {
     try {
       await db.run("DELETE FROM tasks WHERE id = ?", [req.params.id]);
       io.emit('tasksUpdated', { type: 'delete', id: req.params.id });
@@ -189,7 +193,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/goals', async (req, res) => {
+  router.post('/goals', requireAdmin, async (req, res) => {
     const { title, description, category, target, current, due_date, points } = req.body;
     try {
       const result = await db.run(
@@ -202,7 +206,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/goals/:id', async (req, res) => {
+  router.put('/goals/:id', requireAdmin, async (req, res) => {
     const { title, description, category, target, current, due_date, points, completed } = req.body;
     try {
       await db.run(
@@ -225,7 +229,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/rewards', async (req, res) => {
+  router.post('/rewards', requireAdmin, async (req, res) => {
     const { name, description, icon, category, cost } = req.body;
     try {
       const result = await db.run(
@@ -250,7 +254,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/expenses', async (req, res) => {
+  router.post('/expenses', requireAdmin, async (req, res) => {
     const { description, category, amount, date, notes } = req.body;
     try {
       await db.run(`UPDATE budget_categories SET spent = spent + ? WHERE name = ?`, [amount, category]);
@@ -272,7 +276,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/meals/update', async (req, res) => {
+  router.post('/meals/update', requireAdmin, async (req, res) => {
     const meals = req.body;
     try {
       // For bulk update, we might still use serialize/prepare for efficiency, 
@@ -315,7 +319,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/activities', async (req, res) => {
+  router.post('/activities', requireAdmin, async (req, res) => {
     const { type, memberId, text, points, time } = req.body;
     try {
       const result = await db.run(`INSERT INTO activities (type, member_id, text, points, time) VALUES (?, ?, ?, ?, ?)`,
@@ -343,7 +347,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/events', async (req, res) => {
+  router.post('/events', requireAdmin, async (req, res) => {
     const { title, date, type, assignedTo, points } = req.body;
     try {
       const result = await db.run(
@@ -357,7 +361,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/events/:id', async (req, res) => {
+  router.put('/events/:id', requireAdmin, async (req, res) => {
     const { title, date, assignedTo, completed } = req.body;
     try {
       await db.run(
@@ -386,7 +390,7 @@ module.exports = (io) => {
     }
   });
 
-  router.post('/notes', async (req, res) => {
+  router.post('/notes', requireAdmin, async (req, res) => {
     const { title, content, priority, author_id, date, pinned } = req.body;
     try {
       const result = await db.run(
@@ -400,7 +404,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/notes/:id', async (req, res) => {
+  router.put('/notes/:id', requireAdmin, async (req, res) => {
     const { title, content, priority, pinned, completed } = req.body;
     try {
       await db.run(
@@ -414,7 +418,7 @@ module.exports = (io) => {
     }
   });
 
-  router.delete('/notes/:id', async (req, res) => {
+  router.delete('/notes/:id', requireAdmin, async (req, res) => {
     try {
       await db.run("DELETE FROM notes WHERE id = ?", [req.params.id]);
       io.emit('updateData');

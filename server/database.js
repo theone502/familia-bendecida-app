@@ -65,6 +65,7 @@ function initDb() {
         db.run("ALTER TABLE users ADD COLUMN birthday TEXT", () => { });
         db.run("ALTER TABLE users ADD COLUMN job TEXT", () => { });
         db.run("ALTER TABLE users ADD COLUMN debt INTEGER DEFAULT 0", () => { });
+        db.run("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0", () => { });
       }
     });
 
@@ -206,11 +207,11 @@ function seedData() {
   console.log("Seeding data for 2026...");
   // Default Members
   const members = [
-    { name: 'Andres', role: 'Padre', email: 'andres@familia.com', password: '123', color: '#10B981', points: 350, tasks_completed: 42, streak: 21 },
-    { name: 'Magda', role: 'Madre', email: 'magda@familia.com', password: '123', color: '#8B5CF6', points: 420, tasks_completed: 56, streak: 18 },
-    { name: 'Juan', role: 'Hijo Mayor', email: 'juan@familia.com', password: '123', color: '#3B82F6', points: 285, tasks_completed: 38, streak: 14 },
-    { name: 'Ana', role: 'Hija', email: 'ana@familia.com', password: '123', color: '#EC4899', points: 320, tasks_completed: 45, streak: 25 },
-    { name: 'Carlos', role: 'Hijo Menor', email: 'carlos@familia.com', password: '123', color: '#F59E0B', points: 190, tasks_completed: 28, streak: 7 }
+    { name: 'Andres', role: 'Padre', email: 'andres@familia.com', password: 'imthebest502@', color: '#10B981', points: 350, tasks_completed: 42, streak: 21, is_admin: 1 },
+    { name: 'Magda', role: 'Madre', email: 'magda@familia.com', password: '123', color: '#8B5CF6', points: 420, tasks_completed: 56, streak: 18, is_admin: 0 },
+    { name: 'Juan', role: 'Hijo Mayor', email: 'juan@familia.com', password: '123', color: '#3B82F6', points: 285, tasks_completed: 38, streak: 14, is_admin: 0 },
+    { name: 'Ana', role: 'Hija', email: 'ana@familia.com', password: '123', color: '#EC4899', points: 320, tasks_completed: 45, streak: 25, is_admin: 0 },
+    { name: 'Carlos', role: 'Hijo Menor', email: 'carlos@familia.com', password: '123', color: '#F59E0B', points: 190, tasks_completed: 28, streak: 7, is_admin: 0 }
   ];
 
   members.forEach(m => {
@@ -219,9 +220,9 @@ function seedData() {
     const avatar = `https://ui-avatars.com/api/?name=${avatarName}&background=${avatarColor}&color=fff&bold=true&size=400`;
     const hash = bcrypt.hashSync(m.password, 10);
 
-    db.run(`INSERT INTO users (name, email, password, role, color, avatar, points, tasks_completed, streak) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [m.name, m.email, hash, m.role, m.color, avatar, m.points, m.tasks_completed, m.streak]);
+    db.run(`INSERT INTO users (name, email, password, role, color, avatar, points, tasks_completed, streak, is_admin)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [m.name, m.email, hash, m.role, m.color, avatar, m.points, m.tasks_completed, m.streak, m.is_admin || 0]);
   });
 
   // Calendar for 2026 (Cleaning turns)
