@@ -2471,8 +2471,9 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        logout();
+                    if (response.status === 403) {
+                        // Not admin - show message but don't logout
+                        console.warn('Admin access required');
                     }
                     throw new Error(data.error || 'API Error');
                 }
@@ -2532,15 +2533,35 @@
                 const splash = document.getElementById('splash-content');
                 const loginContainer = document.getElementById('login-container');
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     if (token && savedUser) {
-                        // Already logged in - skip to app
-                        currentUser = JSON.parse(savedUser);
-                        welcomeScreen.classList.add('hidden');
-                        setTimeout(() => {
-                            welcomeScreen.style.display = 'none';
-                            completeLogin(currentUser);
-                        }, 500);
+                        // Verify token is still valid before skipping login
+                        try {
+                            const testRes = await fetch('/api/users', {
+                                headers: { 'x-access-token': token }
+                            });
+                            if (testRes.ok) {
+                                currentUser = JSON.parse(savedUser);
+                                welcomeScreen.classList.add('hidden');
+                                setTimeout(() => {
+                                    welcomeScreen.style.display = 'none';
+                                    completeLogin(currentUser);
+                                }, 500);
+                            } else {
+                                // Token invalid - clear and show login
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('user');
+                                splash.style.display = 'none';
+                                loginContainer.style.display = 'flex';
+                                renderLoginProfiles();
+                            }
+                        } catch (err) {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            splash.style.display = 'none';
+                            loginContainer.style.display = 'flex';
+                            renderLoginProfiles();
+                        }
                     } else {
                         // Show profile selection login
                         splash.style.display = 'none';
@@ -2799,8 +2820,9 @@
             async function renderLoginProfiles() {
                 const profilesContainer = document.getElementById('login-profiles');
                 try {
-                    // Fetch users from backend
-                    familyMembers = await apiCall('/api/users');
+                    // Fetch users from backend (public endpoint, no auth needed)
+                    const res = await fetch('/api/users/public');
+                    familyMembers = await res.json();
 
                     profilesContainer.innerHTML = '';
                     familyMembers.forEach(member => {
@@ -2880,7 +2902,15 @@
                 showToast('¡Bienvenido!', `Hola ${member.name}, que tengas un bendecido día.`);
 
                 // Load all data from server
-                await loadAllData();
+                try {
+                    await loadAllData();
+                } catch (err) {
+                    console.error('Error loading data, clearing session:', err);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    location.reload();
+                    return;
+                }
 
                 checkCleaningNotification();
             }

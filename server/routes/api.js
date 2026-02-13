@@ -4,13 +4,23 @@ const db = require('../database');
 const { verifyToken, requireAdmin } = require('./auth');
 
 module.exports = (io) => {
-  // All routes require authentication
+  // Public route for login profile selection (no auth needed)
+  router.get('/users/public', async (req, res) => {
+    try {
+      const rows = await db.all("SELECT id, name, role, color, avatar FROM users");
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // All other routes require authentication
   router.use(verifyToken);
 
-  // USERS
+  // USERS (full data, requires auth)
   router.get('/users', async (req, res) => {
     try {
-      const rows = await db.all("SELECT id, name, role, color, avatar, points, tasks_completed, streak, email, birthday, job, debt FROM users");
+      const rows = await db.all("SELECT id, name, role, color, avatar, points, tasks_completed, streak, email, birthday, job, debt, is_admin FROM users");
       const mapped = rows.map(r => ({
         ...r,
         tasksCompleted: r.tasks_completed,
