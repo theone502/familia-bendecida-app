@@ -787,6 +787,15 @@ const FamilyManager = {
   showEditMember(id) {
       const member = this.members.find(m => m.id === id);
       const content = `
+        <div style="text-align:center; margin-bottom:15px;">
+            <img src="${member.avatar}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); margin-bottom:10px;" id="edit-avatar-preview">
+            <div>
+                <label class="btn" style="cursor:pointer; border:1px solid var(--border); font-size:0.9rem;">
+                    <i class="fa-solid fa-camera"></i> Cambiar Foto
+                    <input type="file" id="edit-avatar-file" accept="image/*" style="display:none;" onchange="FamilyManager.previewAvatar(this, ${id})">
+                </label>
+            </div>
+        </div>
         <div class="form-group"><label class="form-label">Nombre</label><input type="text" class="form-input" id="edit-name" value="${member.name}"></div>
         <div class="form-group"><label class="form-label">Rol</label><input type="text" class="form-input" id="edit-role" value="${member.role}"></div>
         <div class="form-group"><label class="form-label">Trabajo/Ocupación</label><input type="text" class="form-input" id="edit-job" value="${member.job || ''}" placeholder="Ej: Estudiante, Ingeniero..."></div>
@@ -795,13 +804,41 @@ const FamilyManager = {
       this.showModal('Editar Perfil', content, [{ text: 'Guardar Cambios', type: 'primary', onclick: `FamilyManager.saveMember(${id})` }]);
   },
 
+  previewAvatar(input, userId) {
+      if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+              document.getElementById('edit-avatar-preview').src = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+          this._pendingAvatarUpload = { file: input.files[0], userId };
+      }
+  },
+
+  async uploadAvatar(userId) {
+      if (!this._pendingAvatarUpload || this._pendingAvatarUpload.userId !== userId) return;
+      const formData = new FormData();
+      formData.append('avatar', this._pendingAvatarUpload.file);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/users/${userId}/avatar`, {
+          method: 'POST',
+          headers: { 'x-access-token': token },
+          body: formData
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      this._pendingAvatarUpload = null;
+  },
+
   async saveMember(id) {
       const name = document.getElementById('edit-name').value;
       const role = document.getElementById('edit-role').value;
       const job = document.getElementById('edit-job').value;
       const birthday = document.getElementById('edit-birthday').value;
-      
+
       try {
+          if (this._pendingAvatarUpload && this._pendingAvatarUpload.userId === id) {
+              await this.uploadAvatar(id);
+          }
           await this.apiCall(`/api/users/${id}`, 'PUT', { name, role, job, birthday });
           document.querySelector('.modal-overlay').remove();
           this.loadData();

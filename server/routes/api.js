@@ -1,7 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const multer = require('multer');
 const db = require('../database');
 const { verifyToken, requireAdmin } = require('./auth');
+
+// Multer config for profile picture uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '..', '..', 'public', 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'avatar-' + req.params.id + '-' + Date.now() + ext);
+  }
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, allowed.includes(ext));
+  }
+});
 
 module.exports = (io) => {
   // Public route for login profile selection (no auth needed)
@@ -65,6 +87,19 @@ module.exports = (io) => {
 
       io.emit('updateData'); // Notify clients
       res.json({ message: 'User updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Profile picture upload
+  router.post('/users/:id/avatar', verifyToken, requireAdmin, upload.single('avatar'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+      const avatarUrl = '/uploads/' + req.file.filename;
+      await db.run('UPDATE users SET avatar = ? WHERE id = ?', [avatarUrl, req.params.id]);
+      io.emit('updateData');
+      res.json({ avatar: avatarUrl });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

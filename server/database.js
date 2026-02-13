@@ -213,11 +213,12 @@ function seedData() {
   console.log("Seeding data for 2026...");
   // Default Members
   const members = [
-    { name: 'Andres', role: 'Padre', email: 'andres@familia.com', password: 'imthebest502@', color: '#10B981', points: 350, tasks_completed: 42, streak: 21, is_admin: 1 },
-    { name: 'Magda', role: 'Madre', email: 'magda@familia.com', password: '123', color: '#8B5CF6', points: 420, tasks_completed: 56, streak: 18, is_admin: 0 },
-    { name: 'Juan', role: 'Hijo Mayor', email: 'juan@familia.com', password: '123', color: '#3B82F6', points: 285, tasks_completed: 38, streak: 14, is_admin: 0 },
-    { name: 'Ana', role: 'Hija', email: 'ana@familia.com', password: '123', color: '#EC4899', points: 320, tasks_completed: 45, streak: 25, is_admin: 0 },
-    { name: 'Carlos', role: 'Hijo Menor', email: 'carlos@familia.com', password: '123', color: '#F59E0B', points: 190, tasks_completed: 28, streak: 7, is_admin: 0 }
+    { name: 'Andres 💻', role: 'Tech Guy', email: 'andres@familia.com', password: 'imthebest502@', color: '#10B981', points: 350, tasks_completed: 42, streak: 21, is_admin: 1 },
+    { name: 'Magda/Tiy', role: 'Madre', email: 'magda@familia.com', password: '123', color: '#8B5CF6', points: 420, tasks_completed: 56, streak: 18, is_admin: 0 },
+    { name: 'Chusma', role: 'Familia', email: 'juan@familia.com', password: '123', color: '#3B82F6', points: 285, tasks_completed: 38, streak: 14, is_admin: 0 },
+    { name: 'Monkey', role: 'Familia', email: 'ana@familia.com', password: '123', color: '#EC4899', points: 320, tasks_completed: 45, streak: 25, is_admin: 0 },
+    { name: 'Wanit', role: 'Familia', email: 'carlos@familia.com', password: '123', color: '#F59E0B', points: 190, tasks_completed: 28, streak: 7, is_admin: 0 },
+    { name: 'Chepe/Macho', role: 'Familia', email: 'chepe@familia.com', password: '123', color: '#EF4444', points: 100, tasks_completed: 15, streak: 5, is_admin: 0 }
   ];
 
   members.forEach(m => {
