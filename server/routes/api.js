@@ -4,6 +4,7 @@ const path = require('path');
 const multer = require('multer');
 const db = require('../database');
 const { verifyToken, requireAdmin } = require('./auth');
+const { sendPushToAll } = require('../pushService');
 
 // Multer config for profile picture uploads
 const storage = multer.diskStorage({
@@ -31,6 +32,27 @@ module.exports = (io) => {
     try {
       const rows = await db.all("SELECT id, name, role, color, avatar, email FROM users");
       res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // PUSH NOTIFICATION ROUTES
+  router.get('/push/vapid-key', verifyToken, (req, res) => {
+    res.json({ publicKey: process.env.VAPID_PUBLIC_KEY });
+  });
+
+  router.post('/push/subscribe', verifyToken, async (req, res) => {
+    const { subscription, userId } = req.body;
+    if (!subscription || !subscription.endpoint || !subscription.keys) {
+      return res.status(400).json({ error: 'Invalid subscription' });
+    }
+    try {
+      await db.run(
+        `INSERT OR REPLACE INTO push_subscriptions (user_id, endpoint, p256dh, auth, created_at) VALUES (?, ?, ?, ?, ?)`,
+        [userId, subscription.endpoint, subscription.keys.p256dh, subscription.keys.auth, new Date().toISOString()]
+      );
+      res.json({ message: 'Subscribed' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -443,6 +465,18 @@ module.exports = (io) => {
         [title, content, priority, author_id, date, pinned ? 1 : 0]
       );
       io.emit('updateData');
+
+      // Send push notification for pinned notes (announcements)
+      if (pinned) {
+        const author = await db.get('SELECT name FROM users WHERE id = ?', [author_id]);
+        sendPushToAll({
+          title: '📌 Anuncio Familiar',
+          body: `${author ? author.name : 'Admin'}: ${title}`,
+          tag: 'announcement-' + result.lastID,
+          url: '/'
+        }, author_id);
+      }
+
       res.json({ id: result.lastID, ...req.body });
     } catch (err) {
       res.status(500).json({ error: err.message });

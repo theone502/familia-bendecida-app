@@ -17,6 +17,7 @@ const io = socketIo(server, {
 const db = require('./database');
 const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api')(io);
+const { sendPushToAll } = require('./pushService');
 
 // Middleware
 app.use(cors());
@@ -57,6 +58,14 @@ io.on('connection', (socket) => {
         sender_color: sender ? sender.color : '#999'
       };
       io.emit('newMessage', newMessage);
+
+      // Send push notification for chat messages
+      sendPushToAll({
+        title: `💬 ${sender ? sender.name : 'Alguien'}`,
+        body: message.length > 100 ? message.substring(0, 100) + '...' : message,
+        tag: 'chat',
+        url: '/'
+      }, sender_id);
     } catch (err) {
       console.error("Error saving message:", err);
     }

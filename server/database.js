@@ -199,6 +199,16 @@ function initDb() {
       completed BOOLEAN DEFAULT 0
     )`);
 
+    // Push Subscriptions Table
+    db.run(`CREATE TABLE IF NOT EXISTS push_subscriptions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      endpoint TEXT UNIQUE,
+      p256dh TEXT,
+      auth TEXT,
+      created_at TEXT
+    )`);
+
     // Initial Data Seeding (if empty)
     db.get("SELECT count(*) as count FROM users", (err, row) => {
       if (row && row.count === 0) {

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#064e3b"/>
+  <text x="256" y="200" font-family="Arial,sans-serif" font-size="128" font-weight="bold" fill="#10b981" text-anchor="middle">FB</text>
+  <text x="256" y="320" font-family="Arial,sans-serif" font-size="56" fill="#f59e0b" text-anchor="middle">Familia</text>
+  <text x="256" y="400" font-family="Arial,sans-serif" font-size="56" fill="#f59e0b" text-anchor="middle">Bendecida</text>
+</svg>
