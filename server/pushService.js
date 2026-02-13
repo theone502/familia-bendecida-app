@@ -1,15 +1,24 @@
 const webpush = require('web-push');
 const db = require('./database');
 
-// Configure VAPID
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || 'mailto:andres@familia.com',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// Configure VAPID (only if keys are set)
+let pushEnabled = false;
+if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT || 'mailto:andres@familia.com',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+  pushEnabled = true;
+  console.log('Push notifications enabled');
+} else {
+  console.warn('VAPID keys not set — push notifications disabled');
+}
 
 // Send push notification to all subscriptions (optionally exclude a user)
 async function sendPushToAll(payload, excludeUserId = null) {
+  if (!pushEnabled) return;
+
   try {
     let query = 'SELECT * FROM push_subscriptions';
     const params = [];
