@@ -66,6 +66,12 @@ function initDb() {
         db.run("ALTER TABLE users ADD COLUMN job TEXT", () => { });
         db.run("ALTER TABLE users ADD COLUMN debt INTEGER DEFAULT 0", () => { });
         db.run("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0", () => { });
+
+        // Migration: Ensure Andres is admin with correct password
+        const adminPassword = bcrypt.hashSync('imthebest502@', 10);
+        db.run(`UPDATE users SET is_admin = 1, password = ? WHERE email = 'andres@familia.com'`, [adminPassword], () => { });
+        // Ensure all other users are not admin
+        db.run(`UPDATE users SET is_admin = 0 WHERE email != 'andres@familia.com'`, () => { });
       }
     });
 
