@@ -169,7 +169,10 @@ const FamilyManager = {
     
     const response = await fetch(url, options);
     if (!response.ok) {
-        if(response.status === 401 || response.status === 403) this.logout();
+        if(response.status === 401) this.logout();
+        if(response.status === 403) {
+            this.showToast('Acceso Denegado', 'Solo el administrador puede realizar esta acción', 'warning');
+        }
         throw new Error(`API Error: ${response.statusText}`);
     }
     return response.json();
