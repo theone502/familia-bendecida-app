@@ -7,7 +7,7 @@ module.exports = (io) => {
   // Public route for login profile selection (no auth needed)
   router.get('/users/public', async (req, res) => {
     try {
-      const rows = await db.all("SELECT id, name, role, color, avatar FROM users");
+      const rows = await db.all("SELECT id, name, role, color, avatar, email FROM users");
       res.json(rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
