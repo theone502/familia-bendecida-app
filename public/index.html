@@ -1587,6 +1587,13 @@
                 grid-template-columns: repeat(6, 1fr);
             }
 
+            .dashboard-grid > .card,
+            .dashboard-grid > .welcome,
+            .dashboard-grid > .bible-verse,
+            .dashboard-grid > div {
+                grid-column: span 6 !important;
+            }
+
             .stats-row {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1685,7 +1692,15 @@
             }
 
             .dashboard-grid {
+                grid-template-columns: 1fr !important;
                 gap: 16px;
+            }
+
+            .dashboard-grid > .card,
+            .dashboard-grid > .welcome,
+            .dashboard-grid > .bible-verse,
+            .dashboard-grid > div {
+                grid-column: span 1 !important;
             }
 
             .chat-container {
