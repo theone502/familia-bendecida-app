@@ -1685,7 +1685,12 @@
             }
 
             .dashboard-grid {
+                grid-template-columns: 1fr;
                 gap: 16px;
+            }
+
+            .dashboard-grid > .card {
+                grid-column: span 1 !important;
             }
 
             .chat-container {
@@ -1764,8 +1769,27 @@
                 transform: translateY(150px);
             }
 
+            /* Dashboard cards: full width on mobile */
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-grid > .card {
+                grid-column: span 1 !important;
+            }
+
+            /* Calendar: horizontal scroll on mobile */
             .calendar-grid {
                 gap: 4px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                min-width: 0;
+                grid-template-columns: repeat(7, minmax(48px, 1fr));
+            }
+
+            .calendar-weekdays {
+                overflow-x: auto;
+                grid-template-columns: repeat(7, minmax(48px, 1fr)) !important;
             }
 
             .calendar-day {
@@ -1783,6 +1807,27 @@
             .assigned-to {
                 font-size: 9px;
                 padding: 2px 4px;
+            }
+
+            /* Chat input: keep button inside on mobile */
+            .chat-container {
+                height: calc(100vh - 250px) !important;
+            }
+
+            .chat-input {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .chat-input input {
+                flex: 1 1 100%;
+                min-width: 0;
+            }
+
+            .chat-input .btn {
+                flex: 1 1 100%;
+                justify-content: center;
             }
 
             .section-header {
