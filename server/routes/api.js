@@ -26,6 +26,26 @@ const upload = multer({
   }
 });
 
+// Multer config for chat image uploads
+const chatStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '..', '..', 'public', 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'chat-' + Date.now() + '-' + Math.round(Math.random() * 1000) + ext);
+  }
+});
+const chatUpload = multer({
+  storage: chatStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, allowed.includes(ext));
+  }
+});
+
 module.exports = (io) => {
   // Public route for login profile selection (no auth needed)
   router.get('/users/public', async (req, res) => {
@@ -58,8 +78,36 @@ module.exports = (io) => {
     }
   });
 
+  // Chat image upload (requires auth)
+  router.post('/chat/upload-image', verifyToken, chatUpload.single('image'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+      const imageUrl = '/uploads/' + req.file.filename;
+      res.json({ imageUrl });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // All other routes require authentication
   router.use(verifyToken);
+
+  // Cleaning penalty - any authenticated user can trigger this
+  router.post('/users/:id/penalty', async (req, res) => {
+    const { amount, reason } = req.body;
+    const id = req.params.id;
+    try {
+      const user = await db.get("SELECT * FROM users WHERE id = ?", [id]);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+
+      const newDebt = (user.debt || 0) + (amount || 30);
+      await db.run("UPDATE users SET debt = ? WHERE id = ?", [newDebt, id]);
+      io.emit('updateData');
+      res.json({ message: 'Penalty applied', debt: newDebt });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 
   // USERS (full data, requires auth)
   router.get('/users', async (req, res) => {

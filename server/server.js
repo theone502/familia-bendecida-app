@@ -37,12 +37,12 @@ io.on('connection', (socket) => {
   console.log('New client connected');
 
   socket.on('sendMessage', async (data) => {
-    const { sender_id, message, type } = data;
+    const { sender_id, message, type, image_url } = data;
     const timestamp = new Date().toISOString();
 
     try {
-      const result = await db.run(`INSERT INTO chat (sender_id, message, timestamp, type) VALUES (?, ?, ?, ?)`,
-        [sender_id, message, timestamp, type]);
+      const result = await db.run(`INSERT INTO chat (sender_id, message, timestamp, type, image_url) VALUES (?, ?, ?, ?, ?)`,
+        [sender_id, message, timestamp, type, image_url || null]);
 
       // Fetch sender info to include in the broadcast
       const sender = await db.get(`SELECT name, avatar, color FROM users WHERE id = ?`, [sender_id]);
@@ -53,6 +53,7 @@ io.on('connection', (socket) => {
         message,
         timestamp,
         type,
+        image_url: image_url || null,
         sender_name: sender ? sender.name : 'Unknown',
         sender_avatar: sender ? sender.avatar : '',
         sender_color: sender ? sender.color : '#999'
@@ -60,9 +61,10 @@ io.on('connection', (socket) => {
       io.emit('newMessage', newMessage);
 
       // Send push notification for chat messages
+      const pushBody = image_url ? '📷 Envió una foto' : (message.length > 100 ? message.substring(0, 100) + '...' : message);
       sendPushToAll({
         title: `💬 ${sender ? sender.name : 'Alguien'}`,
-        body: message.length > 100 ? message.substring(0, 100) + '...' : message,
+        body: pushBody,
         tag: 'chat',
         url: '/'
       }, sender_id);

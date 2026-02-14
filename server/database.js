@@ -174,8 +174,13 @@ function initDb() {
       sender_id INTEGER,
       message TEXT,
       timestamp TEXT,
-      type TEXT
-    )`);
+      type TEXT,
+      image_url TEXT
+    )`, (err) => {
+      if (!err) {
+        db.run("ALTER TABLE chat ADD COLUMN image_url TEXT", () => { });
+      }
+    });
 
     // Activities Table
     db.run(`CREATE TABLE IF NOT EXISTS activities (

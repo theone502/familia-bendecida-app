@@ -2047,6 +2047,18 @@
                         </div>
 
 
+                        <!-- Birthday Countdown Card -->
+                        <div class="card" id="birthday-countdown-card"
+                            style="grid-column: span 12; padding: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                <i class="fa-solid fa-cake-candles" style="font-size: 24px; color: var(--secondary);"></i>
+                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Cumpleaños Próximos</h3>
+                            </div>
+                            <div id="birthday-countdown-content">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+
                         <!-- Bible Verse Section -->
                         <div class="bible-verse">
                             <div class="card">
@@ -2373,7 +2385,13 @@
                             <div class="chat-messages" id="chat-messages-container" style="flex: 1; min-height: 0;">
                                 <!-- Chat messages will be populated here -->
                             </div>
+                            <div id="chat-image-preview" style="display:none; margin-top:8px; position:relative; width:fit-content;">
+                                <img id="chat-image-preview-img" style="max-width:200px; max-height:150px; border-radius:12px; border:2px solid var(--border);">
+                                <button onclick="clearChatImagePreview()" style="position:absolute; top:-8px; right:-8px; background:var(--danger); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:grid; place-items:center;"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
                             <div class="chat-input" style="margin-top: 12px;">
+                                <input type="file" id="chat-image-input" accept="image/*" style="display:none;">
+                                <button class="btn" id="chat-image-btn" title="Enviar imagen" style="padding: 10px 14px;"><i class="fa-solid fa-camera"></i></button>
                                 <input type="text" id="chat-input-field" placeholder="Escribe un mensaje..." style="flex: 3;">
                                 <button class="btn primary" id="send-message-btn"><i
                                         class="fa-solid fa-paper-plane"></i> Enviar</button>
@@ -2478,6 +2496,25 @@
                     <button class="btn" style="flex: 1;" onclick="closeNoteModal()">Cancelar</button>
                     <button class="btn primary" style="flex: 2;" onclick="saveNote()">Guardar Nota</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Cleaning Penalty Modal -->
+        <div id="penalty-modal" class="modal-overlay">
+            <div class="modal-container" style="text-align:center; max-width:420px;">
+                <div style="background: linear-gradient(135deg, #ef4444, #dc2626); color:white; padding:24px; border-radius:var(--radius-md) var(--radius-md) 0 0; margin:-24px -24px 24px -24px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size:48px; margin-bottom:12px; display:block;"></i>
+                    <div style="font-size:22px; font-weight:700;">Penalización de Limpieza</div>
+                </div>
+                <div id="penalty-member-avatar" style="margin-bottom:16px;"></div>
+                <div id="penalty-message" style="font-size:16px; color:var(--text); margin-bottom:20px;"></div>
+                <div style="background:rgba(239,68,68,0.1); border:2px solid var(--danger); border-radius:var(--radius-sm); padding:20px; margin-bottom:24px;">
+                    <div style="font-size:42px; font-weight:800; color:var(--danger);">-$30</div>
+                    <div style="font-size:14px; color:var(--text-light); margin-top:4px;">Agregado a la deuda</div>
+                </div>
+                <button class="btn primary" style="width:100%; padding:14px; font-size:16px;" onclick="closePenaltyModal()">
+                    <i class="fa-solid fa-check"></i> Entendido
+                </button>
             </div>
         </div>
 
@@ -2796,12 +2833,13 @@
                     // Show notification if it's from someone else
                     if (currentUser && message.sender_id !== currentUser.id) {
                         const senderName = message.sender_name || 'Alguien';
-                        showToast('Nuevo mensaje', `${senderName}: ${message.message}`);
+                        const notifBody = message.image_url ? '📷 Envió una foto' : message.message;
+                        showToast('Nuevo mensaje', `${senderName}: ${notifBody}`);
 
                         // Browser notification
                         if ('Notification' in window && Notification.permission === 'granted') {
                             new Notification(`${senderName} dice:`, {
-                                body: message.message,
+                                body: notifBody,
                                 icon: message.sender_avatar || 'https://ui-avatars.com/api/?name=F&background=064e3b&color=fff'
                             });
                         }
@@ -2889,6 +2927,29 @@
                 if (input) {
                     input.addEventListener('keypress', (e) => {
                         if (e.key === 'Enter') sendMessage();
+                    });
+                }
+                const chatImageBtn = document.getElementById('chat-image-btn');
+                if (chatImageBtn) {
+                    chatImageBtn.addEventListener('click', () => {
+                        document.getElementById('chat-image-input').click();
+                    });
+                }
+                const chatImageInput = document.getElementById('chat-image-input');
+                if (chatImageInput) {
+                    chatImageInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        try {
+                            showToast('Subiendo...', 'Subiendo imagen...');
+                            const imageUrl = await uploadChatImage(file);
+                            pendingChatImageUrl = imageUrl;
+                            const preview = document.getElementById('chat-image-preview');
+                            document.getElementById('chat-image-preview-img').src = imageUrl;
+                            preview.style.display = 'block';
+                        } catch (err) {
+                            showToast('Error', 'No se pudo subir la imagen');
+                        }
                     });
                 }
             });
@@ -2996,6 +3057,7 @@
                 }
 
                 checkCleaningNotification();
+                checkCleaningPenalty();
             }
 
             function logout() {
@@ -3057,6 +3119,47 @@
                         showToast('🧹 Aviso Importante', '¡Hoy es tu turno de limpieza!', 6000);
                     }, 1000);
                 }
+            }
+
+            let penaltyChecked = false;
+
+            async function checkCleaningPenalty() {
+                if (!currentUser || penaltyChecked) return;
+                penaltyChecked = true;
+
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+                const yesterdayEvent = allEvents.find(e => e.date === yesterdayStr && e.type === 'limpieza');
+                if (!yesterdayEvent || yesterdayEvent.completed) return;
+
+                const memberName = yesterdayEvent.assignedTo;
+                const member = familyMembers.find(m => m.name === memberName);
+                if (!member) return;
+
+                // Show penalty modal
+                const avatarEl = document.getElementById('penalty-member-avatar');
+                avatarEl.innerHTML = `<img src="${member.avatar}" style="width:80px; height:80px; border-radius:50%; border:4px solid var(--danger);">`;
+                document.getElementById('penalty-message').innerHTML = `<strong style="color:var(--danger);">${member.name}</strong> no limpió ayer.<br>Se aplica una penalización de <strong>$30</strong>.`;
+                document.getElementById('penalty-modal').style.display = 'flex';
+
+                // Add $30 to their debt
+                try {
+                    await apiCall(`/api/users/${member.id}/penalty`, 'POST', {
+                        amount: 30,
+                        reason: 'No limpió en su turno'
+                    });
+                    // Reload data to reflect updated debt
+                    const users = await apiCall('/api/users');
+                    familyMembers = users;
+                } catch (err) {
+                    console.error('Error applying penalty:', err);
+                }
+            }
+
+            function closePenaltyModal() {
+                document.getElementById('penalty-modal').style.display = 'none';
             }
 
             // Toast notification function
@@ -3125,6 +3228,7 @@
                 }
 
                 renderTodayCleaning();
+                renderBirthdayCountdown();
                 renderRecentActivity();
                 renderUpcomingTasks();
             }
@@ -3178,6 +3282,59 @@
                     </div>
                 `;
                 }
+            }
+
+            function renderBirthdayCountdown() {
+                const container = document.getElementById('birthday-countdown-content');
+                if (!container) return;
+
+                const members = familyMembers.filter(m => m.birthday);
+                if (members.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color:var(--text-light); padding:12px;">No hay cumpleaños registrados. Agrega fechas de cumpleaños en los perfiles.</p>';
+                    return;
+                }
+
+                const now = new Date();
+                const todayMonth = now.getMonth();
+                const todayDay = now.getDate();
+
+                const birthdayData = members.map(m => {
+                    const bParts = m.birthday.split('-');
+                    const bMonth = parseInt(bParts[1]) - 1;
+                    const bDay = parseInt(bParts[2]);
+
+                    let nextBirthday = new Date(now.getFullYear(), bMonth, bDay);
+                    if (nextBirthday < new Date(now.getFullYear(), todayMonth, todayDay)) {
+                        nextBirthday = new Date(now.getFullYear() + 1, bMonth, bDay);
+                    }
+
+                    const diffTime = nextBirthday - new Date(now.getFullYear(), todayMonth, todayDay);
+                    const daysUntil = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+                    return { member: m, daysUntil, bMonth, bDay };
+                }).sort((a, b) => a.daysUntil - b.daysUntil);
+
+                container.innerHTML = birthdayData.map(bd => {
+                    const isToday = bd.daysUntil === 0;
+                    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                    const dateStr = `${bd.bDay} ${monthNames[bd.bMonth]}`;
+
+                    return `
+                        <div style="display:flex; align-items:center; gap:14px; padding:12px; border-radius:var(--radius-sm); ${isToday ? 'background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(236,72,153,0.1)); border: 2px solid var(--secondary);' : 'background: var(--bg-soft);'} margin-bottom:8px; transition: var(--transition);">
+                            <img src="${bd.member.avatar}" style="width:48px; height:48px; border-radius:50%; border:3px solid ${isToday ? 'var(--secondary)' : bd.member.color};">
+                            <div style="flex:1;">
+                                <div style="font-weight:600; font-size:15px; color:var(--text);">${bd.member.name} ${isToday ? '🎉' : ''}</div>
+                                <div style="font-size:13px; color:var(--text-light);"><i class="fa-solid fa-calendar" style="margin-right:4px;"></i>${dateStr}</div>
+                            </div>
+                            <div style="text-align:center; min-width:60px;">
+                                ${isToday
+                                    ? '<div style="font-size:24px;">🎂</div><div style="font-size:12px; font-weight:700; color:var(--secondary);">¡HOY!</div>'
+                                    : `<div style="font-size:22px; font-weight:700; color:var(--primary);">${bd.daysUntil}</div><div style="font-size:11px; color:var(--text-light);">días</div>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
 
             async function toggleCleaningToday() {
@@ -3748,13 +3905,19 @@
 
                     const timestamp = new Date(message.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
+                    const imageHtml = message.image_url
+                        ? `<div style="margin-top: 6px;"><img src="${message.image_url}" style="max-width:250px; max-height:200px; border-radius:12px; cursor:pointer; border: 1px solid rgba(255,255,255,0.2);" onclick="window.open('${message.image_url}', '_blank')"></div>`
+                        : '';
+                    const textHtml = message.message ? `<div style="font-size: 15px; line-height: 1.4; margin-top: 4px;">${escapeHtml(message.message)}</div>` : '';
+
                     messageEl.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 8px;">
                             ${!isSelf ? `<img src="${senderAvatar}" style="width:28px; height:28px; border-radius:50%; border: 2px solid ${senderColor};">` : ''}
                             <span style="font-weight: 600; font-size: 13px; ${isSelf ? 'opacity: 0.9;' : 'color:' + senderColor}">${senderName}</span>
                             <span style="font-size: 11px; opacity: 0.6; margin-left: auto;">${timestamp}</span>
                         </div>
-                        <div style="font-size: 15px; line-height: 1.4; margin-top: 4px;">${escapeHtml(message.message)}</div>
+                        ${imageHtml}
+                        ${textHtml}
                     `;
 
                     chatContainer.appendChild(messageEl);
@@ -3770,11 +3933,35 @@
                 return div.innerHTML;
             }
 
+            let pendingChatImageUrl = null;
+
+            function clearChatImagePreview() {
+                pendingChatImageUrl = null;
+                document.getElementById('chat-image-preview').style.display = 'none';
+                document.getElementById('chat-image-input').value = '';
+            }
+
+            async function uploadChatImage(file) {
+                const token = localStorage.getItem('token');
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const res = await fetch('/api/chat/upload-image', {
+                    method: 'POST',
+                    headers: { 'x-access-token': token },
+                    body: formData
+                });
+
+                if (!res.ok) throw new Error('Upload failed');
+                const data = await res.json();
+                return data.imageUrl;
+            }
+
             async function sendMessage() {
                 const input = document.getElementById('chat-input-field');
                 const message = input.value.trim();
 
-                if (!message) return;
+                if (!message && !pendingChatImageUrl) return;
 
                 if (!currentUser) {
                     showToast('Error', 'Debes iniciar sesión para enviar mensajes');
@@ -3789,12 +3976,14 @@
 
                 const messageData = {
                     sender_id: currentUser.id,
-                    message: message,
-                    type: 'text'
+                    message: message || '',
+                    type: pendingChatImageUrl ? 'image' : 'text',
+                    image_url: pendingChatImageUrl || null
                 };
 
                 socket.emit('sendMessage', messageData);
                 input.value = '';
+                clearChatImagePreview();
                 input.focus();
             }
 
