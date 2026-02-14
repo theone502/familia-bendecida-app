@@ -1685,12 +1685,7 @@
             }
 
             .dashboard-grid {
-                grid-template-columns: 1fr;
                 gap: 16px;
-            }
-
-            .dashboard-grid > .card {
-                grid-column: span 1 !important;
             }
 
             .chat-container {
@@ -3582,6 +3577,7 @@
                 const id = document.getElementById('modal-member-id').value;
                 const name = document.getElementById('modal-member-name').value;
                 const birthday = document.getElementById('modal-member-birthday').value;
+                const photoInput = document.getElementById('modal-member-photo');
 
                 if (!name) {
                     showToast('Error', 'El nombre es obligatorio', 3000);
@@ -3589,17 +3585,31 @@
                 }
 
                 try {
+                    let memberId = id;
                     if (id) {
                         // Edit existing member via API
                         await apiCall(`/api/users/${id}`, 'PUT', { name, birthday });
                     } else {
                         // Register new member via API
                         const email = name.toLowerCase().replace(/\s+/g, '') + '@familia.com';
-                        await apiCall('/auth/register', 'POST', {
+                        const result = await apiCall('/auth/register', 'POST', {
                             name,
                             email,
                             password: '123',
                             role: 'Miembro'
+                        });
+                        memberId = result.user ? result.user.id : null;
+                    }
+
+                    // Upload photo if one was selected
+                    if (memberId && photoInput && photoInput.files && photoInput.files[0]) {
+                        const formData = new FormData();
+                        formData.append('avatar', photoInput.files[0]);
+                        const token = localStorage.getItem('token');
+                        await fetch(`/api/users/${memberId}/avatar`, {
+                            method: 'POST',
+                            headers: { 'x-access-token': token },
+                            body: formData
                         });
                     }
 
