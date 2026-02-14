@@ -883,6 +883,10 @@
             margin-bottom: 20px;
         }
 
+        .calendar-scroll-wrapper {
+            overflow: visible;
+        }
+
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -1789,29 +1793,39 @@
             }
 
             /* Calendar: horizontal scroll on mobile */
-            .calendar-grid {
-                gap: 4px;
+            .calendar-scroll-wrapper {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
-                min-width: 0;
-                grid-template-columns: repeat(7, minmax(48px, 1fr));
             }
 
-            .calendar-weekdays {
-                overflow-x: auto;
-                grid-template-columns: repeat(7, minmax(48px, 1fr)) !important;
+            .calendar-scroll-wrapper .calendar-weekdays {
+                min-width: 500px;
+                grid-template-columns: repeat(7, 1fr) !important;
+                gap: 4px !important;
+                font-size: 12px;
+            }
+
+            .calendar-grid {
+                min-width: 500px;
+                gap: 4px;
+                grid-template-columns: repeat(7, 1fr);
             }
 
             .calendar-day {
-                min-height: 70px;
-                padding: 5px;
-                font-size: 11px;
+                min-height: 60px;
+                padding: 4px;
+                font-size: 10px;
             }
 
             .day-number {
-                width: 22px;
-                height: 22px;
-                font-size: 11px;
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+
+            .cleaning-badge {
+                font-size: 8px !important;
+                padding: 1px 3px;
             }
 
             .assigned-to {
@@ -2153,18 +2167,20 @@
                                 <h3 id="current-month">Octubre 2025</h3>
                                 <button class="btn" id="today-btn">Hoy</button>
                             </div>
-                            <div class="calendar-weekdays"
-                                style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; font-weight: 600; color: var(--text-light); padding: 10px 0;">
-                                <div>Dom</div>
-                                <div>Lun</div>
-                                <div>Mar</div>
-                                <div>Mié</div>
-                                <div>Jue</div>
-                                <div>Vie</div>
-                                <div>Sáb</div>
-                            </div>
-                            <div class="calendar-grid" id="calendar-days">
-                                <!-- Calendar days will be populated here -->
+                            <div class="calendar-scroll-wrapper">
+                                <div class="calendar-weekdays"
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; font-weight: 600; color: var(--text-light); padding: 10px 0;">
+                                    <div>Dom</div>
+                                    <div>Lun</div>
+                                    <div>Mar</div>
+                                    <div>Mié</div>
+                                    <div>Jue</div>
+                                    <div>Vie</div>
+                                    <div>Sáb</div>
+                                </div>
+                                <div class="calendar-grid" id="calendar-days">
+                                    <!-- Calendar days will be populated here -->
+                                </div>
                             </div>
                         </div>
 
