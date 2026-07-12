@@ -14,6 +14,11 @@ const FamilyManager = {
   chat: [],
   shoppingList: [],
   activities: [],
+  polls: [],
+  photos: [],
+  reminders: [],
+  recipes: [],
+  _recipeFilter: 'all',
   
   currentMonth: new Date().getMonth(),
   currentYear: new Date().getFullYear(),
@@ -28,9 +33,35 @@ const FamilyManager = {
     this.checkAuth();
     this.setupEventListeners();
     this.setupSocket();
-    
+    this.setupConnectionMonitor();
+
     const savedFreq = localStorage.getItem('cleaningFreq');
     if(savedFreq) this.cleaningFrequency = parseInt(savedFreq);
+  },
+
+  setupConnectionMonitor() {
+    const indicator = document.getElementById('connection-indicator');
+
+    const updateStatus = (online) => {
+      if (indicator) {
+        indicator.textContent = online ? '● En línea' : '● Sin conexión';
+        indicator.style.color = online ? 'var(--success)' : 'var(--danger)';
+      }
+      if (!online) {
+        this.showToast('Sin conexión', 'Verifica tu conexión a internet', 'warning');
+      } else {
+        this.showToast('Conexión restaurada', 'Ya estás en línea', 'success');
+      }
+    };
+
+    window.addEventListener('offline', () => updateStatus(false));
+    window.addEventListener('online', () => updateStatus(true));
+
+    if (indicator) {
+      const online = navigator.onLine;
+      indicator.textContent = online ? '● En línea' : '● Sin conexión';
+      indicator.style.color = online ? 'var(--success)' : 'var(--danger)';
+    }
   },
 
   checkAuth() {
@@ -127,7 +158,7 @@ const FamilyManager = {
 
   async loadData() {
     try {
-      const [members, tasks, goals, rewards, events, budget, meals, chat, activities, shopping] = await Promise.all([
+      const [members, tasks, goals, rewards, events, budget, meals, chat, activities, shopping, polls, photos, reminders, recipes] = await Promise.all([
         this.apiCall('/api/users'),
         this.apiCall('/api/tasks'),
         this.apiCall('/api/goals'),
@@ -137,7 +168,11 @@ const FamilyManager = {
         this.apiCall('/api/meals'),
         this.apiCall('/api/chat'),
         this.apiCall('/api/activities'),
-        this.apiCall('/api/shopping')
+        this.apiCall('/api/shopping'),
+        this.apiCall('/api/polls'),
+        this.apiCall('/api/photos'),
+        this.apiCall('/api/reminders'),
+        this.apiCall('/api/recipes')
       ]);
 
       this.members = members;
@@ -150,10 +185,13 @@ const FamilyManager = {
       this.chat = chat;
       this.activities = activities;
       this.shoppingList = shopping;
-      this.achievements = this.getDefaultAchievements(); 
+      this.polls = polls || [];
+      this.photos = photos || [];
+      this.reminders = reminders || [];
+      this.recipes = recipes || [];
+      this.achievements = this.getDefaultAchievements();
 
       this.updateUI();
-      // Force refresh of current view
       const activeSection = document.querySelector('.content-section.active');
       if (activeSection) this.loadSectionContent(activeSection.id);
     } catch (error) {
@@ -233,7 +271,7 @@ const FamilyManager = {
   },
 
   setupEventListeners() {
-    document.querySelectorAll('.nav-item').forEach(item => {
+    document.querySelectorAll('.nav-link').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
         this.showSection(item.dataset.section);
@@ -251,7 +289,7 @@ const FamilyManager = {
   },
   
   showSection(sectionId) {
-    document.querySelectorAll('.nav-item').forEach(item => {
+    document.querySelectorAll('.nav-link').forEach(item => {
       item.classList.remove('active');
       if (item.dataset.section === sectionId) item.classList.add('active');
     });
@@ -279,6 +317,9 @@ const FamilyManager = {
       case 'chat': this.renderChat(); break;
       case 'achievements': this.renderAchievements(); break;
       case 'shopping': this.renderShoppingList(); break;
+      case 'polls': this.renderPolls(); break;
+      case 'reminders': this.renderReminders(); break;
+      case 'recipes': this.renderRecipes(); break;
     }
   },
 
@@ -846,57 +887,60 @@ const FamilyManager = {
       } catch(e) { console.error(e); }
   },
 
-  // --- GALLERY (UPDATED) ---
+  // --- GALLERY ---
   renderGallery() {
       const section = document.getElementById('gallery');
-      if(!section) return;
-      
-      // For now, these are static placeholders until real upload logic is built
-      // Real upload would require Multer on backend and file storage
-      const photos = [
-          { src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500', caption: 'Día de Campo' },
-          { src: 'https://images.unsplash.com/photo-1609220136736-443140cffec6?w=500', caption: 'Cena de Navidad' },
-          { src: 'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=500', caption: 'Vacaciones' },
-          { src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500', caption: 'Cumpleaños' },
-          { src: 'https://images.unsplash.com/photo-1581952976131-c63e7f342742?w=500', caption: 'Noche de Juegos' },
-          { src: 'https://images.unsplash.com/photo-1476900966801-48fe3c5385a5?w=500', caption: 'Caminata' }
-      ];
-
+      if (!section) return;
+      const photos = this.photos || [];
       section.innerHTML = `
         <div class="section-header">
             <div class="section-title"><i class="fa-solid fa-images section-title-icon"></i><span>Galería Familiar</span></div>
-            ${this.isAdmin() ? `<button class="btn primary" onclick="document.getElementById('file-upload').click()">
+            <label class="btn primary" style="cursor:pointer;">
                 <i class="fa-solid fa-upload"></i> Subir Foto
-            </button>
-            <input type="file" id="file-upload" style="display:none;" onchange="FamilyManager.handleFileUpload(this)">` : ''}
+                <input type="file" id="gallery-file-input" accept="image/*" style="display:none;" onchange="FamilyManager.uploadPhoto(this)">
+            </label>
         </div>
         <div class="gallery-grid" id="gallery-grid">
-           ${photos.map(p => `
-               <div class="gallery-item">
-                   <img src="${p.src}" alt="${p.caption}">
+           ${photos.length === 0 ? '<div class="empty-state" style="grid-column:1/-1">No hay fotos aún. ¡Sube la primera!</div>' : photos.map(p => `
+               <div class="gallery-item" style="position:relative;">
+                   <img src="${p.url}" alt="${p.caption || 'Foto familiar'}" onclick="FamilyManager.openPhotoFull('${p.url}', '${(p.caption||'').replace(/'/g,"\\'")}')">
                    <div class="gallery-caption">
-                       <h4 style="margin:0;">${p.caption}</h4>
+                       <h4 style="margin:0; font-size:13px;">${p.caption || ''}</h4>
+                       <small style="opacity:0.7;">${p.uploader_name || ''}</small>
                    </div>
+                   <button onclick="FamilyManager.deletePhoto(${p.id})" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;display:grid;place-items:center;"><i class="fa-solid fa-xmark" style="font-size:12px;"></i></button>
                </div>
            `).join('')}
         </div>
       `;
   },
 
-  handleFileUpload(input) {
-      if (input.files && input.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-              // Mock adding it to the DOM
-              const grid = document.getElementById('gallery-grid');
-              const div = document.createElement('div');
-              div.className = 'gallery-item';
-              div.innerHTML = `<img src="${e.target.result}"><div class="gallery-caption"><h4>Nueva Foto</h4></div>`;
-              grid.prepend(div);
-              FamilyManager.showToast('Foto subida', 'La foto se ha agregado a la galería', 'success');
-          };
-          reader.readAsDataURL(input.files[0]);
-      }
+  async uploadPhoto(input) {
+      if (!input.files || !input.files[0]) return;
+      const caption = prompt('¿Le pones un título a la foto? (opcional)') || '';
+      const formData = new FormData();
+      formData.append('photo', input.files[0]);
+      formData.append('caption', caption);
+      const token = localStorage.getItem('token');
+      try {
+          const res = await fetch('/api/photos', { method: 'POST', headers: { 'x-access-token': token }, body: formData });
+          if (!res.ok) throw new Error('Upload failed');
+          this.showToast('Foto subida', 'La foto se agregó a la galería', 'success');
+          this.loadData();
+      } catch (e) { this.showToast('Error', 'No se pudo subir la foto', 'error'); }
+  },
+
+  async deletePhoto(id) {
+      if (!confirm('¿Eliminar esta foto?')) return;
+      try { await this.apiCall(`/api/photos/${id}`, 'DELETE'); this.loadData(); } catch (e) {}
+  },
+
+  openPhotoFull(url, caption) {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;';
+      overlay.innerHTML = `<img src="${url}" style="max-width:90vw;max-height:80vh;border-radius:12px;"><p style="color:white;margin-top:16px;font-size:16px;">${caption}</p>`;
+      overlay.onclick = () => overlay.remove();
+      document.body.appendChild(overlay);
   },
   
   // --- TASKS (Keep Existing) ---
@@ -946,6 +990,272 @@ const FamilyManager = {
             </div>
           `;
       }).join('');
+  },
+
+  // --- POLLS ---
+  renderPolls() {
+      const container = document.getElementById('polls-container');
+      if (!container) return;
+      const wrapper = document.getElementById('add-poll-btn-wrapper');
+      if (wrapper && this.isAdmin()) {
+          wrapper.innerHTML = `<button class="btn primary" onclick="FamilyManager.showAddPollModal()"><i class="fa-solid fa-plus"></i> Nueva Votación</button>`;
+      }
+      if (!this.polls || this.polls.length === 0) {
+          container.innerHTML = '<div class="empty-state">No hay votaciones activas</div>';
+          return;
+      }
+      container.innerHTML = this.polls.map(poll => {
+          const total = poll.votes ? poll.votes.reduce((a, b) => a + b, 0) : 0;
+          const optionsHtml = poll.options.map((opt, i) => {
+              const count = poll.votes ? poll.votes[i] : 0;
+              const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+              const voted = poll.userVote === i;
+              return `
+                <div style="margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                        <span style="font-weight:${voted?'700':'400'};">${voted ? '✅ ' : ''}${opt}</span>
+                        <span style="color:var(--text-light);">${count} votos (${pct}%)</span>
+                    </div>
+                    <div style="background:var(--bg-soft); border-radius:8px; height:8px; overflow:hidden;">
+                        <div style="background:var(--primary-light); height:100%; width:${pct}%; transition:width 0.4s;"></div>
+                    </div>
+                    ${poll.userVote === null ? `<button class="btn" style="margin-top:6px; font-size:12px; padding:4px 12px;" onclick="FamilyManager.votePoll(${poll.id}, ${i})">Votar</button>` : ''}
+                </div>`;
+          }).join('');
+          return `
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+                    <h3 style="margin:0; flex:1;">${poll.question}</h3>
+                    ${this.isAdmin() ? `<button onclick="FamilyManager.deletePoll(${poll.id})" class="btn" style="padding:6px 10px; margin-left:10px;"><i class="fa-solid fa-trash" style="color:var(--danger);"></i></button>` : ''}
+                </div>
+                ${optionsHtml}
+                <div style="color:var(--text-light); font-size:13px; margin-top:8px;">${total} votos en total</div>
+            </div>`;
+      }).join('');
+  },
+
+  async votePoll(pollId, optionIndex) {
+      try {
+          await this.apiCall(`/api/polls/${pollId}/vote`, 'POST', { option_index: optionIndex });
+          this.showToast('Voto registrado', '¡Tu voto fue contado!', 'success');
+          this.loadData();
+      } catch (e) { this.showToast('Error', 'No se pudo registrar el voto', 'error'); }
+  },
+
+  async deletePoll(id) {
+      if (!confirm('¿Eliminar esta votación?')) return;
+      try { await this.apiCall(`/api/polls/${id}`, 'DELETE'); this.loadData(); } catch (e) {}
+  },
+
+  showAddPollModal() {
+      this.showModal('Nueva Votación', `
+        <div class="form-group">
+            <label class="form-label">Pregunta</label>
+            <input type="text" class="form-input" id="poll-question" placeholder="¿Qué cenamos el sábado?">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Opciones (una por línea, mín. 2)</label>
+            <textarea class="form-input" id="poll-options" rows="4" placeholder="Pizza\nPollo frito\nTacos\nPasta"></textarea>
+        </div>
+      `, [{ text: 'Crear', type: 'primary', onclick: 'FamilyManager.savePoll()' }]);
+  },
+
+  async savePoll() {
+      const question = document.getElementById('poll-question').value.trim();
+      const optionsRaw = document.getElementById('poll-options').value;
+      const options = optionsRaw.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+      if (!question || options.length < 2) return this.showToast('Error', 'Necesitas una pregunta y al menos 2 opciones', 'error');
+      await this.apiCall('/api/polls', 'POST', { question, options });
+      document.querySelector('.modal-overlay').remove();
+      this.loadData();
+  },
+
+  // --- REMINDERS ---
+  renderReminders() {
+      const container = document.getElementById('reminders-container');
+      if (!container) return;
+      if (!this.reminders || this.reminders.length === 0) {
+          container.innerHTML = '<div class="empty-state">No hay recordatorios activos</div>';
+          return;
+      }
+      const repeatLabels = { none: 'Una vez', daily: 'Diario', weekly: 'Semanal', monthly: 'Mensual' };
+      container.innerHTML = this.reminders.map(r => {
+          const due = new Date(r.remind_at);
+          const isOverdue = due < new Date() && r.repeat === 'none';
+          return `
+            <div class="card" style="border-left:4px solid ${isOverdue ? 'var(--danger)' : 'var(--primary-light)'};">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div style="flex:1;">
+                        <h4 style="margin:0 0 6px;">${r.title}</h4>
+                        ${r.description ? `<p style="color:var(--text-light); font-size:14px; margin:0 0 8px;">${r.description}</p>` : ''}
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <span style="font-size:12px; background:var(--bg-soft); padding:3px 8px; border-radius:6px;">
+                                <i class="fa-solid fa-clock"></i> ${due.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' })} ${due.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' })}
+                            </span>
+                            <span style="font-size:12px; background:var(--bg-soft); padding:3px 8px; border-radius:6px;">
+                                <i class="fa-solid fa-repeat"></i> ${repeatLabels[r.repeat] || 'Una vez'}
+                            </span>
+                            ${isOverdue ? '<span style="font-size:12px; background:var(--danger); color:white; padding:3px 8px; border-radius:6px;">Vencido</span>' : ''}
+                        </div>
+                    </div>
+                    <button onclick="FamilyManager.deleteReminder(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>`;
+      }).join('');
+  },
+
+  showAddReminderModal() {
+      const now = new Date();
+      now.setMinutes(0, 0, 0);
+      now.setHours(now.getHours() + 1);
+      const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      this.showModal('Nuevo Recordatorio', `
+        <div class="form-group">
+            <label class="form-label">Título</label>
+            <input type="text" class="form-input" id="reminder-title" placeholder="Pagar Verizon">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Descripción (opcional)</label>
+            <input type="text" class="form-input" id="reminder-desc" placeholder="Vence el 1ro del mes">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Fecha y Hora</label>
+            <input type="datetime-local" class="form-input" id="reminder-date" value="${localIso}">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Repetir</label>
+            <select class="form-input" id="reminder-repeat">
+                <option value="none">Una sola vez</option>
+                <option value="daily">Diario</option>
+                <option value="weekly">Semanal</option>
+                <option value="monthly">Mensual</option>
+            </select>
+        </div>
+      `, [{ text: 'Guardar', type: 'primary', onclick: 'FamilyManager.saveReminder()' }]);
+  },
+
+  async saveReminder() {
+      const title = document.getElementById('reminder-title').value.trim();
+      const description = document.getElementById('reminder-desc').value.trim();
+      const remind_at = document.getElementById('reminder-date').value;
+      const repeat = document.getElementById('reminder-repeat').value;
+      if (!title || !remind_at) return this.showToast('Error', 'Completa el título y la fecha', 'error');
+      await this.apiCall('/api/reminders', 'POST', { title, description, remind_at: new Date(remind_at).toISOString(), repeat });
+      document.querySelector('.modal-overlay').remove();
+      this.showToast('Recordatorio creado', title, 'success');
+      this.loadData();
+  },
+
+  async deleteReminder(id) {
+      if (!confirm('¿Eliminar este recordatorio?')) return;
+      try { await this.apiCall(`/api/reminders/${id}`, 'DELETE'); this.loadData(); } catch (e) {}
+  },
+
+  // --- RECIPES ---
+  filterRecipes(category) {
+      this._recipeFilter = category;
+      document.querySelectorAll('#recipe-filters .btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      this.renderRecipes();
+  },
+
+  renderRecipes() {
+      const container = document.getElementById('recipes-container');
+      if (!container) return;
+      const filtered = this._recipeFilter === 'all' ? this.recipes : this.recipes.filter(r => r.category === this._recipeFilter);
+      if (!filtered || filtered.length === 0) {
+          container.innerHTML = '<div class="empty-state">No hay recetas en esta categoría</div>';
+          return;
+      }
+      container.innerHTML = filtered.map(r => {
+          const ingredients = Array.isArray(r.ingredients) ? r.ingredients : [];
+          return `
+            <div class="card" style="cursor:pointer;" onclick="FamilyManager.openRecipe(${r.id})">
+                ${r.image_url ? `<img src="${r.image_url}" style="width:100%; height:160px; object-fit:cover; border-radius:12px; margin-bottom:12px;">` : `<div style="width:100%; height:80px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); border-radius:12px; margin-bottom:12px; display:grid; place-items:center;"><i class="fa-solid fa-utensils" style="font-size:2rem; color:white;"></i></div>`}
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div style="flex:1;">
+                        <h4 style="margin:0 0 4px;">${r.name}</h4>
+                        <span style="font-size:12px; background:var(--bg-soft); padding:2px 8px; border-radius:6px;">${r.category || 'General'}</span>
+                    </div>
+                    ${this.isAdmin() ? `<button onclick="event.stopPropagation(); FamilyManager.deleteRecipe(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);"><i class="fa-solid fa-trash"></i></button>` : ''}
+                </div>
+                ${r.description ? `<p style="color:var(--text-light); font-size:13px; margin:8px 0 0;">${r.description}</p>` : ''}
+                ${ingredients.length > 0 ? `<p style="font-size:12px; color:var(--text-light); margin:6px 0 0;"><i class="fa-solid fa-list"></i> ${ingredients.length} ingredientes</p>` : ''}
+            </div>`;
+      }).join('');
+  },
+
+  openRecipe(id) {
+      const r = this.recipes.find(x => x.id === id);
+      if (!r) return;
+      const ingredients = Array.isArray(r.ingredients) ? r.ingredients : [];
+      const steps = Array.isArray(r.steps) ? r.steps : [];
+      this.showModal(`🍽️ ${r.name}`, `
+        ${r.image_url ? `<img src="${r.image_url}" style="width:100%; border-radius:12px; margin-bottom:16px;">` : ''}
+        ${r.description ? `<p style="margin-bottom:12px;">${r.description}</p>` : ''}
+        <h4 style="color:var(--primary); margin-bottom:8px;">Ingredientes</h4>
+        <ul style="padding-left:20px; margin-bottom:16px;">${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+        <h4 style="color:var(--primary); margin-bottom:8px;">Preparación</h4>
+        <ol style="padding-left:20px;">${steps.map(s => `<li style="margin-bottom:6px;">${s}</li>`).join('')}</ol>
+        ${r.author_name ? `<p style="color:var(--text-light); font-size:12px; margin-top:16px;">Receta de: ${r.author_name}</p>` : ''}
+      `, [{ text: 'Cerrar', type: '', onclick: 'document.querySelector(".modal-overlay").remove()' }]);
+  },
+
+  showAddRecipeModal() {
+      const categories = ['Desayunos', 'Almuerzos', 'Cenas', 'Postres', 'Meriendas', 'General'];
+      this.showModal('Nueva Receta', `
+        <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-input" id="recipe-name" placeholder="Arroz con Pollo">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Descripción (opcional)</label>
+            <input type="text" class="form-input" id="recipe-desc" placeholder="Clásico de la familia">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" id="recipe-cat">
+                ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Ingredientes (uno por línea)</label>
+            <textarea class="form-input" id="recipe-ingredients" rows="4" placeholder="2 tazas de arroz\n1 pollo\n..."></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Pasos de preparación (uno por línea)</label>
+            <textarea class="form-input" id="recipe-steps" rows="4" placeholder="Sofríe el pollo\nAgrega verduras\n..."></textarea>
+        </div>
+      `, [{ text: 'Guardar', type: 'primary', onclick: 'FamilyManager.saveRecipe()' }]);
+  },
+
+  async saveRecipe() {
+      const name = document.getElementById('recipe-name').value.trim();
+      const description = document.getElementById('recipe-desc').value.trim();
+      const category = document.getElementById('recipe-cat').value;
+      const ingredientsRaw = document.getElementById('recipe-ingredients').value;
+      const stepsRaw = document.getElementById('recipe-steps').value;
+      const ingredients = JSON.stringify(ingredientsRaw.split('\n').map(i => i.trim()).filter(i => i));
+      const steps = JSON.stringify(stepsRaw.split('\n').map(s => s.trim()).filter(s => s));
+      if (!name) return this.showToast('Error', 'El nombre es obligatorio', 'error');
+      const form = new FormData();
+      form.append('name', name);
+      form.append('description', description);
+      form.append('category', category);
+      form.append('ingredients', ingredients);
+      form.append('steps', steps);
+      const token = localStorage.getItem('token');
+      try {
+          await fetch('/api/recipes', { method: 'POST', headers: { 'x-access-token': token }, body: form });
+          document.querySelector('.modal-overlay').remove();
+          this.showToast('Receta guardada', name, 'success');
+          this.loadData();
+      } catch (e) { this.showToast('Error', 'No se pudo guardar', 'error'); }
+  },
+
+  async deleteRecipe(id) {
+      if (!confirm('¿Eliminar esta receta?')) return;
+      try { await this.apiCall(`/api/recipes/${id}`, 'DELETE'); this.loadData(); } catch (e) {}
   },
 
   // Utils

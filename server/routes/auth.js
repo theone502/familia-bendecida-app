@@ -15,6 +15,7 @@ function verifyToken(req, res, next) {
     if (err) return res.status(401).json({ error: 'Invalid token' });
     req.userId = decoded.id;
     req.isAdmin = decoded.is_admin;
+    req.user = { id: decoded.id, is_admin: decoded.is_admin };
     next();
   });
 }

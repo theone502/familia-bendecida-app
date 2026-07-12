@@ -20,9 +20,29 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const allowedExt = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic', '.heif'];
+    const allowedMime = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
     const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, allowed.includes(ext));
+    cb(null, allowedExt.includes(ext) || allowedMime.includes(file.mimetype));
+  }
+});
+
+// Multer config for logo uploads
+const logoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '..', '..', 'public', 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'logo-' + Date.now() + ext);
+  }
+});
+const logoUpload = multer({
+  storage: logoStorage,
+  limits: { fileSize: 3 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    cb(null, allowed.includes(path.extname(file.originalname).toLowerCase()));
   }
 });
 
@@ -57,6 +77,42 @@ module.exports = (io) => {
     }
   });
 
+  // Public route — app logo (needed on the splash/login screen, before auth)
+  router.get('/settings/logo', async (req, res) => {
+    try {
+      const row = await db.get("SELECT value FROM app_settings WHERE key = 'logo_url'");
+      res.json({ logo_url: row ? row.value : null });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/settings/logo', verifyToken, requireAdmin, logoUpload.single('logo'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+      const logoUrl = '/uploads/' + req.file.filename;
+      await db.run(
+        `INSERT INTO app_settings (key, value) VALUES ('logo_url', ?)
+         ON CONFLICT(key) DO UPDATE SET value = excluded.value`,
+        [logoUrl]
+      );
+      io.emit('logoUpdated', { logo_url: logoUrl });
+      res.json({ logo_url: logoUrl });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.delete('/settings/logo', verifyToken, requireAdmin, async (req, res) => {
+    try {
+      await db.run("DELETE FROM app_settings WHERE key = 'logo_url'");
+      io.emit('logoUpdated', { logo_url: null });
+      res.json({ message: 'Logo reset to default' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // PUSH NOTIFICATION ROUTES
   router.get('/push/vapid-key', verifyToken, (req, res) => {
     res.json({ publicKey: process.env.VAPID_PUBLIC_KEY });
@@ -73,6 +129,21 @@ module.exports = (io) => {
         [userId, subscription.endpoint, subscription.keys.p256dh, subscription.keys.auth, new Date().toISOString()]
       );
       res.json({ message: 'Subscribed' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/push/test', verifyToken, requireAdmin, async (req, res) => {
+    try {
+      const subCount = await db.get('SELECT COUNT(*) as count FROM push_subscriptions');
+      await sendPushToAll({
+        title: '🔔 Notificación de prueba',
+        body: '¡Si ves esto, las notificaciones están funcionando correctamente!',
+        tag: 'test-' + Date.now(),
+        url: '/'
+      }, null);
+      res.json({ message: 'Test notification sent', subscriberCount: subCount.count });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -100,7 +171,7 @@ module.exports = (io) => {
       const user = await db.get("SELECT * FROM users WHERE id = ?", [id]);
       if (!user) return res.status(404).json({ error: 'User not found' });
 
-      const newDebt = (user.debt || 0) + (amount || 30);
+      const newDebt = (user.debt || 0) + (amount || 40);
       await db.run("UPDATE users SET debt = ? WHERE id = ?", [newDebt, id]);
       io.emit('updateData');
       res.json({ message: 'Penalty applied', debt: newDebt });
@@ -144,7 +215,9 @@ module.exports = (io) => {
       const newDebt = debt !== undefined ? debt : user.debt;
 
       let newAvatar = user.avatar;
-      if (name || color) {
+      // Only regenerate avatar URL if user doesn't have a custom uploaded photo
+      const hasCustomPhoto = user.avatar && user.avatar.startsWith('/uploads/');
+      if ((name || color) && !hasCustomPhoto) {
         const avatarName = newName.replace(/\s+/g, '+');
         const avatarColor = newColor.replace('#', '');
         newAvatar = `https://ui-avatars.com/api/?name=${avatarName}&background=${avatarColor}&color=fff&bold=true&size=400`;
@@ -334,29 +407,6 @@ module.exports = (io) => {
     }
   });
 
-  // REWARDS
-  router.get('/rewards', async (req, res) => {
-    try {
-      const rows = await db.all("SELECT * FROM rewards");
-      res.json(rows);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-
-  router.post('/rewards', requireAdmin, async (req, res) => {
-    const { name, description, icon, category, cost } = req.body;
-    try {
-      const result = await db.run(
-        `INSERT INTO rewards (name, description, icon, category, cost) VALUES (?, ?, ?, ?, ?)`,
-        [name, description, icon, category, cost]
-      );
-      res.json({ id: result.lastID, ...req.body });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
-
   // BUDGET
   router.get('/budget', async (req, res) => {
     try {
@@ -418,7 +468,35 @@ module.exports = (io) => {
         LEFT JOIN users ON chat.sender_id = users.id
         ORDER BY chat.timestamp ASC
       `);
+      rows.forEach(r => {
+        try { r.reactions = JSON.parse(r.reactions || '{}'); } catch { r.reactions = {}; }
+      });
       res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Read receipts — last message id each user has seen
+  router.get('/chat/reads', async (req, res) => {
+    try {
+      const rows = await db.all("SELECT * FROM chat_reads");
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/chat/reads', async (req, res) => {
+    const { last_read_id } = req.body;
+    try {
+      await db.run(
+        `INSERT INTO chat_reads (user_id, last_read_id) VALUES (?, ?)
+         ON CONFLICT(user_id) DO UPDATE SET last_read_id = excluded.last_read_id`,
+        [req.user.id, last_read_id]
+      );
+      io.emit('readReceiptUpdated', { userId: req.user.id, lastReadId: last_read_id });
+      res.json({ message: 'Read receipt updated' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -495,61 +573,192 @@ module.exports = (io) => {
     }
   });
 
-  // NOTES
-  router.get('/notes', async (req, res) => {
+  router.delete('/events/:id', requireAdmin, async (req, res) => {
     try {
-      const rows = await db.all("SELECT * FROM notes ORDER BY pinned DESC, id DESC");
+      await db.run("DELETE FROM events WHERE id = ?", [req.params.id]);
+      io.emit('updateData');
+      res.json({ message: 'Event deleted' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POLLS
+  router.get('/polls', async (req, res) => {
+    try {
+      const polls = await db.all("SELECT * FROM polls ORDER BY created_at DESC");
+      for (const poll of polls) {
+        poll.options = JSON.parse(poll.options);
+        const votes = await db.all("SELECT option_index, COUNT(*) as count FROM poll_votes WHERE poll_id = ? GROUP BY option_index", [poll.id]);
+        poll.votes = poll.options.map((_, i) => (votes.find(v => v.option_index === i) || { count: 0 }).count);
+        const userVote = await db.get("SELECT option_index FROM poll_votes WHERE poll_id = ? AND user_id = ?", [poll.id, req.user.id]);
+        poll.userVote = userVote ? userVote.option_index : null;
+      }
+      res.json(polls);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/polls', requireAdmin, async (req, res) => {
+    const { question, options, expires_at } = req.body;
+    try {
+      const result = await db.run(
+        `INSERT INTO polls (question, options, created_by, created_at, expires_at, active) VALUES (?, ?, ?, ?, ?, 1)`,
+        [question, JSON.stringify(options), req.user.id, new Date().toISOString(), expires_at || null]
+      );
+      io.emit('updateData');
+      res.json({ id: result.lastID, question, options, votes: options.map(() => 0) });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.put('/polls/:id', requireAdmin, async (req, res) => {
+    const { question, options, expires_at } = req.body;
+    const pollId = req.params.id;
+    try {
+      await db.run(
+        `UPDATE polls SET question=?, options=?, expires_at=? WHERE id=?`,
+        [question, JSON.stringify(options), expires_at || null, pollId]
+      );
+      // Options changed shape, so old votes no longer map cleanly — reset them.
+      await db.run("DELETE FROM poll_votes WHERE poll_id = ?", [pollId]);
+      io.emit('updateData');
+      res.json({ message: 'Poll updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/polls/:id/vote', async (req, res) => {
+    const { option_index } = req.body;
+    const pollId = req.params.id;
+    try {
+      await db.run(
+        `INSERT OR REPLACE INTO poll_votes (poll_id, user_id, option_index) VALUES (?, ?, ?)`,
+        [pollId, req.user.id, option_index]
+      );
+      io.emit('pollUpdated', { pollId });
+      res.json({ message: 'Vote registered' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.delete('/polls/:id', requireAdmin, async (req, res) => {
+    try {
+      await db.run("DELETE FROM polls WHERE id = ?", [req.params.id]);
+      io.emit('updateData');
+      res.json({ message: 'Poll deleted' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // GALLERY (Photos)
+  const photoStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '..', '..', 'public', 'uploads')),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      cb(null, 'photo-' + Date.now() + '-' + Math.round(Math.random() * 1000) + ext);
+    }
+  });
+  const photoUpload = multer({
+    storage: photoStorage,
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+      cb(null, allowed.includes(path.extname(file.originalname).toLowerCase()));
+    }
+  });
+
+  router.get('/photos', async (req, res) => {
+    try {
+      const rows = await db.all(`
+        SELECT photos.*, users.name as uploader_name, users.color as uploader_color
+        FROM photos LEFT JOIN users ON photos.uploaded_by = users.id
+        ORDER BY photos.created_at DESC
+      `);
       res.json(rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
-  router.post('/notes', requireAdmin, async (req, res) => {
-    const { title, content, priority, author_id, date, pinned } = req.body;
+  router.post('/photos', photoUpload.single('photo'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+      const url = '/uploads/' + req.file.filename;
+      const { caption } = req.body;
+      const result = await db.run(
+        `INSERT INTO photos (url, caption, uploaded_by, created_at) VALUES (?, ?, ?, ?)`,
+        [url, caption || '', req.user.id, new Date().toISOString()]
+      );
+      const newPhoto = { id: result.lastID, url, caption, uploaded_by: req.user.id, created_at: new Date().toISOString() };
+      io.emit('photoAdded', newPhoto);
+      res.json(newPhoto);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.delete('/photos/:id', async (req, res) => {
+    try {
+      const photo = await db.get("SELECT * FROM photos WHERE id = ?", [req.params.id]);
+      if (!photo) return res.status(404).json({ error: 'Not found' });
+      if (photo.uploaded_by !== req.user.id && !req.user.is_admin) return res.status(403).json({ error: 'Forbidden' });
+      await db.run("DELETE FROM photos WHERE id = ?", [req.params.id]);
+      io.emit('updateData');
+      res.json({ message: 'Photo deleted' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // REMINDERS
+  router.get('/reminders', async (req, res) => {
+    try {
+      const rows = await db.all("SELECT * FROM reminders WHERE active = 1 ORDER BY remind_at ASC");
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/reminders', requireAdmin, async (req, res) => {
+    const { title, description, remind_at, repeat } = req.body;
     try {
       const result = await db.run(
-        `INSERT INTO notes (title, content, priority, author_id, date, pinned) VALUES (?, ?, ?, ?, ?, ?)`,
-        [title, content, priority, author_id, date, pinned ? 1 : 0]
+        `INSERT INTO reminders (title, description, remind_at, repeat, created_by, active, sent) VALUES (?, ?, ?, ?, ?, 1, 0)`,
+        [title, description, remind_at, repeat || 'none', req.user.id]
       );
       io.emit('updateData');
-
-      // Send push notification for pinned notes (announcements)
-      if (pinned) {
-        const author = await db.get('SELECT name FROM users WHERE id = ?', [author_id]);
-        sendPushToAll({
-          title: '📌 Anuncio Familiar',
-          body: `${author ? author.name : 'Admin'}: ${title}`,
-          tag: 'announcement-' + result.lastID,
-          url: '/'
-        }, author_id);
-      }
-
-      res.json({ id: result.lastID, ...req.body });
+      res.json({ id: result.lastID, title, description, remind_at, repeat, active: 1 });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
-  router.put('/notes/:id', requireAdmin, async (req, res) => {
-    const { title, content, priority, pinned, completed } = req.body;
+  router.put('/reminders/:id', requireAdmin, async (req, res) => {
+    const { title, description, remind_at, repeat, active } = req.body;
     try {
       await db.run(
-        `UPDATE notes SET title=?, content=?, priority=?, pinned=?, completed=? WHERE id=?`,
-        [title, content, priority, pinned ? 1 : 0, completed ? 1 : 0, req.params.id]
+        `UPDATE reminders SET title=?, description=?, remind_at=?, repeat=?, active=?, sent=0 WHERE id=?`,
+        [title, description, remind_at, repeat, active ? 1 : 0, req.params.id]
       );
       io.emit('updateData');
-      res.json({ message: 'Note updated' });
+      res.json({ message: 'Reminder updated' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
-  router.delete('/notes/:id', requireAdmin, async (req, res) => {
+  router.delete('/reminders/:id', requireAdmin, async (req, res) => {
     try {
-      await db.run("DELETE FROM notes WHERE id = ?", [req.params.id]);
+      await db.run("DELETE FROM reminders WHERE id = ?", [req.params.id]);
       io.emit('updateData');
-      res.json({ message: 'Note deleted' });
+      res.json({ message: 'Reminder deleted' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

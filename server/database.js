@@ -118,16 +118,6 @@ function initDb() {
       completed BOOLEAN DEFAULT 0
     )`);
 
-    // Rewards Table
-    db.run(`CREATE TABLE IF NOT EXISTS rewards (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT,
-      icon TEXT,
-      category TEXT,
-      cost INTEGER
-    )`);
-
     // Calendar Events Table
     db.run(`CREATE TABLE IF NOT EXISTS events (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -136,8 +126,13 @@ function initDb() {
       type TEXT,
       assigned_to INTEGER,
       completed BOOLEAN DEFAULT 0,
-      points INTEGER
-    )`);
+      points INTEGER,
+      penalized INTEGER DEFAULT 0
+    )`, (err) => {
+      if (!err) {
+        db.run("ALTER TABLE events ADD COLUMN penalized INTEGER DEFAULT 0", () => { });
+      }
+    });
 
     // Budget Table
     db.run(`CREATE TABLE IF NOT EXISTS budget_categories (
@@ -179,8 +174,16 @@ function initDb() {
     )`, (err) => {
       if (!err) {
         db.run("ALTER TABLE chat ADD COLUMN image_url TEXT", () => { });
+        db.run("ALTER TABLE chat ADD COLUMN reactions TEXT DEFAULT '{}'", () => { });
+        db.run("ALTER TABLE chat ADD COLUMN deleted INTEGER DEFAULT 0", () => { });
       }
     });
+
+    // Chat Read Receipts Table
+    db.run(`CREATE TABLE IF NOT EXISTS chat_reads (
+      user_id INTEGER PRIMARY KEY,
+      last_read_id INTEGER DEFAULT 0
+    )`);
 
     // Activities Table
     db.run(`CREATE TABLE IF NOT EXISTS activities (
@@ -190,18 +193,6 @@ function initDb() {
       text TEXT,
       points INTEGER,
       time TEXT
-    )`);
-
-    // Notes Table
-    db.run(`CREATE TABLE IF NOT EXISTS notes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT,
-      content TEXT,
-      priority TEXT,
-      author_id INTEGER,
-      date TEXT,
-      pinned BOOLEAN DEFAULT 0,
-      completed BOOLEAN DEFAULT 0
     )`);
 
     // Push Subscriptions Table
@@ -214,11 +205,85 @@ function initDb() {
       created_at TEXT
     )`);
 
+    // Polls Table
+    db.run(`CREATE TABLE IF NOT EXISTS polls (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      question TEXT NOT NULL,
+      options TEXT NOT NULL,
+      created_by INTEGER,
+      created_at TEXT,
+      expires_at TEXT,
+      active INTEGER DEFAULT 1
+    )`);
+
+    // Poll Votes Table
+    db.run(`CREATE TABLE IF NOT EXISTS poll_votes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      poll_id INTEGER,
+      user_id INTEGER,
+      option_index INTEGER,
+      UNIQUE(poll_id, user_id),
+      FOREIGN KEY(poll_id) REFERENCES polls(id) ON DELETE CASCADE
+    )`);
+
+    // Photos Table (Gallery)
+    db.run(`CREATE TABLE IF NOT EXISTS photos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      url TEXT NOT NULL,
+      caption TEXT,
+      uploaded_by INTEGER,
+      created_at TEXT
+    )`);
+
+    // Reminders Table
+    db.run(`CREATE TABLE IF NOT EXISTS reminders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT,
+      remind_at TEXT NOT NULL,
+      repeat TEXT DEFAULT 'none',
+      created_by INTEGER,
+      active INTEGER DEFAULT 1,
+      sent INTEGER DEFAULT 0
+    )`);
+
+    // App Settings Table (key/value — e.g. custom logo)
+    db.run(`CREATE TABLE IF NOT EXISTS app_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT
+    )`);
+
     // Initial Data Seeding (if empty)
     db.get("SELECT count(*) as count FROM users", (err, row) => {
       if (row && row.count === 0) {
         console.log("Seeding initial data...");
         seedData();
+      } else {
+        repairStaleAssignedNames();
+      }
+    });
+  });
+}
+
+// events.assigned_to stores each member's display name as free text, not a
+// user id. If someone's name is edited later (nickname, emoji), old rows keep
+// the stale name and silently stop matching that user anywhere in the app
+// (today's cleaning card, points on completion, penalties, notifications all
+// look up the member by name). A user's email stays stable across name edits,
+// so use it to find and backfill any events still pointing at an old name.
+function repairStaleAssignedNames() {
+  db.all("SELECT id, name, email FROM users", (err, users) => {
+    if (err || !users) return;
+    users.forEach(u => {
+      if (!u.email) return;
+      const localPart = u.email.split('@')[0];
+      const oldName = localPart.charAt(0).toUpperCase() + localPart.slice(1);
+      if (oldName !== u.name) {
+        db.run("UPDATE events SET assigned_to = ? WHERE assigned_to = ?", [u.name, oldName], function (err) {
+          if (!err && this.changes > 0) {
+            console.log(`Repaired ${this.changes} event(s): "${oldName}" -> "${u.name}"`);
+          }
+        });
       }
     });
   });
@@ -299,6 +364,17 @@ function seedData() {
         index === 6 ? 'Cena especial familiar' : ''
       ]);
   });
+
+  // Default reminders
+  const nextMonth = new Date();
+  nextMonth.setDate(1);
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+  db.run(`INSERT INTO reminders (title, description, remind_at, repeat, created_by, active) VALUES (?, ?, ?, ?, ?, ?)`,
+    ['💸 Pagar Internet Verizon', 'Vence el 1ro de cada mes. Pagar antes de la fecha límite.', nextMonth.toISOString().split('T')[0] + 'T09:00:00', 'monthly', 1, 1]);
+
+  // Default poll
+  db.run(`INSERT INTO polls (question, options, created_by, created_at, active) VALUES (?, ?, ?, ?, ?)`,
+    ['¿Qué cenamos el sábado?', JSON.stringify(['Pizza', 'Pollo frito', 'Tacos', 'Pasta']), 1, new Date().toISOString(), 1]);
 }
 
 // Export raw db (for backward compatibility if needed) and async wrappers

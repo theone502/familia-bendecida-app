@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#064e3b" />
+    <meta name="theme-color" content="#080C0F" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Familia Bendecida" />
@@ -19,12 +19,47 @@
         rel="stylesheet">
     <style>
         :root {
-            /* Premium Sacred Emerald & Gold Palette */
+            /* Ledger — Stripe-inspired teal/blue on deep navy-black */
+            --primary: #2FD9B9;
+            --primary-light: #5EEAD4;
+            --primary-dark: #14B8A6;
+            --secondary: #4F8FFF;
+            --secondary-light: #7CACFF;
+            --accent: #2FD9B9;
+
+            --success: #34D399;
+            --warning: #F5A524;
+            --danger: #F0475F;
+            --info: #4F8FFF;
+
+            --bg: #080C0F;
+            --bg-soft: #0F151B;
+            --bg-glass: rgba(15, 21, 27, 0.72);
+            --card: #10171E;
+            --text: #EFF3F2;
+            --text-light: #8B9C98;
+            --border: rgba(255, 255, 255, 0.08);
+
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.35);
+            --shadow: 0 10px 22px -8px rgb(0 0 0 / 0.55), 0 4px 10px -6px rgb(0 0 0 / 0.4);
+            --shadow-lg: 0 24px 40px -14px rgb(0 0 0 / 0.65), 0 8px 16px -8px rgb(0 0 0 / 0.5);
+            --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.35);
+
+            --radius: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+            --glass-blur: blur(14px);
+            --glass-border: 1px solid rgba(47, 217, 185, 0.16);
+        }
+
+        [data-theme="light"] {
+            /* Original Premium Sacred Emerald & Gold Palette */
             --primary: #064e3b;
             --primary-light: #10b981;
             --primary-dark: #064e3b;
             --secondary: #d97706;
-            /* Golden Bronze */
             --secondary-light: #f59e0b;
             --accent: #10b981;
 
@@ -46,25 +81,8 @@
             --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
-            --radius: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-
             --glass-blur: blur(12px);
             --glass-border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        [data-theme="dark"] {
-            --bg: #020617;
-            --bg-soft: #0f172a;
-            --bg-glass: rgba(15, 23, 42, 0.7);
-            --card: #0f172a;
-            --text: #f8fafc;
-            --text-light: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
-            --primary-light: #34d399;
-            --glass-border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -90,7 +108,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(245, 158, 11, 0.05));
+            background:
+                radial-gradient(900px 500px at 8% -10%, rgba(47, 217, 185, 0.08), transparent 60%),
+                radial-gradient(700px 420px at 100% 0%, rgba(79, 143, 255, 0.06), transparent 55%);
             z-index: -1;
         }
 
@@ -122,16 +142,50 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background:
+                radial-gradient(700px 460px at 12% 15%, rgba(47, 217, 185, 0.22), transparent 60%),
+                radial-gradient(600px 420px at 88% 80%, rgba(79, 143, 255, 0.18), transparent 60%),
+                linear-gradient(160deg, #05080A, #0B121A 60%, #05080A);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            color: var(--secondary);
+            color: var(--text);
             text-align: center;
             padding: 20px;
             transition: opacity 0.5s ease;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before,
+        .welcome-screen::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.5;
+            pointer-events: none;
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+
+        .welcome-screen::before {
+            width: 260px; height: 260px;
+            background: #2FD9B9;
+            top: -80px; left: -60px;
+        }
+
+        .welcome-screen::after {
+            width: 220px; height: 220px;
+            background: #4F8FFF;
+            bottom: -70px; right: -50px;
+            animation-direction: reverse;
+            animation-duration: 12s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(24px, -18px); }
         }
 
         .welcome-screen.hidden {
@@ -139,11 +193,45 @@
             pointer-events: none;
         }
 
-        .welcome-screen i {
+        .welcome-icon-anim {
             font-size: 72px;
-            margin-bottom: 24px;
-            animation: gentlePulse 2s infinite;
-            color: var(--secondary);
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: block;
+            opacity: 0;
+            animation: welcomeRiseIn 0.7s ease-out 0.1s forwards, gentlePulse 2s infinite 0.8s;
+        }
+
+        @keyframes welcomeRiseIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .welcome-title-anim {
+            opacity: 0;
+            animation: welcomeRiseIn 0.7s ease-out 0.35s forwards;
+        }
+
+        .welcome-subtitle-anim {
+            opacity: 0;
+            animation: welcomeRiseIn 0.7s ease-out 0.75s forwards;
+        }
+
+        .welcome-verse-wrap {
+            opacity: 0;
+            margin-top: 8px;
+        }
+
+        .welcome-verse-anim {
+            animation: welcomeRiseIn 0.9s ease-out 1.7s forwards;
+        }
+
+        .welcome-verse-icon {
+            font-size: 26px;
+            margin-bottom: 14px;
+            opacity: 0.85;
+            display: block;
+            color: var(--primary);
         }
 
         /* Profile Selection UI */
@@ -188,7 +276,7 @@
         }
 
         .profile-item:hover {
-            background: rgba(6, 78, 59, 0.1);
+            background: rgba(47, 217, 185, 0.1);
             transform: translateY(-5px);
         }
 
@@ -202,7 +290,7 @@
 
         .profile-item:hover img {
             border-color: var(--secondary);
-            box-shadow: 0 0 15px rgba(217, 119, 6, 0.3);
+            box-shadow: 0 0 15px rgba(79, 143, 255, 0.35);
         }
 
         .profile-item .name {
@@ -228,6 +316,10 @@
         .welcome-title {
             font: 700 42px/1.2 'Poppins', sans-serif;
             margin-bottom: 16px;
+            background: linear-gradient(90deg, var(--text), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .welcome-subtitle {
@@ -681,6 +773,7 @@
         .wstats .v {
             font: 700 26px/1 'Poppins', sans-serif;
             color: var(--secondary);
+            font-variant-numeric: tabular-nums;
         }
 
         .wstats .muted {
@@ -926,6 +1019,55 @@
         .calendar-day.completed {
             background: var(--bg-soft);
             border-color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .calendar-day.editable {
+            cursor: pointer;
+        }
+
+        .calendar-day.editable:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px var(--secondary), var(--shadow);
+        }
+
+        .cleaning-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--primary);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            align-self: flex-start;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .calendar-view-toggle {
+            display: inline-flex;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .calendar-view-toggle button {
+            border: none;
+            background: var(--card);
+            color: var(--text-light);
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .calendar-view-toggle button.active {
+            background: var(--primary);
+            color: white;
         }
 
         .day-number {
@@ -994,7 +1136,7 @@
         .task-filters input:focus,
         .task-filters select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 3px rgba(47, 217, 185, 0.15);
         }
 
         .task-list {
@@ -1401,7 +1543,7 @@
         .chat-input input:focus,
         .chat-input select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 3px rgba(47, 217, 185, 0.15);
         }
 
         /* Toast */
@@ -1564,7 +1706,7 @@
         .form-control:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.1);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
         }
 
         .avatar-picker {
@@ -1713,6 +1855,10 @@
         }
 
         @media (max-width: 600px) {
+            .leaderboard-bar {
+                display: none;
+            }
+
             .header {
                 flex-direction: row;
                 justify-content: space-between;
@@ -1881,17 +2027,45 @@
                 gap: 10px;
             }
         }
+
+        /* Broom sweeper animation */
+        @keyframes sweepAcross {
+            0% { transform: translateX(-40px) scaleX(1); }
+            48% { transform: translateX(40px) scaleX(1); }
+            50% { transform: translateX(40px) scaleX(-1); }
+            98% { transform: translateX(-40px) scaleX(-1); }
+            100% { transform: translateX(-40px) scaleX(1); }
+        }
+
+        @keyframes sweepBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .broom-sweeper {
+            font-size: 40px;
+            display: inline-block;
+            animation: sweepAcross 2.2s ease-in-out infinite, sweepBob 0.5s ease-in-out infinite;
+        }
+
+        .broom-sweeper.done {
+            animation: bounceIn 0.6s ease-out;
+        }
     </style>
 </head>
 
 <body>
     <div class="welcome-screen" id="welcome-screen">
         <div id="splash-content" style="text-align: center;">
-            <i class="fa-solid fa-book-bible"></i>
-            <div class="welcome-verse" id="welcome-verse">...</div>
-            <div class="welcome-reference" id="welcome-reference">...</div>
-            <h1 class="welcome-title">Familia Bendecida</h1>
-            <p class="welcome-subtitle">Centro Familiar - Organización y Espiritualidad</p>
+            <i class="fa-solid fa-house-chimney-window welcome-icon-anim" id="splash-logo-icon"></i>
+            <img id="splash-logo-img" src="" alt="Logo" style="display:none; width:88px; height:88px; object-fit:contain; border-radius:20px; margin-bottom:20px;" class="welcome-icon-anim">
+            <h1 class="welcome-title welcome-title-anim">Bienvenidos, Familia Bendecida</h1>
+            <p class="welcome-subtitle welcome-subtitle-anim">Centro Familiar - Organización y Espiritualidad</p>
+            <div class="welcome-verse-wrap welcome-verse-anim">
+                <i class="fa-solid fa-book-bible welcome-verse-icon"></i>
+                <div class="welcome-verse" id="welcome-verse">...</div>
+                <div class="welcome-reference" id="welcome-reference">...</div>
+            </div>
         </div>
 
         <div class="login-container" id="login-container">
@@ -1928,10 +2102,12 @@
         <!-- Header -->
         <header class="header">
             <div class="logo">
-                <i class="fa-solid fa-house-chimney"></i>
+                <i class="fa-solid fa-house-chimney" id="header-logo-icon"></i>
+                <img id="header-logo-img" src="" alt="Logo" style="display:none; width:32px; height:32px; object-fit:contain; border-radius:8px;">
                 <h1>Familia Bendecida</h1>
             </div>
             <div class="actions">
+                <span id="connection-indicator" style="font-size:12px; font-weight:600; letter-spacing:0.5px; color:var(--success); display:flex; align-items:center; gap:4px;">● En línea</span>
                 <button class="icon-btn" id="themeToggle" title="Cambiar tema"><i class="fa-solid fa-moon"></i></button>
                 <button class="icon-btn" id="openSettings" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
                 <button class="icon-btn" id="logoutBtn" title="Cerrar Sesión" onclick="logout()"><i
@@ -1969,17 +2145,17 @@
                         <i class="fa-solid fa-images"></i>
                         <span>Galería</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="rewards">
-                        <i class="fa-solid fa-gift"></i>
-                        <span>Recompensas</span>
-                    </a>
                     <a href="#" class="nav-link" data-section="chat">
                         <i class="fa-solid fa-comments"></i>
                         <span>Chat Familiar</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="notes">
-                        <i class="fa-solid fa-note-sticky"></i>
-                        <span>Notas y Pendientes</span>
+                    <a href="#" class="nav-link" data-section="polls">
+                        <i class="fa-solid fa-poll"></i>
+                        <span>Votaciones</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="reminders">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Recordatorios</span>
                     </a>
                 </nav>
 
@@ -2038,9 +2214,20 @@
                             </div>
                         </div>
 
-                        <!-- NEW: Turno de Limpieza Card -->
+                        <!-- Family Leaderboard Card -->
+                        <div class="card" id="leaderboard-card" style="grid-column: span 12; padding: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                <i class="fa-solid fa-trophy" style="font-size: 24px; color: var(--warning);"></i>
+                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Tabla de Posiciones</h3>
+                            </div>
+                            <div id="leaderboard-content">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Turno de Limpieza Card (compact strip) -->
                         <div class="card" id="today-cleaning-turn"
-                            style="grid-column: span 12; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px; border: 2px solid var(--secondary); background: rgba(217, 119, 6, 0.05);">
+                            style="grid-column: span 12; padding: 16px 20px; border: 1px solid var(--border); background: rgba(79, 143, 255, 0.05);">
                             <div id="today-cleaning-content">
                                 <!-- Populated via JS -->
                             </div>
@@ -2055,6 +2242,17 @@
                                 <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Cumpleaños Próximos</h3>
                             </div>
                             <div id="birthday-countdown-content">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Family Debts Card (cleaning penalties) -->
+                        <div class="card" id="family-debts-card" style="grid-column: span 12; padding: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                <i class="fa-solid fa-hand-holding-dollar" style="font-size: 24px; color: var(--danger);"></i>
+                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Deudas por Penalización</h3>
+                            </div>
+                            <div id="family-debts-content">
                                 <!-- Populated via JS -->
                             </div>
                         </div>
@@ -2177,7 +2375,13 @@
                         <div class="card">
                             <div class="calendar-header">
                                 <h3 id="current-month">Octubre 2025</h3>
-                                <button class="btn" id="today-btn">Hoy</button>
+                                <div style="display:flex; gap:10px; align-items:center;">
+                                    <div class="calendar-view-toggle">
+                                        <button id="calendar-view-month" class="active" onclick="setCalendarView('month')">Mes</button>
+                                        <button id="calendar-view-week" onclick="setCalendarView('week')">Semana</button>
+                                    </div>
+                                    <button class="btn" id="today-btn">Hoy</button>
+                                </div>
                             </div>
                             <div class="calendar-scroll-wrapper">
                                 <div class="calendar-weekdays"
@@ -2352,25 +2556,6 @@
                     </div>
                 </section>
 
-                <!-- Rewards Section -->
-                <section id="rewards" class="content-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fa-solid fa-gift"></i>
-                            <span>Sistema de Recompensas</span>
-                        </div>
-                        <div>
-                            <button class="btn primary" id="add-reward-btn"><i class="fa-solid fa-plus"></i>
-                                Agregar
-                                Recompensa</button>
-                        </div>
-                    </div>
-
-                    <div class="rewards-grid" id="rewards-container">
-                        <!-- Reward cards will be populated here -->
-                    </div>
-                </section>
-
                 <!-- Chat Section -->
                 <section id="chat" class="content-section">
                     <div class="section-header">
@@ -2400,37 +2585,28 @@
                     </div>
                 </section>
 
-                <!-- Notes Section -->
-                <section id="notes" class="content-section">
+                <!-- Polls Section -->
+                <section id="polls" class="content-section">
                     <div class="section-header">
                         <div class="section-title">
-                            <i class="fa-solid fa-note-sticky"></i>
-                            <span>Notas y Pendientes</span>
+                            <i class="fa-solid fa-poll"></i>
+                            <span>Votaciones Familiares</span>
                         </div>
-                        <div>
-                            <button class="btn primary" id="add-note-btn"><i class="fa-solid fa-plus"></i>
-                                Nueva Nota</button>
-                        </div>
+                        <div id="add-poll-btn-wrapper"></div>
                     </div>
+                    <div id="polls-container" style="display:flex; flex-direction:column; gap:20px;"></div>
+                </section>
 
-                    <div class="notes-container">
-                        <div class="card">
-                            <div class="note-filters">
-                                <input type="text" id="note-search" placeholder="Buscar notas...">
-                                <select id="note-priority-filter">
-                                    <option value="all">Todas las prioridades</option>
-                                    <option value="high">Alta</option>
-                                    <option value="medium">Media</option>
-                                    <option value="low">Baja</option>
-                                </select>
-                                <button class="btn" id="sort-notes-by-date"><i class="fa-solid fa-calendar"></i>
-                                    Ordenar por fecha</button>
-                            </div>
-                            <div class="note-list" id="note-list-container">
-                                <!-- Notes will be populated here -->
-                            </div>
+                <!-- Reminders Section -->
+                <section id="reminders" class="content-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fa-solid fa-bell"></i>
+                            <span>Recordatorios</span>
                         </div>
+                        <div id="add-reminder-btn-wrapper"></div>
                     </div>
+                    <div id="reminders-container" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;"></div>
                 </section>
             </main>
         </div>
@@ -2467,38 +2643,6 @@
             </div>
         </div>
 
-        <!-- Note Modal -->
-        <div id="note-modal" class="modal-overlay">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <div class="modal-title" id="note-modal-title">Nueva Nota</div>
-                    <button class="toast-close" onclick="closeNoteModal()">&times;</button>
-                </div>
-                <input type="hidden" id="modal-note-id">
-                <div class="form-group">
-                    <label>Título</label>
-                    <input type="text" id="modal-note-title" class="form-control" placeholder="Ej: Recordar la oración">
-                </div>
-                <div class="form-group">
-                    <label>Contenido</label>
-                    <textarea id="modal-note-content" class="form-control" style="height: 120px; resize: none;"
-                        placeholder="Escribe aquí los detalles..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Prioridad</label>
-                    <select id="modal-note-priority" class="form-control">
-                        <option value="low">Baja (General)</option>
-                        <option value="medium" selected>Media (Importante)</option>
-                        <option value="high">Alta (Urgente)</option>
-                    </select>
-                </div>
-                <div style="display: flex; gap: 12px; margin-top: 32px;">
-                    <button class="btn" style="flex: 1;" onclick="closeNoteModal()">Cancelar</button>
-                    <button class="btn primary" style="flex: 2;" onclick="saveNote()">Guardar Nota</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Cleaning Penalty Modal -->
         <div id="penalty-modal" class="modal-overlay">
             <div class="modal-container" style="text-align:center; max-width:420px;">
@@ -2509,7 +2653,7 @@
                 <div id="penalty-member-avatar" style="margin-bottom:16px;"></div>
                 <div id="penalty-message" style="font-size:16px; color:var(--text); margin-bottom:20px;"></div>
                 <div style="background:rgba(239,68,68,0.1); border:2px solid var(--danger); border-radius:var(--radius-sm); padding:20px; margin-bottom:24px;">
-                    <div style="font-size:42px; font-weight:800; color:var(--danger);">-$30</div>
+                    <div style="font-size:42px; font-weight:800; color:var(--danger);">-$40</div>
                     <div style="font-size:14px; color:var(--text-light); margin-top:4px;">Agregado a la deuda</div>
                 </div>
                 <button class="btn primary" style="width:100%; padding:14px; font-size:16px;" onclick="closePenaltyModal()">
@@ -2554,11 +2698,81 @@
                 { text: 'Por la fe andamos, no por vista.', reference: '2 Corintios 5:7' },
                 { text: 'Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.', reference: '2 Timoteo 1:7' },
                 { text: 'Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.', reference: 'Mateo 11:28' },
-                { text: 'En el mundo tendréis aflicción; pero confiad, yo he vencido al mundo.', reference: 'Juan 16:33' }
+                { text: 'En el mundo tendréis aflicción; pero confiad, yo he vencido al mundo.', reference: 'Juan 16:33' },
+                { text: 'Esforzaos y cobrad ánimo; no temáis, ni tengáis miedo... porque Jehová tu Dios es el que va contigo.', reference: 'Josué 1:9' },
+                { text: 'Pero yo y mi casa serviremos a Jehová.', reference: 'Josué 24:15' },
+                { text: 'Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.', reference: 'Salmos 46:1' },
+                { text: 'Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.', reference: 'Salmos 118:24' },
+                { text: 'Alzaré mis ojos a los montes; ¿de dónde vendrá mi socorro? Mi socorro viene de Jehová.', reference: 'Salmos 121:1-2' },
+                { text: 'Si Jehová no edificare la casa, en vano trabajan los que la edifican.', reference: 'Salmos 127:1' },
+                { text: 'He aquí, herencia de Jehová son los hijos.', reference: 'Salmos 127:3' },
+                { text: 'El corazón alegre constituye buen remedio, mas el espíritu triste seca los huesos.', reference: 'Proverbios 17:22' },
+                { text: 'Instruye al niño en su camino, y aun cuando fuere viejo no se apartará de él.', reference: 'Proverbios 22:6' },
+                { text: 'Mejores son dos que uno; porque tienen mejor paga de su trabajo... si cayeren, el uno levantará a su compañero.', reference: 'Eclesiastés 4:9-10' },
+                { text: 'Tú guardarás en completa paz a aquel cuyo pensamiento en ti persevera; porque en ti ha confiado.', reference: 'Isaías 26:3' },
+                { text: 'Mas él herido fue por nuestras rebeliones, molido por nuestros pecados; y por su llaga fuimos nosotros curados.', reference: 'Isaías 53:5' },
+                { text: 'Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.', reference: 'Jeremías 29:11' },
+                { text: 'Por la misericordia de Jehová no hemos sido consumidos... nuevas son cada mañana; grande es tu fidelidad.', reference: 'Lamentaciones 3:22-23' },
+                { text: 'Oh hombre, él te ha declarado lo que es bueno... solamente hacer justicia, y amar misericordia, y humillarte ante tu Dios.', reference: 'Miqueas 6:8' },
+                { text: 'Bienaventurados los pacificadores, porque ellos serán llamados hijos de Dios.', reference: 'Mateo 5:9' },
+                { text: 'No os afanéis por el día de mañana... basta a cada día su propio mal.', reference: 'Mateo 6:34' },
+                { text: 'Todas las cosas que queráis que los hombres hagan con vosotros, así también haced vosotros con ellos.', reference: 'Mateo 7:12' },
+                { text: 'Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.', reference: 'Mateo 18:20' },
+                { text: 'Así que no son ya más dos, sino uno; por tanto, lo que Dios juntó, no lo separe el hombre.', reference: 'Marcos 10:9' },
+                { text: 'Haced a los demás lo que queréis que ellos hagan con vosotros.', reference: 'Lucas 6:31' },
+                { text: 'La paz os dejo, mi paz os doy; yo no os la doy como el mundo la da. No se turbe vuestro corazón, ni tenga miedo.', reference: 'Juan 14:27' },
+                { text: 'Nadie tiene mayor amor que este, que uno ponga su vida por sus amigos.', reference: 'Juan 15:13' },
+                { text: 'Más bienaventurado es dar que recibir.', reference: 'Hechos 20:35' },
+                { text: 'Amaos los unos a los otros con amor fraternal; en cuanto a honra, prefiriéndoos los unos a los otros.', reference: 'Romanos 12:10' },
+                { text: 'Y el Dios de esperanza os llene de todo gozo y paz en el creer, para que abundéis en esperanza.', reference: 'Romanos 15:13' },
+                { text: 'Y ahora permanecen la fe, la esperanza y el amor, estos tres; pero el mayor de ellos es el amor.', reference: '1 Corintios 13:13' },
+                { text: 'Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad, porque Dios ama al dador alegre.', reference: '2 Corintios 9:7' },
+                { text: 'No nos cansemos, pues, de hacer bien; porque a su tiempo segaremos, si no desmayamos.', reference: 'Gálatas 6:9' },
+                { text: 'Antes sed benignos unos con otros, misericordiosos, perdonándoos unos a otros, como Dios también os perdonó a vosotros en Cristo.', reference: 'Efesios 4:32' },
+                { text: 'Hijos, obedeced en el Señor a vuestros padres, porque esto es justo.', reference: 'Efesios 6:1' },
+                { text: 'Nada hagáis por contienda o por vanagloria; antes bien con humildad, estimando cada uno a los demás como superiores a él mismo.', reference: 'Filipenses 2:3' },
+                { text: 'Soportándoos unos a otros, y perdonándoos unos a otros... de la manera que Cristo os perdonó, así también hacedlo vosotros.', reference: 'Colosenses 3:13' },
+                { text: 'Y todo lo que hagáis, hacedlo de corazón, como para el Señor y no para los hombres.', reference: 'Colosenses 3:23' },
+                { text: 'Estad siempre gozosos. Orad sin cesar. Dad gracias en todo, porque esta es la voluntad de Dios para con vosotros en Cristo Jesús.', reference: '1 Tesalonicenses 5:16-18' },
+                { text: 'Jesucristo es el mismo ayer, y hoy, y por los siglos.', reference: 'Hebreos 13:8' },
+                { text: 'Todo hombre sea pronto para oír, tardo para hablar, tardo para airarse.', reference: 'Santiago 1:19' },
+                { text: 'Ante todo, tened entre vosotros ferviente amor; porque el amor cubrirá multitud de pecados.', reference: '1 Pedro 4:8' },
+                { text: 'Echando toda vuestra ansiedad sobre él, porque él tiene cuidado de vosotros.', reference: '1 Pedro 5:7' },
+                { text: 'Amados, amémonos unos a otros; porque el amor es de Dios.', reference: '1 Juan 4:7' },
+                { text: 'Nosotros le amamos a él, porque él nos amó primero.', reference: '1 Juan 4:19' }
             ];
 
             const socket = io();
             const today = new Date();
+
+            // Local calendar date as YYYY-MM-DD. toISOString() converts to UTC first,
+            // which silently rolls "today" over to tomorrow once local time passes
+            // 8pm in UTC-4 (and similar for other negative-offset zones) — always use
+            // this instead for "what day is it" comparisons.
+            function localDateStr(d) {
+                d = d || new Date();
+                const offsetMs = d.getTimezoneOffset() * 60000;
+                return new Date(d.getTime() - offsetMs).toISOString().split('T')[0];
+            }
+
+            // Animate a stat number counting up to its target value.
+            function countUpNumber(el, target, suffix) {
+                if (!el) return;
+                suffix = suffix || '';
+                const start = parseInt(el.dataset.cuValue || '0', 10) || 0;
+                el.dataset.cuValue = target;
+                if (start === target) { el.textContent = target + suffix; return; }
+                const duration = 700;
+                const startTime = performance.now();
+                function step(ts) {
+                    const progress = Math.min((ts - startTime) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.round(start + (target - start) * eased) + suffix;
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+
             const monthMap = {
                 'enero': 0, 'febrero': 1, 'marzo': 2, 'abril': 3, 'mayo': 4, 'junio': 5,
                 'julio': 6, 'agosto': 7, 'septiembre': 8, 'octubre': 9, 'noviembre': 10, 'diciembre': 11
@@ -2569,9 +2783,19 @@
             let familyMembers = [];
             let allTasks = [];
             let allEvents = [];
-            let allNotes = [];
             let chatMessages = [];
+            let allPolls = [];
+            let allReminders = [];
+            let chatReads = [];
             let currentViewDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            let calendarView = 'month';
+
+            window.setCalendarView = function (view) {
+                calendarView = view;
+                document.getElementById('calendar-view-month').classList.toggle('active', view === 'month');
+                document.getElementById('calendar-view-week').classList.toggle('active', view === 'week');
+                renderCalendar();
+            };
 
             // API Wrapper
             async function apiCall(url, method = 'GET', body = null) {
@@ -2634,12 +2858,9 @@
 
             // Navigation functionality
             document.addEventListener('DOMContentLoaded', function () {
-                // Set welcome verse
                 setWelcomeVerse();
-
-                // First ensure data exists
                 initializeSampleData();
-                setWelcomeVerse();
+                loadAppLogo();
 
                 // Transition from Splash to Login
                 const token = localStorage.getItem('token');
@@ -2683,7 +2904,7 @@
                         loginContainer.style.display = 'flex';
                         renderLoginProfiles();
                     }
-                }, 2500);
+                }, 4200);
 
                 // Navigation between sections
                 const navLinks = document.querySelectorAll('.nav-link');
@@ -2704,6 +2925,10 @@
 
                         // Update page title
                         document.title = `Familia Bendecida - ${this.querySelector('span').textContent}`;
+
+                        // Render section-specific content
+                        if (sectionId === 'polls') renderPolls();
+                        if (sectionId === 'chat') markChatRead();
                     });
                 });
 
@@ -2723,7 +2948,7 @@
                 });
 
                 // Apply saved theme
-                const savedTheme = localStorage.getItem('fam_theme') || 'light';
+                const savedTheme = localStorage.getItem('fam_theme') || 'dark';
                 document.documentElement.setAttribute('data-theme', savedTheme);
                 const themeIcon = themeToggle.querySelector('i');
                 themeIcon.className = savedTheme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
@@ -2759,26 +2984,23 @@
                 renderTasks();
                 renderFamily();
                 renderGallery();
-                renderRewards();
                 renderChat();
-                renderNotes(); // Render notes section
 
                 // Calendar navigation
                 document.getElementById('prev-month').addEventListener('click', () => {
-                    currentViewDate.setMonth(currentViewDate.getMonth() - 1);
-                    document.getElementById('current-month').textContent = currentViewDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+                    if (calendarView === 'week') currentViewDate.setDate(currentViewDate.getDate() - 7);
+                    else currentViewDate.setMonth(currentViewDate.getMonth() - 1);
                     renderCalendar();
                 });
 
                 document.getElementById('next-month').addEventListener('click', () => {
-                    currentViewDate.setMonth(currentViewDate.getMonth() + 1);
-                    document.getElementById('current-month').textContent = currentViewDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+                    if (calendarView === 'week') currentViewDate.setDate(currentViewDate.getDate() + 7);
+                    else currentViewDate.setMonth(currentViewDate.getMonth() + 1);
                     renderCalendar();
                 });
 
                 document.getElementById('today-btn').addEventListener('click', () => {
-                    currentViewDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                    document.getElementById('current-month').textContent = today.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+                    currentViewDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
                     renderCalendar();
                 });
 
@@ -2859,6 +3081,35 @@
                     }
                 });
 
+                socket.on('messageReacted', ({ messageId, reactions }) => {
+                    const msg = chatMessages.find(m => m.id === messageId);
+                    if (msg) {
+                        msg.reactions = reactions;
+                        renderChat();
+                    }
+                });
+
+                socket.on('messageDeleted', ({ messageId }) => {
+                    const msg = chatMessages.find(m => m.id === messageId);
+                    if (msg) {
+                        msg.deleted = 1;
+                        msg.message = '';
+                        msg.image_url = null;
+                        renderChat();
+                    }
+                });
+
+                socket.on('readReceiptUpdated', ({ userId, lastReadId }) => {
+                    const existing = chatReads.find(r => r.user_id === userId);
+                    if (existing) existing.last_read_id = lastReadId;
+                    else chatReads.push({ user_id: userId, last_read_id: lastReadId });
+                    renderChat();
+                });
+
+                socket.on('logoUpdated', ({ logo_url }) => {
+                    applyLogo(logo_url);
+                });
+
                 // Other realtime updates
                 socket.on('updateData', () => {
                     loadAllData();
@@ -2871,10 +3122,6 @@
 
             document.getElementById('add-family-member').addEventListener('click', () => {
                 showFamilyModal();
-            });
-
-            document.getElementById('add-reward-btn').addEventListener('click', () => {
-                showToast('Recompensa agregada', 'Nueva recompensa creada (simulada)');
             });
 
             document.getElementById('add-cleaning-day').addEventListener('click', () => {
@@ -2892,23 +3139,8 @@
                 }
             });
 
-            // Settings button (placeholder)
             document.getElementById('openSettings').addEventListener('click', () => {
-                showToast('Ajustes', 'Panel de ajustes abierto');
-            });
-
-            // Add Note button
-            document.getElementById('add-note-btn').addEventListener('click', () => {
-                showNoteModal();
-            });
-
-            // Note Search and Filters
-            document.getElementById('note-search').addEventListener('input', renderNotes);
-            document.getElementById('note-priority-filter').addEventListener('change', renderNotes);
-            document.getElementById('sort-notes-by-date').addEventListener('click', () => {
-                allNotes.reverse();
-                renderNotes();
-                showToast('Orden cambiado', 'Notas reordenadas');
+                showSettingsModal();
             });
 
             window.logout = function () {
@@ -3056,9 +3288,79 @@
                     initPush();
                 }
 
-                checkCleaningNotification();
-                checkCleaningPenalty();
+                showOpeningPopups();
+
+                try { checkCleaningNotification(); } catch (e) { console.error('checkCleaningNotification error:', e); }
+                try { checkCleaningPenalty(); } catch (e) { console.error('checkCleaningPenalty error:', e); }
             }
+
+            // On open: pop up active reminders (e.g. bills like Verizon/T-Mobile)
+            // centered on screen, then the Bible verse — one after another.
+            let openingPopupSteps = [];
+            let openingPopupIndex = 0;
+            let openingPopupTimer = null;
+
+            function showOpeningPopups() {
+                const steps = [];
+                const activeReminders = (allReminders || []).filter(r => r.active);
+                if (activeReminders.length > 0) {
+                    steps.push({ type: 'reminders', reminders: activeReminders });
+                }
+                const verse = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+                steps.push({ type: 'verse', verse });
+
+                openingPopupSteps = steps;
+                showOpeningPopupStep(0);
+            }
+
+            function showOpeningPopupStep(index) {
+                clearTimeout(openingPopupTimer);
+                const existing = document.getElementById('opening-popup-modal');
+                if (existing) existing.remove();
+
+                if (index >= openingPopupSteps.length) return;
+                openingPopupIndex = index;
+                const step = openingPopupSteps[index];
+
+                let inner;
+                if (step.type === 'reminders') {
+                    inner = `
+                        <i class="fa-solid fa-bell" style="font-size:40px; color:var(--primary); margin-bottom:16px;"></i>
+                        <h3 style="margin:0 0 18px;">Recordatorios Activos</h3>
+                        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px; text-align:left;">
+                            ${step.reminders.map(r => `
+                                <div style="background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; padding:12px 16px;">
+                                    <div style="font-weight:600; color:var(--text);">${r.title}</div>
+                                    ${r.description ? `<div style="font-size:13px; color:var(--text-light); margin-top:4px;">${r.description}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn primary" style="width:100%; padding:12px;" onclick="advanceOpeningPopup()">Continuar</button>
+                    `;
+                } else {
+                    inner = `
+                        <i class="fa-solid fa-book-bible" style="font-size:40px; color:var(--primary); margin-bottom:16px;"></i>
+                        <h3 style="margin:0 0 18px;">Versículo del Día</h3>
+                        <p style="font-style:italic; font-size:17px; line-height:1.6; margin-bottom:10px; color:var(--text);">"${step.verse.text}"</p>
+                        <p style="color:var(--text-light); margin-bottom:26px;">— ${step.verse.reference}</p>
+                        <button class="btn primary" style="width:100%; padding:12px;" onclick="document.getElementById('opening-popup-modal').remove()">Cerrar</button>
+                    `;
+                }
+
+                const modal = document.createElement('div');
+                modal.id = 'opening-popup-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10000;padding:16px;';
+                modal.innerHTML = `<div style="background:var(--card); border:1px solid var(--border); border-radius:20px; padding:32px; width:100%; max-width:420px; box-shadow:var(--shadow-lg); text-align:center; animation: fadeInScale 0.35s ease-out;">${inner}</div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+                // Auto-advance if left untouched
+                openingPopupTimer = setTimeout(() => { advanceOpeningPopup(); }, step.type === 'reminders' ? 7000 : 8000);
+            }
+
+            window.advanceOpeningPopup = function () {
+                showOpeningPopupStep(openingPopupIndex + 1);
+            };
 
             function logout() {
                 localStorage.removeItem('token');
@@ -3068,28 +3370,32 @@
 
             async function loadAllData() {
                 try {
-                    const [users, tasks, events, chat, notes] = await Promise.all([
+                    const [users, tasks, events, chat, polls, reminders, reads] = await Promise.all([
                         apiCall('/api/users'),
                         apiCall('/api/tasks'),
                         apiCall('/api/events'),
                         apiCall('/api/chat'),
-                        apiCall('/api/notes') // I might need to add this route to backend too
+                        apiCall('/api/polls'),
+                        apiCall('/api/reminders'),
+                        apiCall('/api/chat/reads')
                     ]);
 
                     familyMembers = users;
                     allTasks = tasks;
                     allEvents = events;
                     chatMessages = chat;
-                    allNotes = notes;
+                    allPolls = polls || [];
+                    allReminders = reminders || [];
+                    chatReads = reads || [];
 
                     renderDashboard();
                     renderCalendar();
                     renderTasks();
                     renderFamily();
                     renderGallery();
-                    renderRewards();
                     renderChat();
-                    renderNotes();
+                    renderPolls();
+                    renderReminders();
                 } catch (err) {
                     console.error("Error loading data:", err);
                 }
@@ -3098,7 +3404,7 @@
             function checkCleaningNotification() {
                 if (!currentUser) return;
 
-                const todayStr = today.toISOString().split('T')[0];
+                const todayStr = localDateStr(today);
                 const turn = allEvents.find(e => e.date === todayStr);
 
                 if (turn && turn.assignedTo === currentUser.name) {
@@ -3109,10 +3415,17 @@
                     }
 
                     if ('Notification' in window && Notification.permission === 'granted') {
-                        new Notification('📚 ¡Tu turno de limpieza!', {
-                            body: `Hola ${currentUser.name}, hoy te corresponde el turno de limpieza.`,
-                            icon: currentUser.avatar
-                        });
+                        try {
+                            new Notification('📚 ¡Tu turno de limpieza!', {
+                                body: `Hola ${currentUser.name}, hoy te corresponde el turno de limpieza.`,
+                                icon: currentUser.avatar
+                            });
+                        } catch (e) {
+                            // Some browsers (notably Chrome on Android) forbid the
+                            // Notification constructor once a service worker is
+                            // registered — the push notification already covers
+                            // this case, so just skip the local one silently.
+                        }
                     }
 
                     setTimeout(() => {
@@ -3129,7 +3442,7 @@
 
                 const yesterday = new Date(today);
                 yesterday.setDate(yesterday.getDate() - 1);
-                const yesterdayStr = yesterday.toISOString().split('T')[0];
+                const yesterdayStr = localDateStr(yesterday);
 
                 const yesterdayEvent = allEvents.find(e => e.date === yesterdayStr && e.type === 'limpieza');
                 if (!yesterdayEvent || yesterdayEvent.completed) return;
@@ -3138,24 +3451,13 @@
                 const member = familyMembers.find(m => m.name === memberName);
                 if (!member) return;
 
-                // Show penalty modal
+                // Show penalty modal (informational only — the server applies the
+                // penalty once per day automatically, so we don't call the API here
+                // to avoid double-charging if multiple members open the app the same day).
                 const avatarEl = document.getElementById('penalty-member-avatar');
                 avatarEl.innerHTML = `<img src="${member.avatar}" style="width:80px; height:80px; border-radius:50%; border:4px solid var(--danger);">`;
-                document.getElementById('penalty-message').innerHTML = `<strong style="color:var(--danger);">${member.name}</strong> no limpió ayer.<br>Se aplica una penalización de <strong>$30</strong>.`;
+                document.getElementById('penalty-message').innerHTML = `<strong style="color:var(--danger);">${member.name}</strong> no limpió ayer.<br>Se aplicó una penalización de <strong>$40</strong>.`;
                 document.getElementById('penalty-modal').style.display = 'flex';
-
-                // Add $30 to their debt
-                try {
-                    await apiCall(`/api/users/${member.id}/penalty`, 'POST', {
-                        amount: 30,
-                        reason: 'No limpió en su turno'
-                    });
-                    // Reload data to reflect updated debt
-                    const users = await apiCall('/api/users');
-                    familyMembers = users;
-                } catch (err) {
-                    console.error('Error applying penalty:', err);
-                }
             }
 
             function closePenaltyModal() {
@@ -3163,15 +3465,33 @@
             }
 
             // Toast notification function
+            // Toasts share one DOM element, so queue them — otherwise an earlier
+            // toast's hide-timer fires while a later one is showing and yanks it
+            // away early (or the two just stomp on each other's text).
+            let toastQueue = [];
+            let toastBusy = false;
+
             function showToast(title, message, duration = 4000) {
+                toastQueue.push({ title, message, duration });
+                processToastQueue();
+            }
+
+            function processToastQueue() {
+                if (toastBusy || toastQueue.length === 0) return;
+                toastBusy = true;
+
+                const { title, message, duration } = toastQueue.shift();
                 const toast = document.getElementById('toast');
                 document.getElementById('toast-title').textContent = title;
                 document.getElementById('toast-message').textContent = message;
-
                 toast.classList.add('show');
 
                 setTimeout(() => {
                     toast.classList.remove('show');
+                    setTimeout(() => {
+                        toastBusy = false;
+                        processToastQueue();
+                    }, 400);
                 }, duration);
             }
 
@@ -3189,9 +3509,12 @@
                 const calendar = allEvents;
 
                 // Update stats
-                document.getElementById('familyMembers').textContent = members.length;
-                document.getElementById('stat-tasks').textContent = tasks.filter(t => !t.completed).length;
-                document.getElementById('stat-completed').textContent = `${Math.round((calendar.filter(c => c.completed).length / calendar.length) * 100) || 0}%`;
+                const completedCount = calendar.filter(c => c.completed).length;
+                const completedRate = Math.round((completedCount / calendar.length) * 100) || 0;
+
+                countUpNumber(document.getElementById('familyMembers'), members.length);
+                countUpNumber(document.getElementById('stat-tasks'), tasks.filter(t => !t.completed).length);
+                countUpNumber(document.getElementById('stat-completed'), completedRate, '%');
 
                 // Calculate streak
                 let streak = 0;
@@ -3202,20 +3525,20 @@
                     if (event.completed) streak++;
                     else break;
                 }
-                document.getElementById('stat-streak').textContent = streak;
+                countUpNumber(document.getElementById('stat-streak'), streak);
 
                 // Total points
                 const totalPoints = members.reduce((sum, member) => sum + member.points, 0);
-                document.getElementById('stat-points').textContent = totalPoints;
+                countUpNumber(document.getElementById('stat-points'), totalPoints);
 
                 // Side stats
-                document.getElementById('side-total').textContent = calendar.filter(c => c.completed).length;
-                document.getElementById('side-rate').textContent = `${Math.round((calendar.filter(c => c.completed).length / calendar.length) * 100) || 0}%`;
-                document.getElementById('side-streak').textContent = streak;
-                document.getElementById('side-score').textContent = totalPoints;
+                countUpNumber(document.getElementById('side-total'), completedCount);
+                countUpNumber(document.getElementById('side-rate'), completedRate, '%');
+                countUpNumber(document.getElementById('side-streak'), streak);
+                countUpNumber(document.getElementById('side-score'), totalPoints);
 
                 // Next cleaning
-                const todayStr = today.toISOString().split('T')[0];
+                const todayStr = localDateStr(today);
                 const nextCleaning = calendar.find(c => c.date >= todayStr);
                 if (nextCleaning) {
                     const nextDate = new Date(nextCleaning.date);
@@ -3227,8 +3550,10 @@
                     document.getElementById('daysUntil').textContent = diffDays <= 0 ? (diffDays === 0 ? "Hoy" : "Ayer") : diffDays;
                 }
 
+                renderLeaderboard();
                 renderTodayCleaning();
                 renderBirthdayCountdown();
+                renderFamilyDebts();
                 renderRecentActivity();
                 renderUpcomingTasks();
             }
@@ -3237,52 +3562,90 @@
                 const container = document.getElementById('today-cleaning-content');
                 if (!container) return;
 
-                const todayStr = today.toISOString().split('T')[0];
+                const todayStr = localDateStr(today);
                 const cleaningEvent = allEvents.find(e => e.date === todayStr);
 
                 if (cleaningEvent) {
                     const member = familyMembers.find(m => m.name === cleaningEvent.assignedTo);
 
                     if (!member) {
-                        container.innerHTML = `<p style="text-align: center; padding: 20px;">Turno asignado a ${cleaningEvent.assignedTo}, pero el perfil no fue encontrado.</p>`;
+                        container.innerHTML = `<p style="text-align: center; padding: 8px;">Turno asignado a ${cleaningEvent.assignedTo}, pero el perfil no fue encontrado.</p>`;
                         return;
                     }
 
                     container.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; animation: slideInUp 0.6s ease-out;">
-                        <div style="position: relative;">
-                            <img src="${member.avatar}" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--secondary); padding: 5px; background: white; box-shadow: var(--shadow-lg);">
-                            <div style="position: absolute; bottom: 5px; right: 5px; background: var(--secondary); color: white; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; border: 3px solid white;">
+                    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; animation: slideInUp 0.6s ease-out;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            <img src="${member.avatar}" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--secondary);">
+                            <div style="position: absolute; bottom: -3px; right: -3px; background: var(--secondary); color: white; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--card); font-size: 9px;">
                                 <i class="fa-solid fa-broom"></i>
                             </div>
                         </div>
-                        <div>
-                            <h3 style="font-size: 28px; margin-bottom: 8px; color: var(--primary);">Hoy le toca a: <strong style="color: var(--secondary);">${member.name}</strong></h3>
-                            <p style="font-size: 18px; color: var(--text-light); margin-bottom: 24px;">¡A dejar el hogar brillando como una bendición! ✨</p>
-                            <button class="btn ${cleaningEvent.completed ? 'success' : 'primary'}" 
-                                    style="padding: 15px 40px; font-size: 18px; height: auto;" 
-                                    onclick="toggleCleaningToday()">
-                                <i class="fa-solid ${cleaningEvent.completed ? 'fa-check-double' : 'fa-check'}"></i>
-                                ${cleaningEvent.completed ? '¡Misión Cumplida!' : 'Marcar como Hecho'}
-                            </button>
-                            <div style="margin-top: 10px;">
-                                <button class="btn" style="font-size: 11px; opacity: 0.6;" onclick="Notification.requestPermission()">
-                                    <i class="fa-solid fa-bell"></i> Activar Notificaciones Escritorio
-                                </button>
-                            </div>
+                        <div style="flex: 1; min-width: 160px;">
+                            <div style="font-weight: 700; font-size: 15px; color: var(--text);">Hoy le toca a <span style="color: var(--secondary);">${member.name}</span></div>
+                            <div style="font-size: 12px; color: var(--text-light);">${cleaningEvent.completed ? '¡El hogar está brillando! ✨' : '+20 puntos al completar'}</div>
                         </div>
+                        <span class="broom-sweeper ${cleaningEvent.completed ? 'done' : ''}" style="font-size: 22px;">${cleaningEvent.completed ? '🎉' : '🧹'}</span>
+                        <button class="btn ${cleaningEvent.completed ? 'success' : 'primary'}" style="padding: 9px 18px; font-size: 12px;" onclick="toggleCleaningToday()">
+                            <i class="fa-solid ${cleaningEvent.completed ? 'fa-check-double' : 'fa-check'}"></i>
+                            ${cleaningEvent.completed ? 'DONE' : 'DONE'}
+                        </button>
+                        <button class="btn" style="font-size: 11px; opacity: 0.6; padding: 9px 10px;" title="Activar Notificaciones Escritorio" onclick="Notification.requestPermission()">
+                            <i class="fa-solid fa-bell"></i>
+                        </button>
+                        ${currentUser && currentUser.is_admin ? `<button class="btn" style="font-size: 11px; opacity: 0.6; padding: 9px 10px;" title="Probar Notificación" onclick="sendTestNotification()"><i class="fa-solid fa-paper-plane"></i></button>` : ''}
                     </div>
                 `;
                 } else {
                     container.innerHTML = `
-                    <div style="opacity: 0.7;">
-                        <i class="fa-solid fa-couch" style="font-size: 64px; color: var(--primary); margin-bottom: 20px;"></i>
-                        <h3 style="font-size: 24px; color: var(--text);">Hoy es día de descanso</h3>
-                        <p style="color: var(--text-light);">No hay limpieza programada para hoy. ¡Disfruten en familia!</p>
+                    <div style="display: flex; align-items: center; gap: 12px; opacity: 0.8;">
+                        <i class="fa-solid fa-couch" style="font-size: 26px; color: var(--primary);"></i>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; font-size: 14px; color: var(--text);">Hoy es día de descanso</div>
+                            <div style="font-size: 12px; color: var(--text-light);">No hay limpieza programada para hoy. ¡Disfruten en familia!</div>
+                        </div>
+                        ${currentUser && currentUser.is_admin ? `<button class="btn" style="font-size: 11px; opacity: 0.6; padding: 9px 10px;" title="Probar Notificación" onclick="sendTestNotification()"><i class="fa-solid fa-paper-plane"></i></button>` : ''}
                     </div>
                 `;
                 }
             }
+
+            function renderLeaderboard() {
+                const container = document.getElementById('leaderboard-content');
+                if (!container) return;
+
+                const ranked = [...familyMembers].sort((a, b) => (b.points || 0) - (a.points || 0));
+                const maxPoints = ranked.length ? (ranked[0].points || 1) : 1;
+                const medals = ['🥇', '🥈', '🥉'];
+
+                container.innerHTML = ranked.map((m, i) => {
+                    const isTop = i === 0;
+                    const pct = Math.max(4, Math.round(((m.points || 0) / maxPoints) * 100));
+                    return `
+                    <div style="display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:12px; margin-bottom:8px; background:${isTop ? 'linear-gradient(90deg, rgba(245,165,36,0.14), transparent)' : 'var(--bg-soft)'}; border:1px solid ${isTop ? 'rgba(245,165,36,0.35)' : 'var(--border)'};">
+                        <div style="width:26px; text-align:center; font-weight:800; font-size:${i < 3 ? '17px' : '14px'}; color:${isTop ? 'var(--secondary-light)' : 'var(--text-light)'};">${medals[i] || (i + 1)}</div>
+                        <img src="${m.avatar}" style="width:38px; height:38px; border-radius:50%; border:2px solid ${isTop ? 'var(--secondary)' : 'var(--border)'};">
+                        <div style="flex:1; min-width:100px; font-weight:600; font-size:14px; color:var(--text);">${m.name}</div>
+                        <div class="leaderboard-bar" style="flex:2; max-width:160px; height:6px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden;">
+                            <div style="height:100%; width:${pct}%; background:var(--primary); border-radius:4px; transition:width 1s cubic-bezier(.16,1,.3,1);"></div>
+                        </div>
+                        <div class="cu" data-target="${m.points || 0}" style="font-weight:700; font-size:14px; min-width:48px; text-align:right; color:var(--text);">0</div>
+                    </div>`;
+                }).join('');
+
+                container.querySelectorAll('.cu').forEach(el => {
+                    countUpNumber(el, parseInt(el.dataset.target, 10));
+                });
+            }
+
+            window.sendTestNotification = async function () {
+                try {
+                    const result = await apiCall('/api/push/test', 'POST');
+                    showToast('Notificación enviada', `Enviada a ${result.subscriberCount} dispositivo(s) suscrito(s).`);
+                } catch (e) {
+                    showToast('Error', 'No se pudo enviar la notificación de prueba');
+                }
+            };
 
             function renderBirthdayCountdown() {
                 const container = document.getElementById('birthday-countdown-content');
@@ -3337,8 +3700,113 @@
                 }).join('');
             }
 
+            function renderFamilyDebts() {
+                const container = document.getElementById('family-debts-content');
+                if (!container) return;
+
+                const debtors = familyMembers.filter(m => (m.debt || 0) > 0).sort((a, b) => (b.debt || 0) - (a.debt || 0));
+
+                if (debtors.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color:var(--text-light); padding:12px;"><i class="fa-solid fa-circle-check" style="color:var(--success);"></i> Nadie debe nada. ¡Todos al día con la limpieza!</p>';
+                    return;
+                }
+
+                container.innerHTML = debtors.map(m => `
+                    <div style="display:flex; align-items:center; gap:14px; padding:12px; border-radius:var(--radius-sm); background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); margin-bottom:8px;">
+                        <img src="${m.avatar}" style="width:44px; height:44px; border-radius:50%; border:2px solid var(--danger);">
+                        <div style="flex:1;">
+                            <div style="font-weight:600; font-size:15px; color:var(--text);">${m.name}</div>
+                            <div style="font-size:12px; color:var(--text-light);">Penalización por no limpiar a tiempo</div>
+                        </div>
+                        <div style="font-size:20px; font-weight:800; color:var(--danger);">$${m.debt}</div>
+                        ${currentUser && currentUser.is_admin ? `<button onclick="clearDebt(${m.id})" style="background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text-light); font-size:12px;" title="Marcar como pagado">Pagado</button>` : ''}
+                    </div>
+                `).join('');
+            }
+
+            window.clearDebt = async function (id) {
+                if (!confirm('¿Marcar esta deuda como pagada?')) return;
+                try {
+                    await apiCall(`/api/users/${id}`, 'PUT', { debt: 0 });
+                    showToast('Deuda saldada', 'La penalización fue marcada como pagada');
+                    await loadAllData();
+                } catch (e) {
+                    showToast('Error', 'No se pudo actualizar la deuda');
+                }
+            };
+
+            window.adminEditDay = function (dateStr, dayData) {
+                if (!currentUser || !currentUser.is_admin) return;
+
+                const existing = document.getElementById('dynamic-day-modal');
+                if (existing) existing.remove();
+
+                const dateLabel = new Date(dateStr + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                const memberBtns = familyMembers.map(m => `
+                    <button onclick="assignCleaningDay('${dateStr}', '${m.name.replace(/'/g, "&#39;")}')"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:10px 14px; border:1px solid ${dayData && dayData.assignedTo === m.name ? 'var(--primary)' : 'var(--border)'}; background:${dayData && dayData.assignedTo === m.name ? 'rgba(16,185,129,0.1)' : 'var(--bg-soft)'}; border-radius:10px; cursor:pointer; margin-bottom:8px; color:var(--text); text-align:left;">
+                        <img src="${m.avatar}" style="width:28px; height:28px; border-radius:50%;">
+                        <span>${m.name}</span>
+                        ${dayData && dayData.assignedTo === m.name ? '<i class="fa-solid fa-check" style="margin-left:auto; color:var(--primary);"></i>' : ''}
+                    </button>
+                `).join('');
+
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-day-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <h3 style="margin:0; text-transform:capitalize;"><i class="fa-solid fa-broom" style="color:var(--primary);margin-right:8px;"></i>${dateLabel}</h3>
+                            <button onclick="document.getElementById('dynamic-day-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        <p style="font-size:13px; color:var(--text-light); margin:0 0 16px;">Asignar turno de limpieza a:</p>
+                        ${memberBtns}
+                        ${dayData ? `<button onclick="removeCleaningDay('${dateStr}', ${dayData.id})" style="width:100%; padding:10px; border:1px solid var(--danger); background:transparent; color:var(--danger); border-radius:10px; cursor:pointer; margin-top:8px;"><i class="fa-solid fa-ban"></i> Quitar turno de este día</button>` : ''}
+                    </div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+            };
+
+            window.assignCleaningDay = async function (dateStr, memberName) {
+                const existingEvent = allEvents.find(e => e.date === dateStr);
+                try {
+                    if (existingEvent) {
+                        await apiCall(`/api/events/${existingEvent.id}`, 'PUT', {
+                            ...existingEvent,
+                            assignedTo: memberName
+                        });
+                    } else {
+                        await apiCall('/api/events', 'POST', {
+                            title: 'Limpieza de Hogar',
+                            date: dateStr,
+                            type: 'limpieza',
+                            assignedTo: memberName,
+                            points: 20
+                        });
+                    }
+                    document.getElementById('dynamic-day-modal').remove();
+                    showToast('Turno actualizado', `${memberName} fue asignado al ${dateStr}`);
+                    await loadAllData();
+                } catch (e) {
+                    showToast('Error', 'No se pudo actualizar el turno');
+                }
+            };
+
+            window.removeCleaningDay = async function (dateStr, eventId) {
+                if (!confirm('¿Quitar el turno de limpieza de este día?')) return;
+                try {
+                    await apiCall(`/api/events/${eventId}`, 'DELETE');
+                    document.getElementById('dynamic-day-modal').remove();
+                    showToast('Turno eliminado', `Ya no hay limpieza programada para el ${dateStr}`);
+                    await loadAllData();
+                } catch (e) {
+                    showToast('Error', 'No se pudo quitar el turno');
+                }
+            };
+
             async function toggleCleaningToday() {
-                const todayStr = today.toISOString().split('T')[0];
+                const todayStr = localDateStr(today);
                 const event = allEvents.find(e => e.date === todayStr);
 
                 if (event) {
@@ -3390,7 +3858,7 @@
                 const activities = [
                     { type: 'task', text: 'Andres completó "Sacar la basura"', time: 'Hace 2 horas' },
                     { type: 'cleaning', text: 'Magda limpió el baño', time: 'Hace 5 horas' },
-                    { type: 'reward', text: 'Chepe canjeó "Elegir película"', time: 'Ayer' }
+                    { type: 'reminder', text: 'Recordatorio: Pagar Internet Verizon', time: 'Ayer' }
                 ];
 
                 activities.forEach(activity => {
@@ -3443,31 +3911,16 @@
                 const calendar = allEvents;
                 const members = familyMembers;
                 const currentDate = currentViewDate;
+                const isAdmin = currentUser && currentUser.is_admin;
 
                 // Render calendar days
                 const calendarDays = document.getElementById('calendar-days');
                 calendarDays.innerHTML = '';
+                const todayStr = localDateStr(today);
 
-                // Get first day of month and number of days
-                const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-                const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-                const daysInMonth = lastDay.getDate();
-                const startingDay = firstDay.getDay(); // 0 = Sun
-
-                // Add empty cells for days before the first day of the month
-                for (let i = 0; i < startingDay; i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.className = 'calendar-day';
-                    emptyDay.style.visibility = 'hidden';
-                    calendarDays.appendChild(emptyDay);
-                }
-
-                // Add days of the month
-                const todayStr = today.toISOString().split('T')[0];
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-                    const dateStr = dayDate.toISOString().split('T')[0];
+                const buildDayCell = (dayDate) => {
+                    const dateStr = localDateStr(dayDate);
+                    const day = dayDate.getDate();
 
                     const calendarDay = document.createElement('div');
                     calendarDay.className = 'calendar-day';
@@ -3475,15 +3928,15 @@
                     const dayData = calendar.find(c => c.date === dateStr);
                     const isToday = dateStr === todayStr;
 
-                    if (isToday) {
-                        calendarDay.classList.add('today');
-                    }
-
+                    if (isToday) calendarDay.classList.add('today');
                     if (dayData) {
                         calendarDay.classList.add('cleaning-day');
-                        if (dayData.completed) {
-                            calendarDay.classList.add('completed');
-                        }
+                        if (dayData.completed) calendarDay.classList.add('completed');
+                    }
+                    if (isAdmin) {
+                        calendarDay.classList.add('editable');
+                        calendarDay.title = 'Clic para reasignar el turno';
+                        calendarDay.onclick = () => adminEditDay(dateStr, dayData);
                     }
 
                     calendarDay.innerHTML = `
@@ -3496,8 +3949,42 @@
                     ` : ''}
                     ${dayData && dayData.completed ? '<div style="position: absolute; top: 10px; right: 10px;"><i class="fa-solid fa-circle-check" style="color: var(--success); font-size: 16px;"></i></div>' : ''}
                 `;
+                    return calendarDay;
+                };
 
-                    calendarDays.appendChild(calendarDay);
+                if (calendarView === 'week') {
+                    // 7 days: Sunday through Saturday of the week containing currentViewDate
+                    const weekStart = new Date(currentDate);
+                    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+                    for (let i = 0; i < 7; i++) {
+                        const dayDate = new Date(weekStart);
+                        dayDate.setDate(weekStart.getDate() + i);
+                        calendarDays.appendChild(buildDayCell(dayDate));
+                    }
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 6);
+                    document.getElementById('current-month').textContent =
+                        `${weekStart.getDate()} - ${weekEnd.getDate()} ${weekEnd.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
+                } else {
+                    // Get first day of month and number of days
+                    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                    const daysInMonth = lastDay.getDate();
+                    const startingDay = firstDay.getDay(); // 0 = Sun
+
+                    // Add empty cells for days before the first day of the month
+                    for (let i = 0; i < startingDay; i++) {
+                        const emptyDay = document.createElement('div');
+                        emptyDay.className = 'calendar-day';
+                        emptyDay.style.visibility = 'hidden';
+                        calendarDays.appendChild(emptyDay);
+                    }
+
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                        calendarDays.appendChild(buildDayCell(dayDate));
+                    }
+                    document.getElementById('current-month').textContent = currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
                 }
 
                 // Update month stats
@@ -3794,11 +4281,16 @@
                         const formData = new FormData();
                         formData.append('avatar', photoInput.files[0]);
                         const token = localStorage.getItem('token');
-                        await fetch(`/api/users/${memberId}/avatar`, {
+                        const uploadRes = await fetch(`/api/users/${memberId}/avatar`, {
                             method: 'POST',
                             headers: { 'x-access-token': token },
                             body: formData
                         });
+                        if (!uploadRes.ok) {
+                            const errData = await uploadRes.json().catch(() => ({}));
+                            console.error('Avatar upload failed:', errData);
+                            showToast('Error', 'No se pudo subir la foto: ' + (errData.error || 'formato no soportado'));
+                        }
                     }
 
                     closeFamilyModal();
@@ -3847,27 +4339,7 @@
                 });
             }
 
-            function renderRewards() {
-                const rewards = JSON.parse(localStorage.getItem('fam_rewards') || '[]');
-                const rewardsContainer = document.getElementById('rewards-container');
-                rewardsContainer.innerHTML = '';
-
-                rewards.forEach((reward, index) => {
-                    const rewardEl = document.createElement('div');
-                    rewardEl.className = 'reward-card';
-                    rewardEl.style.animationDelay = `${index * 0.1}s`;
-
-                    rewardEl.innerHTML = `
-          <i class="${reward.icon} reward-icon"></i>
-          <div class="reward-name">${reward.name}</div>
-          <div class="reward-desc">${reward.description}</div>
-          <div class="reward-cost">${reward.cost} pts</div>
-          <button class="btn primary" style="margin-top: auto;">Canjear</button>
-        `;
-
-                    rewardsContainer.appendChild(rewardEl);
-                });
-            }
+            const QUICK_REACTIONS = ['👍', '❤️', '😂', '🙏', '🎉'];
 
             function renderChat() {
                 const members = familyMembers;
@@ -3882,49 +4354,123 @@
                     return;
                 }
 
+                const lastOwnMessage = [...chat].reverse().find(m => currentUser && m.sender_id === currentUser.id);
+
                 chat.forEach((message) => {
                     const senderName = message.sender_name || (members.find(m => m.id === message.sender_id) || {}).name || 'Desconocido';
                     const senderAvatar = message.sender_avatar || (members.find(m => m.id === message.sender_id) || {}).avatar || 'https://ui-avatars.com/api/?name=?';
                     const senderColor = message.sender_color || (members.find(m => m.id === message.sender_id) || {}).color || '#999';
                     const isSelf = currentUser && message.sender_id === currentUser.id;
+                    const isDeleted = !!message.deleted;
+
+                    const wrapperEl = document.createElement('div');
+                    wrapperEl.style.cssText = `display:flex; flex-direction:column; ${isSelf ? 'align-items:flex-end;' : 'align-items:flex-start;'} margin-bottom:14px; animation: fadeIn 0.25s ease-out;`;
 
                     const messageEl = document.createElement('div');
                     messageEl.style.cssText = `
                         max-width: 75%;
                         padding: 12px 16px;
-                        border-radius: 16px;
+                        border-radius: 18px;
                         display: flex;
                         flex-direction: column;
                         gap: 4px;
-                        margin-bottom: 8px;
+                        box-shadow: var(--shadow-sm);
                         ${isSelf
-                            ? 'align-self: flex-end; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-bottom-right-radius: 4px;'
-                            : 'align-self: flex-start; background: var(--card); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px;'
+                            ? 'background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-bottom-right-radius: 4px;'
+                            : 'background: var(--card); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px;'
                         }
                     `;
 
                     const timestamp = new Date(message.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
-                    const imageHtml = message.image_url
+                    const imageHtml = (!isDeleted && message.image_url)
                         ? `<div style="margin-top: 6px;"><img src="${message.image_url}" style="max-width:250px; max-height:200px; border-radius:12px; cursor:pointer; border: 1px solid rgba(255,255,255,0.2);" onclick="window.open('${message.image_url}', '_blank')"></div>`
                         : '';
-                    const textHtml = message.message ? `<div style="font-size: 15px; line-height: 1.4; margin-top: 4px;">${escapeHtml(message.message)}</div>` : '';
+                    const textHtml = isDeleted
+                        ? `<div style="font-size: 14px; font-style: italic; opacity: 0.7; margin-top: 4px;"><i class="fa-solid fa-ban"></i> Mensaje eliminado</div>`
+                        : (message.message ? `<div style="font-size: 15px; line-height: 1.4; margin-top: 4px;">${escapeHtml(message.message)}</div>` : '');
+
+                    const deleteBtn = (isSelf && !isDeleted)
+                        ? `<button onclick="deleteMyMessage(${message.id})" title="Eliminar" style="background:none; border:none; cursor:pointer; color:inherit; opacity:0.6; padding:0 2px;"><i class="fa-solid fa-trash" style="font-size:11px;"></i></button>`
+                        : '';
 
                     messageEl.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 8px;">
                             ${!isSelf ? `<img src="${senderAvatar}" style="width:28px; height:28px; border-radius:50%; border: 2px solid ${senderColor};">` : ''}
                             <span style="font-weight: 600; font-size: 13px; ${isSelf ? 'opacity: 0.9;' : 'color:' + senderColor}">${senderName}</span>
                             <span style="font-size: 11px; opacity: 0.6; margin-left: auto;">${timestamp}</span>
+                            ${deleteBtn}
                         </div>
                         ${imageHtml}
                         ${textHtml}
                     `;
 
-                    chatContainer.appendChild(messageEl);
+                    wrapperEl.appendChild(messageEl);
+
+                    // Reactions row
+                    if (!isDeleted) {
+                        const reactions = message.reactions || {};
+                        const reactionPills = Object.keys(reactions).filter(e => reactions[e].length > 0).map(emoji => {
+                            const mine = currentUser && reactions[emoji].includes(currentUser.id);
+                            return `<button onclick="toggleReaction(${message.id}, '${emoji}')" style="border:1px solid ${mine ? 'var(--primary)' : 'var(--border)'}; background:${mine ? 'rgba(16,185,129,0.15)' : 'var(--bg-soft)'}; border-radius:12px; padding:2px 8px; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">${emoji} <span style="opacity:0.7;">${reactions[emoji].length}</span></button>`;
+                        }).join('');
+
+                        const pickerBtns = QUICK_REACTIONS.map(emoji =>
+                            `<button onclick="toggleReaction(${message.id}, '${emoji}')" style="background:none; border:none; cursor:pointer; font-size:15px; padding:2px 4px; opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">${emoji}</button>`
+                        ).join('');
+
+                        const reactionRow = document.createElement('div');
+                        reactionRow.style.cssText = `display:flex; align-items:center; gap:4px; margin-top:4px; flex-wrap:wrap; ${isSelf ? 'justify-content:flex-end;' : ''}`;
+                        reactionRow.innerHTML = `${reactionPills}<span style="display:inline-flex; gap:2px;">${pickerBtns}</span>`;
+                        wrapperEl.appendChild(reactionRow);
+                    }
+
+                    // Read receipt — show under the sender's own most recent message
+                    if (isSelf && lastOwnMessage && message.id === lastOwnMessage.id) {
+                        const readers = members.filter(m => {
+                            if (currentUser && m.id === currentUser.id) return false;
+                            const r = chatReads.find(cr => cr.user_id === m.id);
+                            return r && r.last_read_id >= message.id;
+                        });
+                        if (readers.length > 0) {
+                            const readEl = document.createElement('div');
+                            readEl.style.cssText = 'display:flex; align-items:center; gap:4px; margin-top:4px;';
+                            readEl.innerHTML = `<span style="font-size:11px; color:var(--text-light);">Visto por</span>` +
+                                readers.map(r => `<img src="${r.avatar}" title="${r.name}" style="width:16px; height:16px; border-radius:50%; border:1px solid var(--border);">`).join('');
+                            wrapperEl.appendChild(readEl);
+                        }
+                    }
+
+                    chatContainer.appendChild(wrapperEl);
                 });
 
                 // Auto-scroll to bottom
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                markChatRead();
+            }
+
+            window.toggleReaction = function (messageId, emoji) {
+                if (!currentUser) return;
+                socket.emit('reactMessage', { messageId, emoji, userId: currentUser.id });
+            };
+
+            window.deleteMyMessage = function (messageId) {
+                if (!currentUser) return;
+                if (!confirm('¿Eliminar este mensaje?')) return;
+                socket.emit('deleteMessage', { messageId, userId: currentUser.id });
+            };
+
+            let lastReadSent = 0;
+            function markChatRead() {
+                if (!currentUser || !chatMessages.length) return;
+                const chatSection = document.getElementById('chat');
+                if (!chatSection || !chatSection.classList.contains('active')) return;
+
+                const lastId = chatMessages[chatMessages.length - 1].id;
+                if (lastId <= lastReadSent) return;
+                lastReadSent = lastId;
+                apiCall('/api/chat/reads', 'POST', { last_read_id: lastId }).catch(() => {});
             }
 
             function escapeHtml(text) {
@@ -3932,6 +4478,105 @@
                 div.textContent = text;
                 return div.innerHTML;
             }
+
+            // ── APP LOGO ───────────────────────────────────────────────────────
+            function applyLogo(url) {
+                const headerIcon = document.getElementById('header-logo-icon');
+                const headerImg = document.getElementById('header-logo-img');
+                const splashIcon = document.getElementById('splash-logo-icon');
+                const splashImg = document.getElementById('splash-logo-img');
+                if (url) {
+                    headerIcon.style.display = 'none';
+                    headerImg.src = url;
+                    headerImg.style.display = 'inline-block';
+                    splashIcon.style.display = 'none';
+                    splashImg.src = url;
+                    splashImg.style.display = 'inline-block';
+                } else {
+                    headerIcon.style.display = '';
+                    headerImg.style.display = 'none';
+                    splashIcon.style.display = '';
+                    splashImg.style.display = 'none';
+                }
+            }
+
+            async function loadAppLogo() {
+                try {
+                    const res = await fetch('/api/settings/logo');
+                    const data = await res.json();
+                    applyLogo(data.logo_url);
+                } catch (e) { /* keep default icon */ }
+            }
+
+            window.showSettingsModal = function () {
+                const existing = document.getElementById('dynamic-settings-modal');
+                if (existing) existing.remove();
+
+                const isAdmin = currentUser && currentUser.is_admin;
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-settings-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:420px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-gear" style="color:var(--primary);margin-right:8px;"></i>Ajustes</h3>
+                            <button onclick="document.getElementById('dynamic-settings-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        ${isAdmin ? `
+                            <label style="display:block;margin-bottom:8px;font-weight:500;">Logo de la App</label>
+                            <p style="font-size:13px; color:var(--text-light); margin:0 0 14px;">Sube tu propio logo (reemplaza el ícono de casa), o vuelve al predeterminado.</p>
+                            <input type="file" id="logo-upload-input" accept="image/*" style="display:none;">
+                            <div style="display:flex; gap:10px;">
+                                <button onclick="document.getElementById('logo-upload-input').click()" style="flex:2;padding:12px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;font-weight:600;"><i class="fa-solid fa-upload"></i> Subir Logo</button>
+                                <button onclick="resetAppLogo()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;">Restablecer</button>
+                            </div>
+                        ` : `<p style="font-size:14px; color:var(--text-light);">Solo el administrador puede cambiar los ajustes de la app.</p>`}
+                    </div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+                if (isAdmin) {
+                    document.getElementById('logo-upload-input').addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        await uploadAppLogo(file);
+                    });
+                }
+            };
+
+            async function uploadAppLogo(file) {
+                const token = localStorage.getItem('token');
+                const formData = new FormData();
+                formData.append('logo', file);
+                try {
+                    const res = await fetch('/api/settings/logo', {
+                        method: 'POST',
+                        headers: { 'x-access-token': token },
+                        body: formData
+                    });
+                    if (!res.ok) throw new Error('Upload failed');
+                    const data = await res.json();
+                    applyLogo(data.logo_url);
+                    const modal = document.getElementById('dynamic-settings-modal');
+                    if (modal) modal.remove();
+                    showToast('Logo actualizado', 'El nuevo logo ya está visible para toda la familia');
+                } catch (e) {
+                    showToast('Error', 'No se pudo subir el logo');
+                }
+            }
+
+            window.resetAppLogo = async function () {
+                try {
+                    await apiCall('/api/settings/logo', 'DELETE');
+                    applyLogo(null);
+                    const modal = document.getElementById('dynamic-settings-modal');
+                    if (modal) modal.remove();
+                    showToast('Logo restablecido', 'Se volvió al ícono predeterminado');
+                } catch (e) {
+                    showToast('Error', 'No se pudo restablecer el logo');
+                }
+            };
+            // ── END APP LOGO ───────────────────────────────────────────────────
 
             let pendingChatImageUrl = null;
 
@@ -3987,238 +4632,339 @@
                 input.focus();
             }
 
-            function renderNotes() {
-                const notes = allNotes || [];
-                const container = document.getElementById('note-list-container');
+            // ── POLLS / VOTACIONES ─────────────────────────────────────────────
+            function renderPolls() {
+                const container = document.getElementById('polls-container');
+                const btnWrapper = document.getElementById('add-poll-btn-wrapper');
                 if (!container) return;
 
-                const searchEl = document.getElementById('note-search');
-                const filterEl = document.getElementById('note-priority-filter');
-                const searchTerm = searchEl ? searchEl.value.toLowerCase() : '';
-                const priorityFilter = filterEl ? filterEl.value : 'all';
-
-                container.innerHTML = '';
-
-                let filteredNotes = notes.filter(n => {
-                    const title = (n.title || '').toLowerCase();
-                    const content = (n.content || '').toLowerCase();
-                    const matchesSearch = title.includes(searchTerm) || content.includes(searchTerm);
-                    const matchesPriority = priorityFilter === 'all' || n.priority === priorityFilter;
-                    return matchesSearch && matchesPriority;
-                });
-
-                filteredNotes.sort((a, b) => {
-                    if (a.pinned && !b.pinned) return -1;
-                    if (!a.pinned && b.pinned) return 1;
-                    return b.id - a.id;
-                });
-
-                if (filteredNotes.length === 0) {
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 60px 20px; color: var(--text-light);">
-                            <i class="fa-solid fa-note-sticky" style="font-size: 64px; display: block; margin-bottom: 20px; opacity: 0.2;"></i>
-                            <h3 style="margin-bottom: 8px; color: var(--text);">No hay notas</h3>
-                            <p>Crea tu primera nota con el botón "Nueva Nota"</p>
-                        </div>`;
-                    return;
-                }
-
-                filteredNotes.forEach(note => {
-                    const noteEl = document.createElement('div');
-                    const priorityColors = { high: '#ef4444', medium: '#f59e0b', low: '#10b981' };
-                    const priorityLabels = { high: 'Urgente', medium: 'Importante', low: 'General' };
-                    const author = familyMembers.find(m => m.id === note.author_id) || { name: 'Desconocido', avatar: 'https://ui-avatars.com/api/?name=?' };
-                    const pColor = priorityColors[note.priority || 'medium'];
-
-                    noteEl.style.cssText = `
-                        margin-bottom: 16px;
-                        border-left: 5px solid ${pColor};
-                        background: var(--card);
-                        border-radius: 8px;
-                        padding: 20px;
-                        box-shadow: var(--shadow-sm);
-                        transition: all 0.3s ease;
-                    `;
-
-                    noteEl.innerHTML = `
-                        <div style="display: flex; gap: 15px; align-items: flex-start;">
-                            <img src="${author.avatar}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${pColor}; flex-shrink: 0;">
-                            <div style="flex:1; min-width: 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <strong style="font-size: 16px; ${note.completed ? 'text-decoration: line-through; opacity: 0.5;' : ''}">${escapeHtml(note.title || '')}</strong>
-                                        ${note.pinned ? '<span style="background: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;"><i class="fa-solid fa-thumbtack"></i> Fijada</span>' : ''}
-                                        ${note.completed ? '<span style="background: var(--success); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;"><i class="fa-solid fa-check"></i> Hecho</span>' : ''}
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span style="background: ${pColor}20; color: ${pColor}; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600;">${priorityLabels[note.priority || 'medium']}</span>
-                                        <span style="font-size: 12px; color: var(--text-light);">${note.date || ''}</span>
-                                    </div>
-                                </div>
-                                <p style="font-size: 14px; margin-bottom: 14px; color: var(--text); line-height: 1.6; ${note.completed ? 'text-decoration: line-through; opacity: 0.5;' : ''}">${escapeHtml(note.content || '')}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                                    <small style="color: var(--text-light);">Por: <strong style="color: var(--primary);">${author.name}</strong></small>
-                                    <div style="display: flex; gap: 4px;">
-                                        <button data-note-action="done" data-note-id="${note.id}" style="width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:${note.completed ? 'var(--success)' : 'var(--bg-soft)'}; color:${note.completed ? 'white' : 'var(--text-light)'}; cursor:pointer; display:grid; place-items:center;" title="${note.completed ? 'Pendiente' : 'Completar'}">
-                                            <i class="fa-solid fa-check"></i>
-                                        </button>
-                                        <button data-note-action="pin" data-note-id="${note.id}" style="width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:${note.pinned ? 'var(--secondary)' : 'var(--bg-soft)'}; color:${note.pinned ? 'white' : 'var(--text-light)'}; cursor:pointer; display:grid; place-items:center;" title="Fijar">
-                                            <i class="fa-solid fa-thumbtack"></i>
-                                        </button>
-                                        <button data-note-action="edit" data-note-id="${note.id}" style="width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:var(--bg-soft); color:var(--primary); cursor:pointer; display:grid; place-items:center;" title="Editar">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
-                                        <button data-note-action="delete" data-note-id="${note.id}" style="width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:var(--bg-soft); color:var(--danger); cursor:pointer; display:grid; place-items:center;" title="Eliminar">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(noteEl);
-                });
-
-                // Attach event listeners using delegation
-                container.querySelectorAll('[data-note-action]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const action = this.getAttribute('data-note-action');
-                        const noteId = parseInt(this.getAttribute('data-note-id'));
-                        if (action === 'done') toggleDoneNote(noteId);
-                        else if (action === 'pin') togglePinNote(noteId);
-                        else if (action === 'edit') {
-                            const note = allNotes.find(n => n.id === noteId);
-                            if (note) showNoteModal(note);
-                        }
-                        else if (action === 'delete') deleteNote(noteId);
-                    });
-                });
-            }
-
-            window.showNoteModal = function (note = null) {
-                const modal = document.getElementById('note-modal');
-                const titleEl = document.getElementById('note-modal-title');
-                const idInput = document.getElementById('modal-note-id');
-                const titleInput = document.getElementById('modal-note-title');
-                const contentInput = document.getElementById('modal-note-content');
-                const priorityInput = document.getElementById('modal-note-priority');
-
-                if (note) {
-                    titleEl.textContent = 'Editar Nota';
-                    idInput.value = note.id;
-                    titleInput.value = note.title || '';
-                    contentInput.value = note.content || '';
-                    priorityInput.value = note.priority || 'medium';
-                } else {
-                    titleEl.textContent = 'Nueva Nota';
-                    idInput.value = '';
-                    titleInput.value = '';
-                    contentInput.value = '';
-                    priorityInput.value = 'medium';
-                }
-
-                modal.style.display = 'flex';
-                titleInput.focus();
-            }
-
-            window.closeNoteModal = function () {
-                document.getElementById('note-modal').style.display = 'none';
-            }
-
-            window.saveNote = async function () {
-                const id = document.getElementById('modal-note-id').value;
-                const title = document.getElementById('modal-note-title').value.trim();
-                const content = document.getElementById('modal-note-content').value.trim();
-                const priority = document.getElementById('modal-note-priority').value;
-
-                if (!title) {
-                    showToast('Error', 'El título es obligatorio');
-                    return;
-                }
-
-                if (!currentUser) {
-                    showToast('Error', 'Debes iniciar sesión');
-                    return;
-                }
-
-                try {
-                    if (id) {
-                        // Update existing note - only send editable fields
-                        await apiCall(`/api/notes/${id}`, 'PUT', {
-                            title,
-                            content: content || '',
-                            priority,
-                            pinned: (allNotes.find(n => n.id == id) || {}).pinned || false,
-                            completed: (allNotes.find(n => n.id == id) || {}).completed || false
-                        });
-                        showToast('Nota actualizada', 'Los cambios han sido guardados');
+                // Show "Nueva Votación" button only for admins
+                if (btnWrapper) {
+                    if (currentUser && currentUser.is_admin) {
+                        btnWrapper.innerHTML = `<button onclick="showAddPollModal()" class="btn primary"><i class="fa-solid fa-plus"></i> Nueva Votación</button>`;
                     } else {
-                        // Create new note
-                        await apiCall('/api/notes', 'POST', {
-                            title,
-                            content: content || '',
-                            priority,
-                            author_id: currentUser.id,
-                            date: new Date().toLocaleDateString('es-ES'),
-                            pinned: false
-                        });
-                        showToast('Nota creada', 'Nueva nota añadida');
+                        btnWrapper.innerHTML = '';
                     }
+                }
 
-                    closeNoteModal();
-                    await loadAllData();
-                } catch (err) {
-                    console.error('Save note error:', err);
-                    showToast('Error', 'No se pudo guardar la nota');
+                if (!allPolls || allPolls.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding:48px; color:var(--text-light);">
+                        <i class="fa-solid fa-poll" style="font-size:3rem; margin-bottom:16px; opacity:0.3;"></i>
+                        <p style="font-size:1.1rem;">No hay votaciones activas</p>
+                        ${currentUser && currentUser.is_admin ? '<p style="font-size:0.9rem; margin-top:8px;">Crea una nueva votación con el botón de arriba</p>' : ''}
+                    </div>`;
+                    return;
+                }
+
+                container.innerHTML = allPolls.map(poll => {
+                    const total = poll.votes ? poll.votes.reduce((a, b) => a + b, 0) : 0;
+                    const optionsHtml = poll.options.map((opt, i) => {
+                        const count = poll.votes ? (poll.votes[i] || 0) : 0;
+                        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                        const voted = poll.userVote === i;
+                        const canVote = poll.userVote === null || poll.userVote === undefined;
+                        return `
+                        <div style="margin-bottom:14px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <span style="font-weight:${voted ? '700' : '500'}; color:${voted ? 'var(--primary-light)' : 'var(--text)'};">
+                                    ${voted ? '✅ ' : ''}${opt}
+                                </span>
+                                <span style="color:var(--text-light); font-size:13px;">${count} voto${count !== 1 ? 's' : ''} · ${pct}%</span>
+                            </div>
+                            <div style="background:var(--bg-soft); border-radius:8px; height:10px; overflow:hidden;">
+                                <div style="background:${voted ? 'var(--primary-light)' : 'var(--primary)'}; height:100%; width:${pct}%; transition:width 0.5s ease; border-radius:8px;"></div>
+                            </div>
+                            ${canVote ? `<button onclick="votePoll(${poll.id}, ${i})" style="margin-top:8px; padding:6px 16px; border:1px solid var(--primary); background:transparent; color:var(--primary); border-radius:8px; cursor:pointer; font-size:13px; transition:all 0.2s;" onmouseover="this.style.background='var(--primary)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='var(--primary)'">Votar por esta opción</button>` : ''}
+                        </div>`;
+                    }).join('');
+
+                    const expires = poll.expires_at ? `<span style="font-size:12px; color:var(--text-light);">Vence: ${new Date(poll.expires_at).toLocaleDateString('es-ES')}</span>` : '';
+                    const adminBtns = currentUser && currentUser.is_admin
+                        ? `<div style="display:flex; gap:4px;">
+                            <button onclick='showAddPollModal(${JSON.stringify(poll).replace(/'/g, "&#39;")})' style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deletePoll(${poll.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                           </div>`
+                        : '';
+
+                    return `
+                    <div class="card" style="padding:24px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+                            <div>
+                                <h3 style="margin:0 0 4px; font-size:1.1rem;">${poll.question}</h3>
+                                ${expires}
+                            </div>
+                            ${adminBtns}
+                        </div>
+                        ${optionsHtml}
+                        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border); color:var(--text-light); font-size:13px;">
+                            <i class="fa-solid fa-users"></i> ${total} voto${total !== 1 ? 's' : ''} en total
+                            ${poll.userVote !== null && poll.userVote !== undefined ? ' · <span style="color:var(--success);">✓ Ya votaste</span>' : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            window.votePoll = async function votePoll(pollId, optionIndex) {
+                try {
+                    await apiCall(`/api/polls/${pollId}/vote`, 'POST', { option_index: optionIndex });
+                    showToast('¡Voto registrado!', 'Tu voto fue contado exitosamente');
+                    const polls = await apiCall('/api/polls');
+                    allPolls = polls || [];
+                    renderPolls();
+                } catch (e) {
+                    showToast('Error', 'No se pudo registrar el voto');
                 }
             }
 
-            async function toggleDoneNote(id) {
-                const note = allNotes.find(n => n.id === id);
-                if (!note) return;
+            window.deletePoll = async function deletePoll(id) {
+                if (!confirm('¿Eliminar esta votación?')) return;
                 try {
-                    await apiCall(`/api/notes/${id}`, 'PUT', {
-                        title: note.title,
-                        content: note.content,
-                        priority: note.priority,
-                        pinned: note.pinned,
-                        completed: !note.completed
-                    });
-                    showToast(note.completed ? 'Pendiente' : 'Completada', `"${note.title}" ${note.completed ? 'marcada como pendiente' : 'completada'}`);
-                    await loadAllData();
-                } catch (err) {
-                    showToast('Error', 'No se pudo actualizar');
-                }
-            }
-
-            async function togglePinNote(id) {
-                const note = allNotes.find(n => n.id === id);
-                if (!note) return;
-                try {
-                    await apiCall(`/api/notes/${id}`, 'PUT', {
-                        title: note.title,
-                        content: note.content,
-                        priority: note.priority,
-                        pinned: !note.pinned,
-                        completed: note.completed
-                    });
-                    showToast(note.pinned ? 'Desfijada' : 'Fijada', `"${note.title}" ${note.pinned ? 'desfijada' : 'fijada al inicio'}`);
-                    await loadAllData();
-                } catch (err) {
-                    showToast('Error', 'No se pudo actualizar');
-                }
-            }
-
-            async function deleteNote(id) {
-                if (!confirm('¿Eliminar esta nota?')) return;
-                try {
-                    await apiCall(`/api/notes/${id}`, 'DELETE');
-                    showToast('Eliminada', 'La nota ha sido eliminada');
-                    await loadAllData();
-                } catch (err) {
+                    await apiCall(`/api/polls/${id}`, 'DELETE');
+                    const polls = await apiCall('/api/polls');
+                    allPolls = polls || [];
+                    renderPolls();
+                } catch (e) {
                     showToast('Error', 'No se pudo eliminar');
                 }
             }
+
+            window.showAddPollModal = function (poll = null) {
+                const existing = document.getElementById('dynamic-poll-modal');
+                if (existing) existing.remove();
+
+                const isEdit = !!poll;
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-poll-modal';
+                modal.dataset.editId = isEdit ? poll.id : '';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                const expiresValue = isEdit && poll.expires_at ? new Date(new Date(poll.expires_at).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-poll" style="color:var(--primary);margin-right:8px;"></i>${isEdit ? 'Editar Votación' : 'Nueva Votación'}</h3>
+                            <button onclick="document.getElementById('dynamic-poll-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        ${isEdit ? `<p style="font-size:13px; color:var(--text-light); margin:-12px 0 16px;"><i class="fa-solid fa-triangle-exclamation"></i> Editar las opciones reiniciará los votos actuales.</p>` : ''}
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Pregunta</label>
+                            <input type="text" id="poll-question-input" placeholder="¿Qué cenamos el sábado?" value="${isEdit ? poll.question.replace(/"/g, '&quot;') : ''}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Opciones <span style="color:var(--text-light);font-size:13px;">(una por línea, mín. 2)</span></label>
+                            <textarea id="poll-options-input" rows="5" placeholder="Pizza&#10;Pollo frito&#10;Tacos&#10;Pasta" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;resize:vertical;font-family:inherit;">${isEdit ? poll.options.join('\n') : ''}</textarea>
+                        </div>
+                        <div style="margin-bottom:20px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Fecha límite <span style="color:var(--text-light);font-size:13px;">(opcional)</span></label>
+                            <input type="datetime-local" id="poll-expires-input" value="${expiresValue}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                        </div>
+                        <div style="display:flex;gap:10px;">
+                            <button onclick="document.getElementById('dynamic-poll-modal').remove()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;">Cancelar</button>
+                            <button onclick="savePoll()" style="flex:2;padding:12px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;font-weight:600;">${isEdit ? 'Guardar Cambios' : 'Crear Votación'}</button>
+                        </div>
+                    </div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+                document.getElementById('poll-question-input').focus();
+            };
+
+            window.savePoll = async function savePoll() {
+                const modal = document.getElementById('dynamic-poll-modal');
+                const editId = modal ? modal.dataset.editId : '';
+                const question = document.getElementById('poll-question-input').value.trim();
+                const optionsRaw = document.getElementById('poll-options-input').value;
+                const expiresRaw = document.getElementById('poll-expires-input').value;
+                const options = optionsRaw.split('\n').map(o => o.trim()).filter(o => o);
+
+                if (!question) { showToast('Error', 'Escribe una pregunta'); return; }
+                if (options.length < 2) { showToast('Error', 'Agrega al menos 2 opciones'); return; }
+
+                try {
+                    const payload = {
+                        question,
+                        options,
+                        expires_at: expiresRaw ? new Date(expiresRaw).toISOString() : null
+                    };
+                    if (editId) {
+                        await apiCall(`/api/polls/${editId}`, 'PUT', payload);
+                        showToast('Votación actualizada', question);
+                    } else {
+                        await apiCall('/api/polls', 'POST', payload);
+                        showToast('Votación creada', question);
+                    }
+                    modal.remove();
+                    const polls = await apiCall('/api/polls');
+                    allPolls = polls || [];
+                    renderPolls();
+                } catch (e) {
+                    showToast('Error', editId ? 'No se pudo actualizar la votación' : 'No se pudo crear la votación');
+                }
+            }
+            // ── END POLLS ──────────────────────────────────────────────────────
+
+            // ── REMINDERS ──────────────────────────────────────────────────────
+            const REPEAT_LABELS = { none: 'Una vez', daily: 'Diario', weekly: 'Semanal', monthly: 'Mensual' };
+
+            function renderReminders() {
+                const container = document.getElementById('reminders-container');
+                if (!container) return;
+
+                const isAdmin = currentUser && currentUser.is_admin;
+                const btnWrapper = document.getElementById('add-reminder-btn-wrapper');
+                if (btnWrapper) {
+                    btnWrapper.innerHTML = isAdmin
+                        ? `<button class="btn primary" onclick="showAddReminderModal()"><i class="fa-solid fa-plus"></i> Nuevo Recordatorio</button>`
+                        : '';
+                }
+
+                if (!allReminders || allReminders.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding:48px; color:var(--text-light); grid-column:1/-1;">
+                        <i class="fa-solid fa-bell" style="font-size:3rem; margin-bottom:16px; opacity:0.3;"></i>
+                        <p style="font-size:1.1rem;">No hay recordatorios activos</p>
+                        ${isAdmin ? '<p style="font-size:0.9rem; margin-top:8px;">Crea uno con el botón de arriba, por ejemplo un cumpleaños o el turno de limpieza</p>' : ''}
+                    </div>`;
+                    return;
+                }
+
+                const sorted = [...allReminders].sort((a, b) => new Date(a.remind_at) - new Date(b.remind_at));
+
+                container.innerHTML = sorted.map(r => {
+                    const date = new Date(r.remind_at);
+                    const dateStr = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+                    const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                    const repeatLabel = REPEAT_LABELS[r.repeat] || 'Una vez';
+
+                    return `
+                    <div class="card" style="padding:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <i class="fa-solid fa-bell" style="color:var(--primary); font-size:1.2rem;"></i>
+                                <h3 style="margin:0; font-size:1.05rem;">${r.title}</h3>
+                            </div>
+                            ${isAdmin ? `<button onclick="deleteReminder(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Eliminar"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                        ${r.description ? `<p style="color:var(--text-light); font-size:14px; margin:0 0 12px;">${r.description}</p>` : ''}
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:13px;">
+                            <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-calendar"></i> ${dateStr}</span>
+                            <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-clock"></i> ${timeStr}</span>
+                            <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-repeat"></i> ${repeatLabel}</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            window.showAddReminderModal = function () {
+                const existing = document.getElementById('dynamic-reminder-modal');
+                if (existing) existing.remove();
+
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                const defaultDate = now.toISOString().slice(0, 16);
+
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-reminder-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-bell" style="color:var(--primary);margin-right:8px;"></i>Nuevo Recordatorio</h3>
+                            <button onclick="document.getElementById('dynamic-reminder-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+                            <button onclick="fillReminderPreset('birthday')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">🎂 Cumpleaños</button>
+                            <button onclick="fillReminderPreset('cleaning')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">🧹 Turno de limpieza</button>
+                            <button onclick="fillReminderPreset('bill')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">💸 Pago</button>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Título</label>
+                            <input type="text" id="reminder-title-input" placeholder="Ej: Cumpleaños de Magda" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Descripción <span style="color:var(--text-light);font-size:13px;">(opcional)</span></label>
+                            <textarea id="reminder-desc-input" rows="3" placeholder="Detalles del recordatorio..." style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;resize:vertical;font-family:inherit;"></textarea>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Fecha y hora</label>
+                            <input type="datetime-local" id="reminder-date-input" value="${defaultDate}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                        </div>
+                        <div style="margin-bottom:20px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Repetir</label>
+                            <select id="reminder-repeat-input" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                                <option value="none">Una vez</option>
+                                <option value="daily">Diario</option>
+                                <option value="weekly">Semanal</option>
+                                <option value="monthly" selected>Mensual (anual para cumpleaños)</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;gap:10px;">
+                            <button onclick="document.getElementById('dynamic-reminder-modal').remove()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;">Cancelar</button>
+                            <button onclick="saveReminder()" style="flex:2;padding:12px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;font-weight:600;">Crear Recordatorio</button>
+                        </div>
+                    </div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+                document.getElementById('reminder-title-input').focus();
+            };
+
+            window.fillReminderPreset = function (preset) {
+                const titleInput = document.getElementById('reminder-title-input');
+                const descInput = document.getElementById('reminder-desc-input');
+                const repeatInput = document.getElementById('reminder-repeat-input');
+                if (preset === 'birthday') {
+                    titleInput.value = '🎂 Cumpleaños familiar';
+                    descInput.value = '¡No olviden felicitar y preparar algo especial!';
+                    repeatInput.value = 'monthly';
+                } else if (preset === 'cleaning') {
+                    titleInput.value = '🧹 Turno de limpieza';
+                    descInput.value = 'Recuerden revisar quién tiene el turno de limpieza hoy.';
+                    repeatInput.value = 'weekly';
+                } else if (preset === 'bill') {
+                    titleInput.value = '💸 Pagar servicio';
+                    descInput.value = 'Vence pronto, no olviden pagar antes de la fecha límite.';
+                    repeatInput.value = 'monthly';
+                }
+                titleInput.focus();
+            };
+
+            window.saveReminder = async function () {
+                const title = document.getElementById('reminder-title-input').value.trim();
+                const description = document.getElementById('reminder-desc-input').value.trim();
+                const remind_at = document.getElementById('reminder-date-input').value;
+                const repeat = document.getElementById('reminder-repeat-input').value;
+
+                if (!title) { showToast('Error', 'Escribe un título'); return; }
+                if (!remind_at) { showToast('Error', 'Selecciona una fecha y hora'); return; }
+
+                try {
+                    await apiCall('/api/reminders', 'POST', {
+                        title,
+                        description,
+                        remind_at: new Date(remind_at).toISOString(),
+                        repeat
+                    });
+                    document.getElementById('dynamic-reminder-modal').remove();
+                    showToast('Recordatorio creado', title);
+                    const reminders = await apiCall('/api/reminders');
+                    allReminders = reminders || [];
+                    renderReminders();
+                } catch (e) {
+                    showToast('Error', 'No se pudo crear el recordatorio');
+                }
+            };
+
+            window.deleteReminder = async function (id) {
+                if (!confirm('¿Eliminar este recordatorio?')) return;
+                try {
+                    await apiCall(`/api/reminders/${id}`, 'DELETE');
+                    const reminders = await apiCall('/api/reminders');
+                    allReminders = reminders || [];
+                    renderReminders();
+                    showToast('Recordatorio eliminado', '');
+                } catch (e) {
+                    showToast('Error', 'No se pudo eliminar');
+                }
+            };
+            // ── END REMINDERS ──────────────────────────────────────────────────
+
         </script>
         <audio id="notificationSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"
             preload="auto"></audio>
