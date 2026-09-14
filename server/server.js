@@ -88,6 +88,25 @@ setTimeout(async () => {
   }
 }, 6000);
 
+// ONE-TIME FIX #3 (safe to delete once confirmed) — points Andrés's avatar
+// and the family logo at the images uploaded locally (now committed to the
+// repo, since Render's free-tier disk is ephemeral and can't be relied on
+// to keep anything uploaded through the app itself).
+setTimeout(async () => {
+  const FLAG = 'fix_2026_09_14c_restore_photos';
+  try {
+    const existing = await db.get(`SELECT value FROM app_settings WHERE key = ?`, [FLAG]);
+    if (existing) return;
+
+    await db.run(`UPDATE users SET avatar = ? WHERE name = ?`, ['/uploads/avatar-1-1789352558347.png', 'Andres 💻']);
+    await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`, ['logo_url', '/uploads/logo-1789352324130.png']);
+    await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`, [FLAG, '1']);
+    console.log('Photo fix applied: set Andres avatar and family logo.');
+  } catch (e) {
+    console.error('Photo fix failed:', e.message);
+  }
+}, 7000);
+
 // Local calendar date as YYYY-MM-DD, based on the server's system timezone.
 // toISOString() converts to UTC first, which rolls "today" over to tomorrow
 // once local time passes 8pm in UTC-4 — always use this for day comparisons.
