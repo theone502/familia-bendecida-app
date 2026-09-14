@@ -2770,6 +2770,14 @@
                 return new Date(d.getTime() - offsetMs).toISOString().split('T')[0];
             }
 
+            // Parse a "YYYY-MM-DD" string as a local-time date, not UTC midnight —
+            // new Date("YYYY-MM-DD") parses as UTC, which rolls back to the previous
+            // day (wrong weekday, wrong day-count) in any timezone behind UTC.
+            function parseLocalDate(dateStr) {
+                const [y, m, d] = dateStr.split('-').map(Number);
+                return new Date(y, m - 1, d);
+            }
+
             // Animate a stat number counting up to its target value.
             function countUpNumber(el, target, suffix) {
                 if (!el) return;
@@ -3540,8 +3548,8 @@
 
                 // Calculate streak
                 let streak = 0;
-                const sortedCalendar = [...calendar].sort((a, b) => new Date(b.date) - new Date(a.date));
-                const pastEvents = sortedCalendar.filter(e => new Date(e.date) <= today);
+                const sortedCalendar = [...calendar].sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date));
+                const pastEvents = sortedCalendar.filter(e => parseLocalDate(e.date) <= today);
 
                 for (const event of pastEvents) {
                     if (event.completed) streak++;
@@ -3563,7 +3571,7 @@
                 const todayStr = localDateStr(today);
                 const nextCleaning = calendar.find(c => c.date >= todayStr);
                 if (nextCleaning) {
-                    const nextDate = new Date(nextCleaning.date);
+                    const nextDate = parseLocalDate(nextCleaning.date);
                     document.getElementById('nextDay').textContent = nextDate.toLocaleDateString('es-ES', { weekday: 'long' });
                     document.getElementById('nextWho').textContent = nextCleaning.assignedTo;
 
@@ -4010,7 +4018,7 @@
 
                 // Update month stats
                 const monthCalendar = calendar.filter(c => {
-                    const date = new Date(c.date);
+                    const date = parseLocalDate(c.date);
                     return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
                 });
 
@@ -4178,7 +4186,7 @@
 
             function formatBirthday(dateStr) {
                 if (!dateStr) return '';
-                const date = new Date(dateStr);
+                const date = parseLocalDate(dateStr);
                 return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
             }
 
