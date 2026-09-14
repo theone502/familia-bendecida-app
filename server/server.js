@@ -19,6 +19,39 @@ const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api')(io);
 const { sendPushToAll } = require('./pushService');
 
+// ONE-TIME FIX (safe to delete once confirmed) — removes Chusma/Monkey and
+// rebalances the cleaning rotation on this deployment's database. Needed
+// because this database is separate from the local dev one (gitignored),
+// and this Render plan has no Shell access to run it by hand. Gated on an
+// app_settings flag so it runs exactly once no matter how many times the
+// server restarts. The 5s delay just gives initDb() time to finish creating
+// tables on a cold start.
+setTimeout(async () => {
+  const FLAG = 'fix_2026_09_14_remove_chusma_monkey';
+  try {
+    const existing = await db.get(`SELECT value FROM app_settings WHERE key = ?`, [FLAG]);
+    if (existing) return;
+
+    const fs = require('fs');
+    const dbFile = path.resolve(__dirname, 'database.sqlite');
+    fs.copyFileSync(dbFile, dbFile + '.bak-' + Date.now());
+
+    const deletedUsers = await db.run(`DELETE FROM users WHERE name IN ('Chusma','Monkey')`);
+    const deletedEvents = await db.run(`DELETE FROM events WHERE type='limpieza' AND assigned_to IN ('Chusma','Monkey')`);
+
+    const cycle = ['Andres 💻', 'Chepe/Macho', 'Wanit', 'Magda/Tiy'];
+    const rows = await db.all(`SELECT id FROM events WHERE type='limpieza' AND date >= date('now') ORDER BY date ASC`);
+    for (let i = 0; i < rows.length; i++) {
+      await db.run(`UPDATE events SET assigned_to = ? WHERE id = ?`, [cycle[i % cycle.length], rows[i].id]);
+    }
+
+    await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`, [FLAG, '1']);
+    console.log(`One-time fix applied: removed ${deletedUsers.changes} user(s), ${deletedEvents.changes} stale cleaning event(s), reassigned ${rows.length} future turn(s).`);
+  } catch (e) {
+    console.error('One-time fix failed:', e.message);
+  }
+}, 5000);
+
 // Local calendar date as YYYY-MM-DD, based on the server's system timezone.
 // toISOString() converts to UTC first, which rolls "today" over to tomorrow
 // once local time passes 8pm in UTC-4 — always use this for day comparisons.
