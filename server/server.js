@@ -107,6 +107,31 @@ setTimeout(async () => {
   }
 }, 7000);
 
+// ONE-TIME FIX #4 (safe to delete once confirmed) — gives Chepe/Macho, Wanit
+// and Magda/Tiy illustrated avatars (DiceBear "avataaars", gender-matched)
+// instead of the default initials placeholder.
+setTimeout(async () => {
+  const FLAG = 'fix_2026_09_14d_family_avatars';
+  try {
+    const existing = await db.get(`SELECT value FROM app_settings WHERE key = ?`, [FLAG]);
+    if (existing) return;
+
+    const avatars = {
+      'Chepe/Macho': 'https://api.dicebear.com/9.x/avataaars/svg?seed=Chepe&top=shortFlat&facialHair=beardLight&facialHairProbability=100&mouth=twinkle&eyes=default&eyebrows=defaultNatural&accessoriesProbability=0',
+      'Wanit': 'https://api.dicebear.com/9.x/avataaars/svg?seed=Wanit&top=straight01&mouth=smile&eyes=default&eyebrows=defaultNatural&accessoriesProbability=0',
+      'Magda/Tiy': 'https://api.dicebear.com/9.x/avataaars/svg?seed=Magda&top=bob&mouth=smile&eyes=default&eyebrows=defaultNatural&accessoriesProbability=0'
+    };
+    for (const [name, url] of Object.entries(avatars)) {
+      await db.run(`UPDATE users SET avatar = ? WHERE name = ?`, [url, name]);
+    }
+
+    await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`, [FLAG, '1']);
+    console.log('Family avatar fix applied: set avatars for Chepe/Macho, Wanit, Magda/Tiy.');
+  } catch (e) {
+    console.error('Family avatar fix failed:', e.message);
+  }
+}, 8000);
+
 // Local calendar date as YYYY-MM-DD, based on the server's system timezone.
 // toISOString() converts to UTC first, which rolls "today" over to tomorrow
 // once local time passes 8pm in UTC-4 — always use this for day comparisons.
