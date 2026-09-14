@@ -52,6 +52,42 @@ setTimeout(async () => {
   }
 }, 5000);
 
+// ONE-TIME FIX #2 (safe to delete once confirmed) — regenerates the cleaning
+// rotation so it starts exactly today with Andrés, then cycles Chepe/Macho,
+// Wanit, Magda/Tiy every 2 days. Deletes and re-creates every future turn
+// rather than reassigning in place, since "today" needs to become a turn
+// day even if it wasn't one already.
+setTimeout(async () => {
+  const FLAG = 'fix_2026_09_14b_rotation_start_today';
+  try {
+    const existing = await db.get(`SELECT value FROM app_settings WHERE key = ?`, [FLAG]);
+    if (existing) return;
+
+    const fs = require('fs');
+    const dbFile = path.resolve(__dirname, 'database.sqlite');
+    fs.copyFileSync(dbFile, dbFile + '.bak-' + Date.now());
+
+    const future = await db.all(`SELECT id FROM events WHERE type='limpieza' AND date >= date('now')`);
+    const count = future.length || 40;
+    for (const row of future) {
+      await db.run(`DELETE FROM events WHERE id = ?`, [row.id]);
+    }
+
+    const cycle = ['Andres 💻', 'Chepe/Macho', 'Wanit', 'Magda/Tiy'];
+    for (let i = 0; i < count; i++) {
+      await db.run(
+        `INSERT INTO events (title, date, type, assigned_to, completed, points, penalized) VALUES (?, date('now', '+' || ? || ' days'), 'limpieza', ?, 0, 20, 0)`,
+        ['Limpieza de Hogar', i * 2, cycle[i % cycle.length]]
+      );
+    }
+
+    await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`, [FLAG, '1']);
+    console.log(`Rotation fix applied: regenerated ${count} cleaning turn(s) starting today with Andres.`);
+  } catch (e) {
+    console.error('Rotation fix failed:', e.message);
+  }
+}, 6000);
+
 // Local calendar date as YYYY-MM-DD, based on the server's system timezone.
 // toISOString() converts to UTC first, which rolls "today" over to tomorrow
 // once local time passes 8pm in UTC-4 — always use this for day comparisons.
