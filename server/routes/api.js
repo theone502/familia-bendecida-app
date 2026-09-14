@@ -727,28 +727,45 @@ module.exports = (io) => {
   });
 
   router.post('/reminders', requireAdmin, async (req, res) => {
-    const { title, description, remind_at, repeat } = req.body;
+    const { title, description, remind_at, repeat, is_bill, amount, penalty_amount, assigned_to } = req.body;
     try {
       const result = await db.run(
-        `INSERT INTO reminders (title, description, remind_at, repeat, created_by, active, sent) VALUES (?, ?, ?, ?, ?, 1, 0)`,
-        [title, description, remind_at, repeat || 'none', req.user.id]
+        `INSERT INTO reminders (title, description, remind_at, repeat, created_by, active, sent, is_bill, amount, penalty_amount, assigned_to, paid, penalized)
+         VALUES (?, ?, ?, ?, ?, 1, 0, ?, ?, ?, ?, 0, 0)`,
+        [title, description, remind_at, repeat || 'none', req.user.id,
+          is_bill ? 1 : 0, amount ?? null, penalty_amount || 0, assigned_to || null]
       );
       io.emit('updateData');
-      res.json({ id: result.lastID, title, description, remind_at, repeat, active: 1 });
+      res.json({ id: result.lastID, title, description, remind_at, repeat, active: 1, is_bill: is_bill ? 1 : 0, amount, penalty_amount, assigned_to });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
   router.put('/reminders/:id', requireAdmin, async (req, res) => {
-    const { title, description, remind_at, repeat, active } = req.body;
+    const { title, description, remind_at, repeat, active, is_bill, amount, penalty_amount, assigned_to } = req.body;
     try {
       await db.run(
-        `UPDATE reminders SET title=?, description=?, remind_at=?, repeat=?, active=?, sent=0 WHERE id=?`,
-        [title, description, remind_at, repeat, active ? 1 : 0, req.params.id]
+        `UPDATE reminders SET title=?, description=?, remind_at=?, repeat=?, active=?, sent=0, is_bill=?, amount=?, penalty_amount=?, assigned_to=? WHERE id=?`,
+        [title, description, remind_at, repeat, active ? 1 : 0,
+          is_bill ? 1 : 0, amount ?? null, penalty_amount || 0, assigned_to || null, req.params.id]
       );
       io.emit('updateData');
       res.json({ message: 'Reminder updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Mark a bill reminder as paid/unpaid — pressing "Done" before the due
+  // date is what stops the automatic penalty from applying. Any logged-in
+  // family member can do this (not just admins), since anyone might pay it.
+  router.post('/reminders/:id/paid', async (req, res) => {
+    const { paid } = req.body;
+    try {
+      await db.run(`UPDATE reminders SET paid = ? WHERE id = ?`, [paid ? 1 : 0, req.params.id]);
+      io.emit('updateData');
+      res.json({ message: 'Reminder payment status updated', paid: paid ? 1 : 0 });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

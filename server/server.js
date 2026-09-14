@@ -150,18 +150,44 @@ setInterval(async () => {
     );
     for (const r of reminders) {
       sendPushToAll({ title: `⏰ ${r.title}`, body: r.description || 'Recordatorio familiar', tag: 'reminder-' + r.id, url: '/' }, null);
+
+      // Bill penalty — a bill's due moment is exactly when this tick notices
+      // remind_at <= now. If nobody pressed "Marcar como pagado" (paid=0) in
+      // time, charge the assigned member once, gated on penalized=0 so a
+      // server restart the same tick can't double-charge. Because this is
+      // driven off remind_at itself (not a fixed "yesterday" snapshot like
+      // the cleaning penalty), it self-heals: if the server was offline
+      // across the due date, remind_at is still <= now on the next tick and
+      // gets caught here instead of being silently skipped.
+      if (r.is_bill && !r.paid && !r.penalized && r.penalty_amount > 0 && r.assigned_to) {
+        const member = await db.get(`SELECT * FROM users WHERE id = ?`, [r.assigned_to]);
+        if (member) {
+          const newDebt = (member.debt || 0) + r.penalty_amount;
+          await db.run(`UPDATE users SET debt = ? WHERE id = ?`, [newDebt, member.id]);
+          sendPushToAll({
+            title: '⚠️ Penalización de Pago',
+            body: `${member.name} no marcó "${r.title}" como pagado a tiempo. Se aplicó una penalización de $${r.penalty_amount}.`,
+            tag: 'bill-penalty-' + r.id + '-' + r.remind_at,
+            url: '/'
+          }, null);
+          io.emit('updateData');
+        }
+        await db.run(`UPDATE reminders SET penalized = 1 WHERE id = ?`, [r.id]);
+        r.penalized = 1;
+      }
+
       if (r.repeat === 'monthly') {
         const next = new Date(r.remind_at);
         next.setMonth(next.getMonth() + 1);
-        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0 WHERE id = ?`, [next.toISOString(), r.id]);
+        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0, paid = 0, penalized = 0 WHERE id = ?`, [next.toISOString(), r.id]);
       } else if (r.repeat === 'weekly') {
         const next = new Date(r.remind_at);
         next.setDate(next.getDate() + 7);
-        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0 WHERE id = ?`, [next.toISOString(), r.id]);
+        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0, paid = 0, penalized = 0 WHERE id = ?`, [next.toISOString(), r.id]);
       } else if (r.repeat === 'daily') {
         const next = new Date(r.remind_at);
         next.setDate(next.getDate() + 1);
-        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0 WHERE id = ?`, [next.toISOString(), r.id]);
+        await db.run(`UPDATE reminders SET remind_at = ?, sent = 0, paid = 0, penalized = 0 WHERE id = ?`, [next.toISOString(), r.id]);
       } else {
         await db.run(`UPDATE reminders SET sent = 1 WHERE id = ?`, [r.id]);
       }

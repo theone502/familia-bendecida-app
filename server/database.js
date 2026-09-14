@@ -244,8 +244,23 @@ function initDb() {
       repeat TEXT DEFAULT 'none',
       created_by INTEGER,
       active INTEGER DEFAULT 1,
-      sent INTEGER DEFAULT 0
-    )`);
+      sent INTEGER DEFAULT 0,
+      is_bill INTEGER DEFAULT 0,
+      amount REAL,
+      penalty_amount REAL DEFAULT 0,
+      assigned_to INTEGER,
+      paid INTEGER DEFAULT 0,
+      penalized INTEGER DEFAULT 0
+    )`, (err) => {
+      if (!err) {
+        db.run("ALTER TABLE reminders ADD COLUMN is_bill INTEGER DEFAULT 0", () => { });
+        db.run("ALTER TABLE reminders ADD COLUMN amount REAL", () => { });
+        db.run("ALTER TABLE reminders ADD COLUMN penalty_amount REAL DEFAULT 0", () => { });
+        db.run("ALTER TABLE reminders ADD COLUMN assigned_to INTEGER", () => { });
+        db.run("ALTER TABLE reminders ADD COLUMN paid INTEGER DEFAULT 0", () => { });
+        db.run("ALTER TABLE reminders ADD COLUMN penalized INTEGER DEFAULT 0", () => { });
+      }
+    });
 
     // App Settings Table (key/value — e.g. custom logo)
     db.run(`CREATE TABLE IF NOT EXISTS app_settings (

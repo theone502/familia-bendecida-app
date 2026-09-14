@@ -11,8 +11,18 @@ function verifyToken(req, res, next) {
   const token = req.headers['x-access-token'];
   if (!token) return res.status(401).json({ error: 'No token provided' });
 
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
     if (err) return res.status(401).json({ error: 'Invalid token' });
+
+    // Re-check the DB on every request so a deleted/removed user's existing
+    // token stops working immediately instead of staying valid until it expires.
+    try {
+      const user = await db.get(`SELECT id FROM users WHERE id = ?`, [decoded.id]);
+      if (!user) return res.status(401).json({ error: 'Invalid token' });
+    } catch (e) {
+      return res.status(500).json({ error: 'Server error: ' + e.message });
+    }
+
     req.userId = decoded.id;
     req.isAdmin = decoded.is_admin;
     req.user = { id: decoded.id, is_admin: decoded.is_admin };

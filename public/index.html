@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#080C0F" />
+    <meta name="theme-color" content="#05070D" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Familia Bendecida" />
@@ -15,74 +15,74 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/push.js"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@600;700;800&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            /* Ledger — Stripe-inspired teal/blue on deep navy-black */
-            --primary: #2FD9B9;
-            --primary-light: #5EEAD4;
-            --primary-dark: #14B8A6;
-            --secondary: #4F8FFF;
-            --secondary-light: #7CACFF;
-            --accent: #2FD9B9;
+            /* Interfaz Futura — sci-fi HUD: electric blue action color, violet highlights, deep space night */
+            --primary: #5DADFF;
+            --primary-light: #8EC5FF;
+            --primary-dark: #3A87DB;
+            --secondary: #0B0F1A;
+            --secondary-light: #14192B;
+            --accent: #B98CFF;
 
             --success: #34D399;
             --warning: #F5A524;
             --danger: #F0475F;
-            --info: #4F8FFF;
+            --info: #5DADFF;
 
-            --bg: #080C0F;
-            --bg-soft: #0F151B;
-            --bg-glass: rgba(15, 21, 27, 0.72);
-            --card: #10171E;
-            --text: #EFF3F2;
-            --text-light: #8B9C98;
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #05070D;
+            --bg-soft: #0B111F;
+            --bg-glass: rgba(11, 17, 31, 0.75);
+            --card: #0B111F;
+            --text: #DCE8FF;
+            --text-light: #6E80A6;
+            --border: rgba(93, 173, 255, 0.22);
 
             --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.35);
             --shadow: 0 10px 22px -8px rgb(0 0 0 / 0.55), 0 4px 10px -6px rgb(0 0 0 / 0.4);
             --shadow-lg: 0 24px 40px -14px rgb(0 0 0 / 0.65), 0 8px 16px -8px rgb(0 0 0 / 0.5);
             --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.35);
 
-            --radius: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
+            --radius: 10px;
+            --radius-md: 8px;
+            --radius-sm: 6px;
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
             --glass-blur: blur(14px);
-            --glass-border: 1px solid rgba(47, 217, 185, 0.16);
+            --glass-border: 1px solid rgba(93, 173, 255, 0.30);
         }
 
         [data-theme="light"] {
-            /* Original Premium Sacred Emerald & Gold Palette */
-            --primary: #064e3b;
-            --primary-light: #10b981;
-            --primary-dark: #064e3b;
-            --secondary: #d97706;
-            --secondary-light: #f59e0b;
-            --accent: #10b981;
+            /* Interfaz Futura — light variant: same blue/violet HUD accents, on a bright ground */
+            --primary: #5DADFF;
+            --primary-light: #8EC5FF;
+            --primary-dark: #3A87DB;
+            --secondary: #0B0F1A;
+            --secondary-light: #14192B;
+            --accent: #8A5CD6;
 
-            --success: #10b981;
+            --success: #2FA89C;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --info: #3b82f6;
+            --info: #3A87DB;
 
-            --bg: #f8fafc;
-            --bg-soft: #f1f5f9;
-            --bg-glass: rgba(255, 255, 255, 0.7);
+            --bg: #F4F7FC;
+            --bg-soft: #E8EEF9;
+            --bg-glass: rgba(255, 255, 255, 0.72);
             --card: #ffffff;
-            --text: #0f172a;
-            --text-light: #64748b;
-            --border: rgba(0, 0, 0, 0.08);
+            --text: #0B0F1A;
+            --text-light: #5B6B8C;
+            --border: rgba(58, 135, 219, 0.18);
 
-            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(11 15 26 / 0.08);
+            --shadow: 0 14px 28px -12px rgb(11 15 26 / 0.16), 0 4px 10px -6px rgb(11 15 26 / 0.10);
+            --shadow-lg: 0 26px 44px -18px rgb(11 15 26 / 0.22), 0 8px 16px -8px rgb(11 15 26 / 0.12);
+            --shadow-inner: inset 0 2px 4px 0 rgb(11 15 26 / 0.05);
 
-            --glass-blur: blur(12px);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+            --glass-blur: blur(16px);
+            --glass-border: 1px solid rgba(58, 135, 219, 0.28);
         }
 
         * {
@@ -94,7 +94,7 @@
         html,
         body {
             height: 100%;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             color: var(--text);
             background-color: var(--bg);
             line-height: var(--line-height);
@@ -108,10 +108,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background:
-                radial-gradient(900px 500px at 8% -10%, rgba(47, 217, 185, 0.08), transparent 60%),
-                radial-gradient(700px 420px at 100% 0%, rgba(79, 143, 255, 0.06), transparent 55%);
+            background-image:
+                linear-gradient(rgba(93, 173, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(93, 173, 255, 0.06) 1px, transparent 1px),
+                radial-gradient(900px 500px at 8% -10%, rgba(185, 140, 255, 0.10), transparent 60%),
+                radial-gradient(700px 420px at 100% 0%, rgba(93, 173, 255, 0.10), transparent 55%);
+            background-size: 34px 34px, 34px 34px, auto, auto;
             z-index: -1;
+        }
+
+        [data-theme="light"] body::before {
+            background-image:
+                linear-gradient(rgba(58, 135, 219, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(58, 135, 219, 0.07) 1px, transparent 1px),
+                radial-gradient(1100px 600px at 10% -10%, rgba(138, 92, 214, 0.10), transparent 55%),
+                radial-gradient(1000px 700px at 100% 0%, rgba(58, 135, 219, 0.12), transparent 60%);
+            background-size: 34px 34px, 34px 34px, auto, auto;
         }
 
         .app-container {
@@ -143,9 +155,9 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(700px 460px at 12% 15%, rgba(47, 217, 185, 0.22), transparent 60%),
-                radial-gradient(600px 420px at 88% 80%, rgba(79, 143, 255, 0.18), transparent 60%),
-                linear-gradient(160deg, #05080A, #0B121A 60%, #05080A);
+                radial-gradient(700px 460px at 12% 15%, rgba(93, 173, 255, 0.24), transparent 60%),
+                radial-gradient(600px 420px at 88% 80%, rgba(185, 140, 255, 0.20), transparent 60%),
+                linear-gradient(160deg, #030408, #05070D 60%, #030408);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -171,16 +183,31 @@
 
         .welcome-screen::before {
             width: 260px; height: 260px;
-            background: #2FD9B9;
+            background: #5DADFF;
             top: -80px; left: -60px;
         }
 
         .welcome-screen::after {
             width: 220px; height: 220px;
-            background: #4F8FFF;
+            background: #B98CFF;
             bottom: -70px; right: -50px;
             animation-direction: reverse;
             animation-duration: 12s;
+        }
+
+        [data-theme="light"] .welcome-screen {
+            background:
+                radial-gradient(700px 460px at 12% 15%, rgba(93, 173, 255, 0.22), transparent 60%),
+                radial-gradient(600px 420px at 88% 80%, rgba(138, 92, 214, 0.18), transparent 60%),
+                linear-gradient(160deg, #F4F7FC, #E8EEF9 60%, #F4F7FC);
+        }
+
+        [data-theme="light"] .welcome-screen::before {
+            background: #5DADFF;
+        }
+
+        [data-theme="light"] .welcome-screen::after {
+            background: #8A5CD6;
         }
 
         @keyframes orbFloat {
@@ -251,7 +278,7 @@
         }
 
         .login-title {
-            font: 700 28px 'Poppins', sans-serif;
+            font: 700 28px 'Orbitron', sans-serif;
             color: var(--primary);
             margin-bottom: 24px;
         }
@@ -276,7 +303,7 @@
         }
 
         .profile-item:hover {
-            background: rgba(47, 217, 185, 0.1);
+            background: rgba(93, 173, 255, 0.12);
             transform: translateY(-5px);
         }
 
@@ -289,8 +316,8 @@
         }
 
         .profile-item:hover img {
-            border-color: var(--secondary);
-            box-shadow: 0 0 15px rgba(79, 143, 255, 0.35);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(185, 140, 255, 0.4);
         }
 
         .profile-item .name {
@@ -314,7 +341,7 @@
         }
 
         .welcome-title {
-            font: 700 42px/1.2 'Poppins', sans-serif;
+            font: 700 42px/1.2 'Orbitron', sans-serif;
             margin-bottom: 16px;
             background: linear-gradient(90deg, var(--text), var(--primary-light));
             -webkit-background-clip: text;
@@ -381,7 +408,7 @@
         }
 
         .logo h1 {
-            font: 700 24px/1.2 'Poppins', sans-serif;
+            font: 700 24px/1.2 'Orbitron', sans-serif;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
@@ -403,7 +430,7 @@
             place-items: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: transparent;
-            color: var(--secondary);
+            color: var(--accent);
             cursor: pointer;
             transition: var(--transition);
         }
@@ -512,6 +539,13 @@
             animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
         }
 
+        .sidebar-credit {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -544,7 +578,7 @@
         }
 
         .stat .v {
-            font: 700 22px/1 'Poppins', sans-serif;
+            font: 700 22px/1 'Orbitron', sans-serif;
             color: var(--primary);
         }
 
@@ -602,7 +636,7 @@
         }
 
         .section-title {
-            font: 600 26px/1 'Poppins', sans-serif;
+            font: 600 26px/1 'Orbitron', sans-serif;
             display: flex;
             gap: 16px;
             align-items: center;
@@ -676,6 +710,14 @@
             transform: translateY(-4px);
         }
 
+        [data-theme="light"] .card {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--shadow-sm);
+        }
+
         .card:hover::before {
             opacity: 1;
         }
@@ -730,7 +772,7 @@
 
         .wel h2 {
             margin: 0 0 16px;
-            font: 700 32px/1.2 'Poppins', sans-serif;
+            font: 700 32px/1.2 'Orbitron', sans-serif;
             color: var(--secondary);
         }
 
@@ -771,7 +813,7 @@
         }
 
         .wstats .v {
-            font: 700 26px/1 'Poppins', sans-serif;
+            font: 700 26px/1 'Orbitron', sans-serif;
             color: var(--secondary);
             font-variant-numeric: tabular-nums;
         }
@@ -869,7 +911,7 @@
         }
 
         .prayer-title {
-            font: 600 22px 'Poppins', sans-serif;
+            font: 600 22px 'Orbitron', sans-serif;
             margin-bottom: 16px;
             color: var(--primary);
         }
@@ -925,7 +967,7 @@
         }
 
         .stat-card .value {
-            font: 700 34px/1 'Poppins', sans-serif;
+            font: 700 34px/1 'Orbitron', sans-serif;
             margin-bottom: 6px;
             color: var(--primary);
         }
@@ -1027,8 +1069,8 @@
         }
 
         .calendar-day.editable:hover {
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 2px var(--secondary), var(--shadow);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent), var(--shadow);
         }
 
         .cleaning-badge {
@@ -1045,6 +1087,54 @@
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
+        }
+
+        .mini-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .mini-calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .mini-calendar-weekdays div {
+            text-align: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .mini-calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            position: relative;
+        }
+
+        .mini-calendar-day.cleaning-day {
+            background: var(--bg-soft);
+            border: 1px solid var(--primary);
+        }
+
+        .mini-calendar-day.today {
+            box-shadow: 0 0 0 2px var(--primary);
+            font-weight: 700;
+        }
+
+        .mini-calendar-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-top: 2px;
         }
 
         .calendar-view-toggle {
@@ -1136,7 +1226,7 @@
         .task-filters input:focus,
         .task-filters select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(47, 217, 185, 0.15);
+            box-shadow: 0 0 0 3px rgba(93, 173, 255, 0.25);
         }
 
         .task-list {
@@ -1543,7 +1633,7 @@
         .chat-input input:focus,
         .chat-input select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(47, 217, 185, 0.15);
+            box-shadow: 0 0 0 3px rgba(93, 173, 255, 0.25);
         }
 
         /* Toast */
@@ -1677,7 +1767,7 @@
         }
 
         .modal-title {
-            font: 700 24px 'Poppins', sans-serif;
+            font: 700 24px 'Orbitron', sans-serif;
             color: var(--primary);
         }
 
@@ -2129,11 +2219,11 @@
                         <i class="fa-solid fa-table-columns"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="calendar">
+                    <a href="#" class="nav-link" data-section="calendar" style="display: none;">
                         <i class="fa-solid fa-calendar"></i>
                         <span>Calendario</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="tasks">
+                    <a href="#" class="nav-link" data-section="tasks" style="display: none;">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Tareas</span>
                     </a>
@@ -2141,15 +2231,19 @@
                         <i class="fa-solid fa-users"></i>
                         <span>Familia</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="gallery">
+                    <a href="#" class="nav-link" data-section="birthdays">
+                        <i class="fa-solid fa-cake-candles"></i>
+                        <span>Cumpleaños</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="gallery" style="display: none;">
                         <i class="fa-solid fa-images"></i>
                         <span>Galería</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="chat">
+                    <a href="#" class="nav-link" data-section="chat" style="display: none;">
                         <i class="fa-solid fa-comments"></i>
                         <span>Chat Familiar</span>
                     </a>
-                    <a href="#" class="nav-link" data-section="polls">
+                    <a href="#" class="nav-link" data-section="polls" style="display: none;">
                         <i class="fa-solid fa-poll"></i>
                         <span>Votaciones</span>
                     </a>
@@ -2179,6 +2273,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="sidebar-credit">Hecho con ❤️ por Andrés 💻</div>
             </aside>
 
             <!-- Main Content -->
@@ -2214,51 +2309,102 @@
                             </div>
                         </div>
 
-                        <!-- Family Leaderboard Card -->
-                        <div class="card" id="leaderboard-card" style="grid-column: span 12; padding: 24px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                                <i class="fa-solid fa-trophy" style="font-size: 24px; color: var(--warning);"></i>
-                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Tabla de Posiciones</h3>
+                        <!-- Calendario de Limpieza (moved here from its own section) -->
+                        <div style="grid-column: span 12;">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <span>Calendario de Limpieza</span>
+                                </div>
+                                <div>
+                                    <button class="btn" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                                    <button class="btn" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+                                    <button class="btn primary" id="add-cleaning-day"><i class="fa-solid fa-plus"></i> Agregar
+                                        día</button>
+                                </div>
                             </div>
-                            <div id="leaderboard-content">
-                                <!-- Populated via JS -->
+
+                            <div class="calendar-container" style="grid-template-columns: 1fr;">
+                                <div class="card">
+                                    <div class="calendar-header">
+                                        <h3 id="current-month">Octubre 2025</h3>
+                                        <div style="display:flex; gap:10px; align-items:center;">
+                                            <div class="calendar-view-toggle">
+                                                <button id="calendar-view-month" class="active" onclick="setCalendarView('month')">Mes</button>
+                                                <button id="calendar-view-week" onclick="setCalendarView('week')">Semana</button>
+                                            </div>
+                                            <button class="btn" id="today-btn">Hoy</button>
+                                        </div>
+                                    </div>
+                                    <div class="calendar-scroll-wrapper">
+                                        <div class="calendar-weekdays"
+                                            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; font-weight: 600; color: var(--text-light); padding: 10px 0;">
+                                            <div>Dom</div>
+                                            <div>Lun</div>
+                                            <div>Mar</div>
+                                            <div>Mié</div>
+                                            <div>Jue</div>
+                                            <div>Vie</div>
+                                            <div>Sáb</div>
+                                        </div>
+                                        <div class="calendar-grid" id="calendar-days">
+                                            <!-- Calendar days will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="display: none;">
+                                    <div class="section-title">
+                                        <i class="fa-solid fa-info-circle"></i>
+                                        <span>Información del Mes</span>
+                                    </div>
+                                    <div class="month-stats" style="display: flex; flex-direction: column; gap: 12px;">
+                                        <div class="stat-item"
+                                            style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span class="stat-label">Días con limpieza:</span>
+                                            <span class="stat-value" id="month-cleaning-days">0</span>
+                                        </div>
+                                        <div class="stat-item"
+                                            style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span class="stat-label">Completados:</span>
+                                            <span class="stat-value" id="month-completed">0</span>
+                                        </div>
+                                        <div class="stat-item"
+                                            style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span class="stat-label">Por completar:</span>
+                                            <span class="stat-value" id="month-pending">0</span>
+                                        </div>
+                                        <div class="stat-item"
+                                            style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                            <span class="stat-label">Miembro más activo:</span>
+                                            <span class="stat-value" id="month-top-member">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top: 24px;">
+                                        <div class="section-title" style="font-size: 20px;">
+                                            <i class="fa-solid fa-user-check"></i>
+                                            <span>Asignaciones</span>
+                                        </div>
+                                        <div id="member-assignments" style="display: flex; flex-direction: column; gap: 10px;">
+                                            <!-- Member assignments will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Turno de Limpieza Card (compact strip) -->
                         <div class="card" id="today-cleaning-turn"
-                            style="grid-column: span 12; padding: 16px 20px; border: 1px solid var(--border); background: rgba(79, 143, 255, 0.05);">
+                            style="grid-column: span 12; padding: 16px 20px; border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); background: color-mix(in srgb, var(--primary) 8%, transparent);">
                             <div id="today-cleaning-content">
                                 <!-- Populated via JS -->
                             </div>
                         </div>
 
 
-                        <!-- Birthday Countdown Card -->
-                        <div class="card" id="birthday-countdown-card"
-                            style="grid-column: span 12; padding: 24px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                                <i class="fa-solid fa-cake-candles" style="font-size: 24px; color: var(--secondary);"></i>
-                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Cumpleaños Próximos</h3>
-                            </div>
-                            <div id="birthday-countdown-content">
-                                <!-- Populated via JS -->
-                            </div>
-                        </div>
-
-                        <!-- Family Debts Card (cleaning penalties) -->
-                        <div class="card" id="family-debts-card" style="grid-column: span 12; padding: 24px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                                <i class="fa-solid fa-hand-holding-dollar" style="font-size: 24px; color: var(--danger);"></i>
-                                <h3 style="font-size: 20px; color: var(--primary); margin: 0;">Deudas por Penalización</h3>
-                            </div>
-                            <div id="family-debts-content">
-                                <!-- Populated via JS -->
-                            </div>
-                        </div>
-
                         <!-- Bible Verse Section -->
-                        <div class="bible-verse">
+                        <div class="bible-verse" style="display: none;">
                             <div class="card">
                                 <i class="fa-solid fa-book-bible"></i>
                                 <div class="bible-text" id="bible-text">Porque de tal manera amó Dios al
@@ -2271,45 +2417,8 @@
                             </div>
                         </div>
 
-                        <!-- Daily Prayer Section -->
-                        <div class="daily-prayer">
-                            <div class="card">
-                                <i class="fa-solid fa-hands-praying"></i>
-                                <div class="prayer-title">Oración del Día</div>
-                                <div class="prayer-text">Señor, bendice nuestra familia hoy. Ayúdanos a
-                                    trabajar juntos
-                                    con amor y paciencia, recordando que en Ti encontramos la fuerza para
-                                    cada tarea.
-                                    Amén.</div>
-                            </div>
-                        </div>
-
-                        <!-- Stats Row -->
-                        <div class="stats-row">
-                            <div class="card stat-card">
-                                <i class="fa-solid fa-broom"></i>
-                                <div class="value" id="stat-tasks">0</div>
-                                <div class="label">Tareas Pendientes</div>
-                            </div>
-                            <div class="card stat-card">
-                                <i class="fa-solid fa-calendar-check"></i>
-                                <div class="value" id="stat-completed">0%</div>
-                                <div class="label">Completado</div>
-                            </div>
-                            <div class="card stat-card">
-                                <i class="fa-solid fa-fire"></i>
-                                <div class="value" id="stat-streak">0</div>
-                                <div class="label">Días Consecutivos</div>
-                            </div>
-                            <div class="card stat-card">
-                                <i class="fa-solid fa-star"></i>
-                                <div class="value" id="stat-points">0</div>
-                                <div class="label">Puntos Totales</div>
-                            </div>
-                        </div>
-
                         <!-- Quick Actions -->
-                        <div class="quick-actions">
+                        <div class="quick-actions" style="display: none;">
                             <div class="action-btn" id="quick-mark-today">
                                 <i class="fa-solid fa-check-circle"></i>
                                 <span>Marcar HOY como hecho</span>
@@ -2328,121 +2437,12 @@
                             </div>
                         </div>
 
-                        <!-- Recent Activity -->
-                        <div class="card" style="grid-column: span 8;">
-                            <div class="section-header">
-                                <div class="section-title">
-                                    <i class="fa-solid fa-clock-rotate-left"></i>
-                                    <span>Actividad Reciente</span>
-                                </div>
-                            </div>
-                            <div id="recent-activity">
-                                <!-- Activity items will be populated here -->
-                            </div>
-                        </div>
-
-                        <!-- Upcoming Tasks -->
-                        <div class="card" style="grid-column: span 4;">
-                            <div class="section-header">
-                                <div class="section-title">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Próximas Tareas</span>
-                                </div>
-                            </div>
-                            <div id="upcoming-tasks">
-                                <!-- Upcoming tasks will be populated here -->
-                            </div>
-                        </div>
                     </div>
                 </section>
 
-                <!-- Calendar Section -->
-                <section id="calendar" class="content-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <span>Calendario de Limpieza</span>
-                        </div>
-                        <div>
-                            <button class="btn" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button class="btn" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
-                            <button class="btn primary" id="add-cleaning-day"><i class="fa-solid fa-plus"></i> Agregar
-                                día</button>
-                        </div>
-                    </div>
-
-                    <div class="calendar-container">
-                        <div class="card">
-                            <div class="calendar-header">
-                                <h3 id="current-month">Octubre 2025</h3>
-                                <div style="display:flex; gap:10px; align-items:center;">
-                                    <div class="calendar-view-toggle">
-                                        <button id="calendar-view-month" class="active" onclick="setCalendarView('month')">Mes</button>
-                                        <button id="calendar-view-week" onclick="setCalendarView('week')">Semana</button>
-                                    </div>
-                                    <button class="btn" id="today-btn">Hoy</button>
-                                </div>
-                            </div>
-                            <div class="calendar-scroll-wrapper">
-                                <div class="calendar-weekdays"
-                                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; font-weight: 600; color: var(--text-light); padding: 10px 0;">
-                                    <div>Dom</div>
-                                    <div>Lun</div>
-                                    <div>Mar</div>
-                                    <div>Mié</div>
-                                    <div>Jue</div>
-                                    <div>Vie</div>
-                                    <div>Sáb</div>
-                                </div>
-                                <div class="calendar-grid" id="calendar-days">
-                                    <!-- Calendar days will be populated here -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="section-title">
-                                <i class="fa-solid fa-info-circle"></i>
-                                <span>Información del Mes</span>
-                            </div>
-                            <div class="month-stats" style="display: flex; flex-direction: column; gap: 12px;">
-                                <div class="stat-item"
-                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                    <span class="stat-label">Días con limpieza:</span>
-                                    <span class="stat-value" id="month-cleaning-days">0</span>
-                                </div>
-                                <div class="stat-item"
-                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                    <span class="stat-label">Completados:</span>
-                                    <span class="stat-value" id="month-completed">0</span>
-                                </div>
-                                <div class="stat-item"
-                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                    <span class="stat-label">Por completar:</span>
-                                    <span class="stat-value" id="month-pending">0</span>
-                                </div>
-                                <div class="stat-item"
-                                    style="display: flex; justify-content: space-between; padding: 8px 0;">
-                                    <span class="stat-label">Miembro más activo:</span>
-                                    <span class="stat-value" id="month-top-member">-</span>
-                                </div>
-                            </div>
-
-                            <div style="margin-top: 24px;">
-                                <div class="section-title" style="font-size: 20px;">
-                                    <i class="fa-solid fa-user-check"></i>
-                                    <span>Asignaciones</span>
-                                </div>
-                                <div id="member-assignments" style="display: flex; flex-direction: column; gap: 10px;">
-                                    <!-- Member assignments will be populated here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 <!-- Tasks Section -->
-                <section id="tasks" class="content-section">
+                <section id="tasks" class="content-section" style="display: none !important;">
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fa-solid fa-list-check"></i>
@@ -2536,8 +2536,23 @@
                     </div>
                 </section>
 
+                <!-- Birthdays Section -->
+                <section id="birthdays" class="content-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fa-solid fa-cake-candles"></i>
+                            <span>Cumpleaños Próximos</span>
+                        </div>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div id="birthday-countdown-content">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Gallery Section -->
-                <section id="gallery" class="content-section">
+                <section id="gallery" class="content-section" style="display: none !important;">
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fa-solid fa-images"></i>
@@ -2557,7 +2572,7 @@
                 </section>
 
                 <!-- Chat Section -->
-                <section id="chat" class="content-section">
+                <section id="chat" class="content-section" style="display: none !important;">
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fa-solid fa-comments"></i>
@@ -2586,7 +2601,7 @@
                 </section>
 
                 <!-- Polls Section -->
-                <section id="polls" class="content-section">
+                <section id="polls" class="content-section" style="display: none !important;">
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fa-solid fa-poll"></i>
@@ -2929,6 +2944,7 @@
                         // Render section-specific content
                         if (sectionId === 'polls') renderPolls();
                         if (sectionId === 'chat') markChatRead();
+                        if (sectionId === 'birthdays') renderBirthdayCountdown();
                     });
                 });
 
@@ -2947,7 +2963,13 @@
                     showToast('Tema cambiado', `Modo ${newTheme === 'light' ? 'claro' : 'oscuro'} activado`);
                 });
 
-                // Apply saved theme
+                // Apply saved theme. One-time migration: force everyone onto the new
+                // Tablero Vivo dark theme once, since an old saved preference would
+                // otherwise keep overriding the new default forever.
+                if (!localStorage.getItem('fam_theme_v3')) {
+                    localStorage.setItem('fam_theme', 'dark');
+                    localStorage.setItem('fam_theme_v3', '1');
+                }
                 const savedTheme = localStorage.getItem('fam_theme') || 'dark';
                 document.documentElement.setAttribute('data-theme', savedTheme);
                 const themeIcon = themeToggle.querySelector('i');
@@ -3550,7 +3572,6 @@
                     document.getElementById('daysUntil').textContent = diffDays <= 0 ? (diffDays === 0 ? "Hoy" : "Ayer") : diffDays;
                 }
 
-                renderLeaderboard();
                 renderTodayCleaning();
                 renderBirthdayCountdown();
                 renderFamilyDebts();
@@ -3582,7 +3603,7 @@
                             </div>
                         </div>
                         <div style="flex: 1; min-width: 160px;">
-                            <div style="font-weight: 700; font-size: 15px; color: var(--text);">Hoy le toca a <span style="color: var(--secondary);">${member.name}</span></div>
+                            <div style="font-weight: 700; font-size: 15px; color: var(--text);">Hoy le toca a <span style="color: var(--accent);">${member.name}</span></div>
                             <div style="font-size: 12px; color: var(--text-light);">${cleaningEvent.completed ? '¡El hogar está brillando! ✨' : '+20 puntos al completar'}</div>
                         </div>
                         <span class="broom-sweeper ${cleaningEvent.completed ? 'done' : ''}" style="font-size: 22px;">${cleaningEvent.completed ? '🎉' : '🧹'}</span>
@@ -3716,7 +3737,7 @@
                         <img src="${m.avatar}" style="width:44px; height:44px; border-radius:50%; border:2px solid var(--danger);">
                         <div style="flex:1;">
                             <div style="font-weight:600; font-size:15px; color:var(--text);">${m.name}</div>
-                            <div style="font-size:12px; color:var(--text-light);">Penalización por no limpiar a tiempo</div>
+                            <div style="font-size:12px; color:var(--text-light);">Penalización pendiente (limpieza o pago sin marcar a tiempo)</div>
                         </div>
                         <div style="font-size:20px; font-weight:800; color:var(--danger);">$${m.debt}</div>
                         ${currentUser && currentUser.is_admin ? `<button onclick="clearDebt(${m.id})" style="background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text-light); font-size:12px;" title="Marcar como pagado">Pagado</button>` : ''}
@@ -4184,7 +4205,7 @@
           <img src="${member.avatar}" alt="${member.name}" class="member-avatar">
           <div class="member-name">${member.name}</div>
           <div class="member-role">Miembro de la familia</div>
-          ${member.birthday ? `<div style="font-size: 14px; color: var(--secondary); margin-bottom: 15px; font-weight: 500;"><i class="fa-solid fa-cake-candles"></i> ${formatBirthday(member.birthday)}</div>` : ''}
+          ${member.birthday ? `<div style="font-size: 14px; color: var(--accent); margin-bottom: 15px; font-weight: 500;"><i class="fa-solid fa-cake-candles"></i> ${formatBirthday(member.birthday)}</div>` : ''}
           <div class="member-stats">
             <div class="member-stat">
               <div class="value">${completedTasks}</div>
@@ -4832,33 +4853,54 @@
                     const dateStr = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
                     const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
                     const repeatLabel = REPEAT_LABELS[r.repeat] || 'Una vez';
+                    const isBill = !!r.is_bill;
+                    const isPaid = !!r.paid;
+                    const responsible = isBill && r.assigned_to ? familyMembers.find(m => m.id === r.assigned_to) : null;
 
                     return `
                     <div class="card" style="padding:20px;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
                             <div style="display:flex; align-items:center; gap:10px;">
-                                <i class="fa-solid fa-bell" style="color:var(--primary); font-size:1.2rem;"></i>
+                                <i class="fa-solid ${isBill ? 'fa-file-invoice-dollar' : 'fa-bell'}" style="color:var(--primary); font-size:1.2rem;"></i>
                                 <h3 style="margin:0; font-size:1.05rem;">${r.title}</h3>
                             </div>
-                            ${isAdmin ? `<button onclick="deleteReminder(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Eliminar"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            <div style="display:flex; gap:6px;">
+                                ${isAdmin ? `<button onclick="editReminder(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Editar"><i class="fa-solid fa-pen"></i></button>` : ''}
+                                ${isAdmin ? `<button onclick="deleteReminder(${r.id})" style="background:none;border:none;cursor:pointer;color:var(--text-light);padding:4px;" title="Eliminar"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
                         </div>
                         ${r.description ? `<p style="color:var(--text-light); font-size:14px; margin:0 0 12px;">${r.description}</p>` : ''}
-                        <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:13px;">
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:13px; margin-bottom:${isBill ? '12px' : '0'};">
                             <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-calendar"></i> ${dateStr}</span>
                             <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-clock"></i> ${timeStr}</span>
                             <span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-repeat"></i> ${repeatLabel}</span>
+                            ${isBill && r.amount ? `<span style="background:var(--bg-soft); padding:4px 10px; border-radius:8px; color:var(--text-light);"><i class="fa-solid fa-dollar-sign"></i> $${r.amount}</span>` : ''}
                         </div>
+                        ${isBill ? `
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid var(--border);">
+                            <div style="font-size:13px; color:var(--text-light);">
+                                ${responsible ? `<span>Responsable: <strong style="color:var(--text);">${responsible.name}</strong></span><br>` : ''}
+                                ${r.penalty_amount > 0 ? `<span>Penalización si no se paga a tiempo: <strong style="color:var(--danger);">$${r.penalty_amount}</strong></span>` : ''}
+                            </div>
+                            <button onclick="toggleReminderPaid(${r.id}, ${isPaid})" style="white-space:nowrap; padding:8px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:600; font-size:13px; ${isPaid ? 'background:rgba(16,185,129,0.15); color:var(--success);' : 'background:var(--primary); color:white;'}">
+                                <i class="fa-solid ${isPaid ? 'fa-check-circle' : 'fa-circle'}"></i> ${isPaid ? 'Pagado' : 'Marcar como pagado'}
+                            </button>
+                        </div>` : ''}
                     </div>`;
                 }).join('');
             }
 
-            window.showAddReminderModal = function () {
+            window.showAddReminderModal = function (editId) {
                 const existing = document.getElementById('dynamic-reminder-modal');
                 if (existing) existing.remove();
 
+                const editing = editId ? allReminders.find(r => r.id === editId) : null;
+
                 const now = new Date();
                 now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                const defaultDate = now.toISOString().slice(0, 16);
+                const defaultDate = editing ? new Date(new Date(editing.remind_at).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : now.toISOString().slice(0, 16);
+
+                const memberOptions = familyMembers.map(m => `<option value="${m.id}" ${editing && editing.assigned_to === m.id ? 'selected' : ''}>${m.name}</option>`).join('');
 
                 const modal = document.createElement('div');
                 modal.id = 'dynamic-reminder-modal';
@@ -4866,21 +4908,22 @@
                 modal.innerHTML = `
                     <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                            <h3 style="margin:0;"><i class="fa-solid fa-bell" style="color:var(--primary);margin-right:8px;"></i>Nuevo Recordatorio</h3>
+                            <h3 style="margin:0;"><i class="fa-solid fa-bell" style="color:var(--primary);margin-right:8px;"></i>${editing ? 'Editar Recordatorio' : 'Nuevo Recordatorio'}</h3>
                             <button onclick="document.getElementById('dynamic-reminder-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
                         </div>
+                        ${!editing ? `
                         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
                             <button onclick="fillReminderPreset('birthday')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">🎂 Cumpleaños</button>
                             <button onclick="fillReminderPreset('cleaning')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">🧹 Turno de limpieza</button>
                             <button onclick="fillReminderPreset('bill')" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;font-size:13px;">💸 Pago</button>
-                        </div>
+                        </div>` : ''}
                         <div style="margin-bottom:16px;">
                             <label style="display:block;margin-bottom:6px;font-weight:500;">Título</label>
-                            <input type="text" id="reminder-title-input" placeholder="Ej: Cumpleaños de Magda" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
+                            <input type="text" id="reminder-title-input" placeholder="Ej: Cumpleaños de Magda" value="${editing ? editing.title.replace(/"/g, '&quot;') : ''}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
                         </div>
                         <div style="margin-bottom:16px;">
                             <label style="display:block;margin-bottom:6px;font-weight:500;">Descripción <span style="color:var(--text-light);font-size:13px;">(opcional)</span></label>
-                            <textarea id="reminder-desc-input" rows="3" placeholder="Detalles del recordatorio..." style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;resize:vertical;font-family:inherit;"></textarea>
+                            <textarea id="reminder-desc-input" rows="3" placeholder="Detalles del recordatorio..." style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;resize:vertical;font-family:inherit;">${editing && editing.description ? editing.description : ''}</textarea>
                         </div>
                         <div style="margin-bottom:16px;">
                             <label style="display:block;margin-bottom:6px;font-weight:500;">Fecha y hora</label>
@@ -4889,20 +4932,47 @@
                         <div style="margin-bottom:20px;">
                             <label style="display:block;margin-bottom:6px;font-weight:500;">Repetir</label>
                             <select id="reminder-repeat-input" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;">
-                                <option value="none">Una vez</option>
-                                <option value="daily">Diario</option>
-                                <option value="weekly">Semanal</option>
-                                <option value="monthly" selected>Mensual (anual para cumpleaños)</option>
+                                <option value="none" ${editing && editing.repeat === 'none' ? 'selected' : ''}>Una vez</option>
+                                <option value="daily" ${editing && editing.repeat === 'daily' ? 'selected' : ''}>Diario</option>
+                                <option value="weekly" ${editing && editing.repeat === 'weekly' ? 'selected' : ''}>Semanal</option>
+                                <option value="monthly" ${!editing || editing.repeat === 'monthly' ? 'selected' : ''}>Mensual (anual para cumpleaños)</option>
                             </select>
+                        </div>
+                        <div style="margin-bottom:16px; padding:14px; border-radius:12px; background:var(--bg-soft);">
+                            <label style="display:flex; align-items:center; gap:8px; font-weight:500; cursor:pointer; margin-bottom:${editing && editing.is_bill ? '14px' : '0'};">
+                                <input type="checkbox" id="reminder-isbill-input" ${editing && editing.is_bill ? 'checked' : ''} onchange="document.getElementById('reminder-bill-fields').style.display = this.checked ? 'block' : 'none'">
+                                Es una factura/pago (monto + penalización)
+                            </label>
+                            <div id="reminder-bill-fields" style="display:${editing && editing.is_bill ? 'block' : 'none'};">
+                                <div style="margin-bottom:12px;">
+                                    <label style="display:block;margin-bottom:6px;font-size:13px;color:var(--text-light);">Monto ($)</label>
+                                    <input type="number" step="0.01" min="0" id="reminder-amount-input" placeholder="Ej: 60" value="${editing && editing.amount != null ? editing.amount : ''}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:1rem;">
+                                </div>
+                                <div style="margin-bottom:12px;">
+                                    <label style="display:block;margin-bottom:6px;font-size:13px;color:var(--text-light);">Penalización si no se marca pagado a tiempo ($)</label>
+                                    <input type="number" step="0.01" min="0" id="reminder-penalty-input" placeholder="Ej: 20" value="${editing && editing.penalty_amount ? editing.penalty_amount : ''}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:1rem;">
+                                </div>
+                                <div>
+                                    <label style="display:block;margin-bottom:6px;font-size:13px;color:var(--text-light);">Responsable</label>
+                                    <select id="reminder-assigned-input" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:1rem;">
+                                        <option value="">Sin asignar</option>
+                                        ${memberOptions}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div style="display:flex;gap:10px;">
                             <button onclick="document.getElementById('dynamic-reminder-modal').remove()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;">Cancelar</button>
-                            <button onclick="saveReminder()" style="flex:2;padding:12px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;font-weight:600;">Crear Recordatorio</button>
+                            <button onclick="saveReminder(${editing ? editing.id : 'null'})" style="flex:2;padding:12px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;font-weight:600;">${editing ? 'Guardar Cambios' : 'Crear Recordatorio'}</button>
                         </div>
                     </div>`;
                 document.body.appendChild(modal);
                 modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
                 document.getElementById('reminder-title-input').focus();
+            };
+
+            window.editReminder = function (id) {
+                showAddReminderModal(id);
             };
 
             window.fillReminderPreset = function (preset) {
@@ -4921,33 +4991,65 @@
                     titleInput.value = '💸 Pagar servicio';
                     descInput.value = 'Vence pronto, no olviden pagar antes de la fecha límite.';
                     repeatInput.value = 'monthly';
+                    const isBillCheckbox = document.getElementById('reminder-isbill-input');
+                    if (isBillCheckbox) {
+                        isBillCheckbox.checked = true;
+                        document.getElementById('reminder-bill-fields').style.display = 'block';
+                    }
                 }
                 titleInput.focus();
             };
 
-            window.saveReminder = async function () {
+            window.saveReminder = async function (editId) {
                 const title = document.getElementById('reminder-title-input').value.trim();
                 const description = document.getElementById('reminder-desc-input').value.trim();
                 const remind_at = document.getElementById('reminder-date-input').value;
                 const repeat = document.getElementById('reminder-repeat-input').value;
+                const is_bill = document.getElementById('reminder-isbill-input').checked;
+                const amount = is_bill ? (document.getElementById('reminder-amount-input').value || null) : null;
+                const penalty_amount = is_bill ? (document.getElementById('reminder-penalty-input').value || 0) : 0;
+                const assigned_to = is_bill ? (document.getElementById('reminder-assigned-input').value || null) : null;
 
                 if (!title) { showToast('Error', 'Escribe un título'); return; }
                 if (!remind_at) { showToast('Error', 'Selecciona una fecha y hora'); return; }
 
+                const payload = {
+                    title,
+                    description,
+                    remind_at: new Date(remind_at).toISOString(),
+                    repeat,
+                    is_bill,
+                    amount,
+                    penalty_amount,
+                    assigned_to
+                };
+
                 try {
-                    await apiCall('/api/reminders', 'POST', {
-                        title,
-                        description,
-                        remind_at: new Date(remind_at).toISOString(),
-                        repeat
-                    });
+                    if (editId) {
+                        await apiCall(`/api/reminders/${editId}`, 'PUT', { ...payload, active: 1 });
+                        showToast('Recordatorio actualizado', title);
+                    } else {
+                        await apiCall('/api/reminders', 'POST', payload);
+                        showToast('Recordatorio creado', title);
+                    }
                     document.getElementById('dynamic-reminder-modal').remove();
-                    showToast('Recordatorio creado', title);
                     const reminders = await apiCall('/api/reminders');
                     allReminders = reminders || [];
                     renderReminders();
                 } catch (e) {
-                    showToast('Error', 'No se pudo crear el recordatorio');
+                    showToast('Error', editId ? 'No se pudo actualizar el recordatorio' : 'No se pudo crear el recordatorio');
+                }
+            };
+
+            window.toggleReminderPaid = async function (id, currentlyPaid) {
+                try {
+                    await apiCall(`/api/reminders/${id}/paid`, 'POST', { paid: !currentlyPaid });
+                    const reminders = await apiCall('/api/reminders');
+                    allReminders = reminders || [];
+                    renderReminders();
+                    showToast(currentlyPaid ? 'Marcado como pendiente' : 'Marcado como pagado', '');
+                } catch (e) {
+                    showToast('Error', 'No se pudo actualizar el estado de pago');
                 }
             };
 
