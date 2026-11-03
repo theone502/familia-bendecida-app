@@ -268,6 +268,37 @@ function initDb() {
       value TEXT
     )`);
 
+    // Mamá & Papá — the siblings who send money home every month. A sender
+    // isn't always an app user (María may not have an account), so user_id is
+    // optional; when it's set, that user's name/avatar are shown live instead.
+    db.run(`CREATE TABLE IF NOT EXISTS parent_senders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      color TEXT,
+      avatar TEXT,
+      user_id INTEGER,
+      monthly_amount REAL DEFAULT 0,
+      sort_order INTEGER DEFAULT 0
+    )`, (err) => {
+      if (!err) seedParentSenders();
+    });
+
+    // One row per sender per month ('YYYY-MM'). Pending = no row; sent = row
+    // exists; confirmed = a second person checked it (confirmed_by set).
+    db.run(`CREATE TABLE IF NOT EXISTS parent_transfers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sender_id INTEGER NOT NULL,
+      month TEXT NOT NULL,
+      amount REAL,
+      method TEXT,
+      note TEXT,
+      sent_at TEXT,
+      recorded_by INTEGER,
+      confirmed_by INTEGER,
+      confirmed_at TEXT,
+      UNIQUE(sender_id, month)
+    )`);
+
     // Initial Data Seeding (if empty)
     db.get("SELECT count(*) as count FROM users", (err, row) => {
       if (row && row.count === 0) {
@@ -300,6 +331,26 @@ function repairStaleAssignedNames() {
           }
         });
       }
+    });
+  });
+}
+
+// Seeds the three Mamá & Papá senders once (only while the table is empty),
+// linking each to an existing app user by name when one exists. Runs on every
+// deployment's own database, so no one-time fix is needed in production.
+function seedParentSenders() {
+  db.get("SELECT count(*) as count FROM parent_senders", (err, row) => {
+    if (err || !row || row.count > 0) return;
+    const senders = [
+      { name: 'Andrés', match: 'Andres%', color: '#10B981', avatar: null },
+      { name: 'Wanit', match: 'Wanit%', color: '#F59E0B', avatar: null },
+      { name: 'María', match: 'Mar_a%', color: '#EC4899', avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Maria&top=longButNotTooLong&mouth=smile&eyes=default&eyebrows=defaultNatural&accessoriesProbability=0' }
+    ];
+    senders.forEach((s, i) => {
+      db.get("SELECT id FROM users WHERE name LIKE ? ORDER BY id LIMIT 1", [s.match], (err, user) => {
+        db.run(`INSERT INTO parent_senders (name, color, avatar, user_id, monthly_amount, sort_order) VALUES (?, ?, ?, ?, 0, ?)`,
+          [s.name, s.color, s.avatar, user ? user.id : null, i]);
+      });
     });
   });
 }

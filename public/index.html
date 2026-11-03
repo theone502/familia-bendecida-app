@@ -2141,6 +2141,365 @@
         .broom-sweeper.done {
             animation: bounceIn 0.6s ease-out;
         }
+
+        /* ── MAMÁ & PAPÁ ─────────────────────────────────────────────── */
+        #parents {
+            --pp-gold: #F5C46B;
+            --pp-rose: #FF7A9A;
+            --pp-sent: #F5A524;
+            --pp-ok: #34D399;
+        }
+
+        .pp-hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            padding: 28px;
+            background:
+                radial-gradient(circle at 85% 20%, rgba(255, 122, 154, 0.35), transparent 55%),
+                radial-gradient(circle at 10% 90%, rgba(245, 196, 107, 0.30), transparent 55%),
+                linear-gradient(135deg, #1B1226, #22142A 55%, #2A1A1E);
+            border: 1px solid rgba(245, 196, 107, 0.35);
+            color: #FFF4E6;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        #parents, #parents-container, .pp-hero > * { min-width: 0; }
+
+        [data-theme="light"] .pp-hero {
+            background:
+                radial-gradient(circle at 85% 20%, rgba(255, 122, 154, 0.30), transparent 55%),
+                radial-gradient(circle at 10% 90%, rgba(245, 196, 107, 0.35), transparent 55%),
+                linear-gradient(135deg, #FFF6EA, #FFEFF2);
+            color: #3A2130;
+            border-color: rgba(214, 150, 60, 0.35);
+        }
+
+        .pp-hero::after {
+            content: '♥';
+            position: absolute;
+            right: -20px;
+            bottom: -60px;
+            font-size: 220px;
+            line-height: 1;
+            color: rgba(255, 122, 154, 0.08);
+            pointer-events: none;
+        }
+
+        .pp-kicker {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--pp-gold);
+            margin-bottom: 6px;
+        }
+
+        .pp-hero h2 {
+            margin: 0 0 4px;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .pp-hero p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 15px;
+        }
+
+        .pp-month-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(245, 196, 107, 0.3);
+        }
+
+        .pp-month-nav button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .pp-month-nav button:hover:not(:disabled) {
+            background: rgba(245, 196, 107, 0.2);
+        }
+
+        .pp-month-nav button:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .pp-month-nav span {
+            min-width: 140px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .pp-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .pp-chip {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .pp-chip.late { background: rgba(240, 71, 95, 0.22); color: #FF8FA0; }
+        .pp-chip.done { background: rgba(52, 211, 153, 0.2); color: var(--pp-ok); }
+
+        .pp-ring {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .pp-ring svg { transform: rotate(-90deg); }
+
+        .pp-ring-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .pp-ring-center strong {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+        }
+
+        .pp-ring-center small {
+            font-size: 12px;
+            opacity: 0.75;
+        }
+
+        .pp-senders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .pp-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 20px 18px;
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .pp-card.sent { border-color: rgba(245, 165, 36, 0.5); }
+        .pp-card.confirmed { border-color: rgba(52, 211, 153, 0.55); box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.15), var(--shadow-sm); }
+        .pp-card.me::before {
+            content: 'Tú';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--bg-soft);
+            color: var(--text-light);
+        }
+
+        .pp-avatar {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            padding: 4px;
+            border: 3px dashed var(--border);
+            position: relative;
+        }
+
+        .pp-card.sent .pp-avatar { border: 3px solid var(--pp-sent); }
+        .pp-card.confirmed .pp-avatar { border: 3px solid var(--pp-ok); }
+
+        .pp-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--bg-soft);
+        }
+
+        .pp-avatar .pp-badge {
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            border: 3px solid var(--card);
+            background: var(--bg-soft);
+            color: var(--text-light);
+        }
+
+        .pp-card.sent .pp-badge { background: var(--pp-sent); color: #1B1226; }
+        .pp-card.confirmed .pp-badge { background: var(--pp-ok); color: #06261A; }
+
+        .pp-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .pp-status {
+            display: inline-block;
+            margin: 6px 0 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: var(--bg-soft);
+            color: var(--text-light);
+        }
+
+        .pp-card.sent .pp-status { background: rgba(245, 165, 36, 0.15); color: var(--pp-sent); }
+        .pp-card.confirmed .pp-status { background: rgba(52, 211, 153, 0.15); color: var(--pp-ok); }
+
+        .pp-amount {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .pp-meta {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.5;
+            min-height: 40px;
+        }
+
+        .pp-meta strong { color: var(--text); }
+
+        .pp-note {
+            margin-top: 8px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-light);
+            word-break: break-word;
+        }
+
+        .pp-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .pp-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pp-btn.send { background: linear-gradient(135deg, var(--pp-gold), var(--pp-rose)); color: #2A1220; }
+        .pp-btn.confirm { background: rgba(52, 211, 153, 0.15); color: var(--pp-ok); }
+        .pp-btn.ghost { background: var(--bg-soft); color: var(--text-light); }
+
+        .pp-history {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .pp-history h3 {
+            margin: 0 0 14px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pp-history table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .pp-history th, .pp-history td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .pp-history th { font-size: 12px; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pp-history td:first-child, .pp-history th:first-child { text-align: left; }
+        .pp-history tr.current td { background: rgba(245, 196, 107, 0.07); }
+        .pp-history tr { cursor: pointer; }
+        .pp-history tfoot td { font-weight: 700; border-bottom: none; }
+
+        .pp-dot { font-size: 15px; }
+        .pp-dot.confirmed { color: var(--pp-ok); }
+        .pp-dot.sent { color: var(--pp-sent); }
+        .pp-dot.pending { color: var(--text-light); opacity: 0.4; }
+
+        .pp-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 600px) {
+            .pp-hero {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 22px 18px;
+                text-align: center;
+            }
+
+            .pp-hero h2 { font-size: 24px; }
+            .pp-ring { margin: 0 auto; }
+            .pp-chips { justify-content: center; }
+            .pp-month-nav span { min-width: 120px; }
+            .pp-history { padding: 16px 12px; }
+            .pp-history th, .pp-history td { padding: 10px 5px; }
+        }
     </style>
 </head>
 
@@ -2250,6 +2609,10 @@
                     <a href="#" class="nav-link" data-section="reminders">
                         <i class="fa-solid fa-bell"></i>
                         <span>Recordatorios</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="parents">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <span>Mamá & Papá</span>
                     </a>
                 </nav>
 
@@ -2623,6 +2986,18 @@
                     </div>
                     <div id="reminders-container" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;"></div>
                 </section>
+
+                <!-- Mamá & Papá Section -->
+                <section id="parents" class="content-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                            <span>Mamá & Papá</span>
+                        </div>
+                        <div id="parents-settings-btn-wrapper"></div>
+                    </div>
+                    <div id="parents-container"></div>
+                </section>
             </main>
         </div>
 
@@ -2810,6 +3185,8 @@
             let allPolls = [];
             let allReminders = [];
             let chatReads = [];
+            let parentsData = null;
+            let parentsMonth = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; })();
             let currentViewDate = new Date(today.getFullYear(), today.getMonth(), 1);
             let calendarView = 'month';
 
@@ -2953,6 +3330,7 @@
                         if (sectionId === 'polls') renderPolls();
                         if (sectionId === 'chat') markChatRead();
                         if (sectionId === 'birthdays') renderBirthdayCountdown();
+                        if (sectionId === 'parents') renderParents();
                     });
                 });
 
@@ -3400,14 +3778,15 @@
 
             async function loadAllData() {
                 try {
-                    const [users, tasks, events, chat, polls, reminders, reads] = await Promise.all([
+                    const [users, tasks, events, chat, polls, reminders, reads, parents] = await Promise.all([
                         apiCall('/api/users'),
                         apiCall('/api/tasks'),
                         apiCall('/api/events'),
                         apiCall('/api/chat'),
                         apiCall('/api/polls'),
                         apiCall('/api/reminders'),
-                        apiCall('/api/chat/reads')
+                        apiCall('/api/chat/reads'),
+                        apiCall('/api/parents').catch(() => null)
                     ]);
 
                     familyMembers = users;
@@ -3417,6 +3796,7 @@
                     allPolls = polls || [];
                     allReminders = reminders || [];
                     chatReads = reads || [];
+                    parentsData = parents;
 
                     renderDashboard();
                     renderCalendar();
@@ -3426,6 +3806,7 @@
                     renderChat();
                     renderPolls();
                     renderReminders();
+                    renderParents();
                 } catch (err) {
                     console.error("Error loading data:", err);
                 }
@@ -5074,6 +5455,382 @@
                 }
             };
             // ── END REMINDERS ──────────────────────────────────────────────────
+
+            // ── MAMÁ & PAPÁ ────────────────────────────────────────────────────
+            const PARENT_METHODS = ['Zelle', 'Remitly', 'Western Union', 'Transferencia', 'Efectivo', 'Otro'];
+
+            function monthKey(d) {
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            }
+
+            function shiftMonth(key, delta) {
+                const [y, m] = key.split('-').map(Number);
+                return monthKey(new Date(y, m - 1 + delta, 1));
+            }
+
+            function monthLabel(key, opts = { month: 'long', year: 'numeric' }) {
+                const [y, m] = key.split('-').map(Number);
+                const label = new Date(y, m - 1, 1).toLocaleDateString('es-ES', opts);
+                return label.charAt(0).toUpperCase() + label.slice(1);
+            }
+
+            function money(n) {
+                return '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+            }
+
+            function memberName(id) {
+                const m = familyMembers.find(u => u.id === id);
+                return m ? m.name : 'Alguien';
+            }
+
+            function parentTransfer(senderId, month) {
+                return (parentsData.transfers || []).find(t => t.sender_id === senderId && t.month === month);
+            }
+
+            function renderParents() {
+                const container = document.getElementById('parents-container');
+                if (!container || !parentsData) return;
+
+                const { senders, due_day, can_manage } = parentsData;
+                const isAdmin = currentUser && currentUser.is_admin;
+                const me = currentUser ? currentUser.id : null;
+                const thisMonth = monthKey(new Date());
+                const month = parentsMonth;
+
+                const btnWrapper = document.getElementById('parents-settings-btn-wrapper');
+                if (btnWrapper) {
+                    btnWrapper.innerHTML = isAdmin
+                        ? `<button class="btn" onclick="showParentsSettings()"><i class="fa-solid fa-sliders"></i> Ajustes</button>`
+                        : '';
+                }
+
+                const rows = senders.map(s => ({ s, t: parentTransfer(s.id, month) }));
+                const sentCount = rows.filter(r => r.t).length;
+                const confirmedCount = rows.filter(r => r.t && r.t.confirmed_by).length;
+                const total = rows.reduce((sum, r) => sum + (r.t ? r.t.amount : 0), 0);
+                const goal = senders.reduce((sum, s) => sum + (s.monthly_amount || 0), 0);
+                const allSent = senders.length > 0 && sentCount === senders.length;
+
+                // Deadline chip — only meaningful for the current month; past
+                // months are simply complete or not.
+                let deadlineChip;
+                if (allSent) {
+                    deadlineChip = `<span class="pp-chip done"><i class="fa-solid fa-heart"></i> ¡Todos enviaron!</span>`;
+                } else if (month < thisMonth) {
+                    deadlineChip = `<span class="pp-chip late"><i class="fa-solid fa-circle-exclamation"></i> Mes incompleto</span>`;
+                } else if (month === thisMonth) {
+                    const dayNow = new Date().getDate();
+                    deadlineChip = dayNow > due_day
+                        ? `<span class="pp-chip late"><i class="fa-solid fa-clock"></i> Atrasado · vencía el ${due_day}</span>`
+                        : `<span class="pp-chip"><i class="fa-solid fa-clock"></i> ${dayNow === due_day ? 'Vence hoy' : `Faltan ${due_day - dayNow} día${due_day - dayNow === 1 ? '' : 's'}`}</span>`;
+                } else {
+                    deadlineChip = `<span class="pp-chip"><i class="fa-solid fa-calendar"></i> Vence el ${due_day}</span>`;
+                }
+
+                const pct = senders.length ? sentCount / senders.length : 0;
+                const R = 64, C = 2 * Math.PI * R;
+
+                const hero = `
+                    <div class="pp-hero">
+                        <div style="position:relative; z-index:1;">
+                            <div class="pp-kicker">Con amor, cada mes</div>
+                            <h2>Para Mamá & Papá 💛</h2>
+                            <p>Lo que enviamos entre hermanos — quién ya envió y quién lo confirmó.</p>
+                            <div class="pp-month-nav">
+                                <button onclick="changeParentsMonth(-1)" title="Mes anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                                <span>${monthLabel(month)}</span>
+                                <button onclick="changeParentsMonth(1)" title="Mes siguiente" ${month >= shiftMonth(thisMonth, 1) ? 'disabled' : ''}><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div class="pp-chips">
+                                ${deadlineChip}
+                                <span class="pp-chip"><i class="fa-solid fa-paper-plane"></i> ${sentCount} de ${senders.length} enviaron</span>
+                                <span class="pp-chip"><i class="fa-solid fa-check-double"></i> ${confirmedCount} confirmados</span>
+                                ${goal > 0 ? `<span class="pp-chip"><i class="fa-solid fa-bullseye"></i> Meta ${money(goal)}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="pp-ring">
+                            <svg width="150" height="150" viewBox="0 0 150 150">
+                                <defs>
+                                    <linearGradient id="ppRingGrad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#F5C46B" />
+                                        <stop offset="100%" stop-color="#FF7A9A" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="75" cy="75" r="${R}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="12" />
+                                <circle cx="75" cy="75" r="${R}" fill="none" stroke="url(#ppRingGrad)" stroke-width="12" stroke-linecap="round"
+                                    stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct)}" style="transition: stroke-dashoffset 0.8s ease;" />
+                            </svg>
+                            <div class="pp-ring-center">
+                                <strong>${money(total)}</strong>
+                                <small>enviado este mes</small>
+                            </div>
+                        </div>
+                    </div>`;
+
+                const cards = rows.map(({ s, t }) => {
+                    const state = !t ? 'pending' : (t.confirmed_by ? 'confirmed' : 'sent');
+                    const label = { pending: 'Pendiente', sent: 'Enviado', confirmed: 'Confirmado' }[state];
+                    const icon = { pending: 'fa-hourglass-half', sent: 'fa-paper-plane', confirmed: 'fa-check-double' }[state];
+                    const avatar = s.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(s.sender_name)}&background=${(s.color || '#F5C46B').replace('#', '')}&color=fff&bold=true`;
+                    const isMine = me && s.user_id === me;
+
+                    let meta;
+                    if (!t) {
+                        meta = s.monthly_amount > 0 ? `Le toca: <strong>${money(s.monthly_amount)}</strong>` : 'Aún no ha enviado este mes';
+                    } else {
+                        const sentDate = new Date(t.sent_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                        meta = `${t.method ? escapeHtml(t.method) + ' · ' : ''}${sentDate}<br>
+                            Registrado por <strong>${escapeHtml(memberName(t.recorded_by))}</strong>
+                            ${t.confirmed_by ? `<br>Confirmado por <strong>${escapeHtml(memberName(t.confirmed_by))}</strong>` : ''}`;
+                    }
+
+                    let actions = '';
+                    if (can_manage) {
+                        if (!t) {
+                            actions = `<button class="pp-btn send" onclick="showParentsSentModal(${s.id})"><i class="fa-solid fa-paper-plane"></i> Marcar enviado</button>`;
+                        } else {
+                            const canEdit = t.recorded_by === me || isAdmin;
+                            if (!t.confirmed_by && t.recorded_by !== me) {
+                                actions += `<button class="pp-btn confirm" onclick="confirmParentsTransfer(${s.id})"><i class="fa-solid fa-check-double"></i> Confirmar</button>`;
+                            }
+                            if (canEdit) {
+                                actions += `<button class="pp-btn ghost" onclick="showParentsSentModal(${s.id})" title="Editar"><i class="fa-solid fa-pen"></i></button>`;
+                                actions += `<button class="pp-btn ghost" onclick="undoParentsTransfer(${s.id})" title="Deshacer"><i class="fa-solid fa-rotate-left"></i></button>`;
+                            }
+                        }
+                    }
+
+                    return `
+                        <div class="pp-card ${state} ${isMine ? 'me' : ''}">
+                            <div class="pp-avatar">
+                                <img src="${avatar}" alt="${escapeHtml(s.sender_name)}">
+                                <span class="pp-badge"><i class="fa-solid ${icon}"></i></span>
+                            </div>
+                            <h3 class="pp-name">${escapeHtml(s.sender_name)}</h3>
+                            <span class="pp-status">${label}</span>
+                            <div class="pp-amount">${t ? money(t.amount) : '—'}</div>
+                            <div class="pp-meta">${meta}</div>
+                            ${t && t.note ? `<div class="pp-note">“${escapeHtml(t.note)}”</div>` : ''}
+                            ${actions ? `<div class="pp-actions">${actions}</div>` : ''}
+                        </div>`;
+                }).join('');
+
+                // History — last 6 months up to the current one, plus this
+                // year's running total per sender.
+                const months = [];
+                for (let i = 0; i < 6; i++) months.push(shiftMonth(thisMonth, -i));
+                const year = thisMonth.slice(0, 4);
+                const yearTotals = senders.map(s => (parentsData.transfers || [])
+                    .filter(t => t.sender_id === s.id && t.month.startsWith(year))
+                    .reduce((sum, t) => sum + t.amount, 0));
+
+                const history = `
+                    <div class="pp-history">
+                        <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--pp-gold);"></i> Historial</h3>
+                        <table>
+                            <thead>
+                                <tr><th>Mes</th>${senders.map(s => `<th>${escapeHtml(s.sender_name)}</th>`).join('')}<th>Total</th></tr>
+                            </thead>
+                            <tbody>
+                                ${months.map(mk => {
+                                    let rowTotal = 0;
+                                    const cells = senders.map(s => {
+                                        const t = parentTransfer(s.id, mk);
+                                        if (!t) return `<td><span class="pp-dot pending"><i class="fa-regular fa-circle"></i></span></td>`;
+                                        rowTotal += t.amount;
+                                        const cls = t.confirmed_by ? 'confirmed' : 'sent';
+                                        return `<td><span class="pp-dot ${cls}" title="${money(t.amount)}"><i class="fa-solid ${t.confirmed_by ? 'fa-circle-check' : 'fa-circle-dot'}"></i></span> ${money(t.amount)}</td>`;
+                                    }).join('');
+                                    return `<tr class="${mk === month ? 'current' : ''}" onclick="setParentsMonth('${mk}')"><td>${monthLabel(mk, { month: 'short', year: 'numeric' })}</td>${cells}<td><strong>${money(rowTotal)}</strong></td></tr>`;
+                                }).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr><td>Total ${year}</td>${yearTotals.map(v => `<td>${money(v)}</td>`).join('')}<td>${money(yearTotals.reduce((a, b) => a + b, 0))}</td></tr>
+                            </tfoot>
+                        </table>
+                        <div class="pp-legend">
+                            <span><span class="pp-dot confirmed"><i class="fa-solid fa-circle-check"></i></span> Confirmado</span>
+                            <span><span class="pp-dot sent"><i class="fa-solid fa-circle-dot"></i></span> Enviado, falta confirmar</span>
+                            <span><span class="pp-dot pending"><i class="fa-regular fa-circle"></i></span> Pendiente</span>
+                        </div>
+                    </div>`;
+
+                container.innerHTML = hero + `<div class="pp-senders">${cards}</div>` + history;
+            }
+
+            window.changeParentsMonth = function (delta) {
+                const next = shiftMonth(parentsMonth, delta);
+                if (next > shiftMonth(monthKey(new Date()), 1)) return;
+                parentsMonth = next;
+                renderParents();
+            };
+
+            window.setParentsMonth = function (key) {
+                parentsMonth = key;
+                renderParents();
+            };
+
+            async function reloadParents() {
+                parentsData = await apiCall('/api/parents');
+                renderParents();
+            }
+
+            window.showParentsSentModal = function (senderId) {
+                const existing = document.getElementById('dynamic-parents-modal');
+                if (existing) existing.remove();
+
+                const s = parentsData.senders.find(x => x.id === senderId);
+                if (!s) return;
+                const t = parentTransfer(senderId, parentsMonth);
+                const amount = t ? t.amount : (s.monthly_amount || '');
+                const date = t ? localDateStr(new Date(t.sent_at)) : localDateStr(new Date());
+                const inputStyle = 'width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);color:var(--text);font-size:1rem;font-family:inherit;';
+
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-parents-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-hand-holding-heart" style="color:#FF7A9A;margin-right:8px;"></i>Envío de ${escapeHtml(s.sender_name)}</h3>
+                            <button onclick="document.getElementById('dynamic-parents-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        <p style="margin:0 0 18px;color:var(--text-light);">${monthLabel(parentsMonth)}</p>
+                        <div style="margin-bottom:14px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Monto ($)</label>
+                            <input type="number" step="0.01" min="0" id="pp-amount-input" value="${amount}" placeholder="Ej: 200" style="${inputStyle}">
+                        </div>
+                        <div style="margin-bottom:14px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Cómo se envió</label>
+                            <select id="pp-method-input" style="${inputStyle}">
+                                ${PARENT_METHODS.map(m => `<option ${t && t.method === m ? 'selected' : ''}>${m}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div style="margin-bottom:14px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Fecha</label>
+                            <input type="date" id="pp-date-input" value="${date}" style="${inputStyle}">
+                        </div>
+                        <div style="margin-bottom:20px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Nota / # de confirmación <span style="color:var(--text-light);font-size:13px;">(opcional)</span></label>
+                            <input type="text" id="pp-note-input" maxlength="140" value="${t && t.note ? escapeHtml(t.note).replace(/"/g, '&quot;') : ''}" placeholder="Ej: Ref #48213, para la luz" style="${inputStyle}">
+                        </div>
+                        <button class="pp-btn send" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="saveParentsTransfer(${senderId})">
+                            <i class="fa-solid fa-paper-plane"></i> ${t ? 'Guardar cambios' : 'Marcar como enviado'}
+                        </button>
+                        ${t && t.confirmed_by ? `<p style="margin:10px 0 0;font-size:12px;color:var(--text-light);text-align:center;">Al editar, el envío necesitará confirmarse de nuevo.</p>` : ''}
+                    </div>`;
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+                document.body.appendChild(modal);
+            };
+
+            window.saveParentsTransfer = async function (senderId) {
+                const amount = parseFloat(document.getElementById('pp-amount-input').value);
+                const method = document.getElementById('pp-method-input').value;
+                const date = document.getElementById('pp-date-input').value;
+                const note = document.getElementById('pp-note-input').value.trim();
+                if (!(amount > 0)) return showToast('Monto inválido', 'Escribe cuánto se envió');
+                try {
+                    await apiCall(`/api/parents/${senderId}/${parentsMonth}/sent`, 'POST', {
+                        amount, method, note,
+                        // Noon local time, so the date can't slip a day in UTC
+                        sent_at: new Date((date || localDateStr(new Date())) + 'T12:00:00').toISOString()
+                    });
+                    document.getElementById('dynamic-parents-modal').remove();
+                    await reloadParents();
+                    showToast('💛 Envío registrado', 'Los demás ya pueden verlo y confirmarlo');
+                } catch (e) {
+                    showToast('Error', e.message);
+                }
+            };
+
+            window.confirmParentsTransfer = async function (senderId) {
+                try {
+                    await apiCall(`/api/parents/${senderId}/${parentsMonth}/confirm`, 'POST');
+                    await reloadParents();
+                    showToast('✅ Envío confirmado', '');
+                } catch (e) {
+                    showToast('Error', e.message);
+                }
+            };
+
+            window.undoParentsTransfer = async function (senderId) {
+                if (!confirm('¿Deshacer este envío? Volverá a quedar como pendiente.')) return;
+                try {
+                    await apiCall(`/api/parents/${senderId}/${parentsMonth}`, 'DELETE');
+                    await reloadParents();
+                    showToast('Envío deshecho', 'Quedó como pendiente');
+                } catch (e) {
+                    showToast('Error', e.message);
+                }
+            };
+
+            window.showParentsSettings = function () {
+                const existing = document.getElementById('dynamic-parents-modal');
+                if (existing) existing.remove();
+                const inputStyle = 'width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:0.95rem;font-family:inherit;';
+
+                const modal = document.createElement('div');
+                modal.id = 'dynamic-parents-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+                modal.innerHTML = `
+                    <div style="background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-sliders" style="color:var(--primary);margin-right:8px;"></i>Ajustes · Mamá & Papá</h3>
+                            <button onclick="document.getElementById('dynamic-parents-modal').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-light);">×</button>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <label style="display:block;margin-bottom:6px;font-weight:500;">Día límite de cada mes (1–28)</label>
+                            <input type="number" min="1" max="28" id="pp-due-input" value="${parentsData.due_day}" style="${inputStyle}background:var(--bg-soft);">
+                        </div>
+                        ${parentsData.senders.map(s => `
+                        <div style="padding:14px;border-radius:12px;background:var(--bg-soft);margin-bottom:12px;" data-pp-sender="${s.id}">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                                <div>
+                                    <label style="display:block;margin-bottom:4px;font-size:13px;color:var(--text-light);">Nombre</label>
+                                    <input type="text" class="pp-s-name" value="${escapeHtml(s.sender_name).replace(/"/g, '&quot;')}" style="${inputStyle}">
+                                </div>
+                                <div>
+                                    <label style="display:block;margin-bottom:4px;font-size:13px;color:var(--text-light);">Monto mensual ($)</label>
+                                    <input type="number" min="0" step="0.01" class="pp-s-amount" value="${s.monthly_amount || ''}" placeholder="0" style="${inputStyle}">
+                                </div>
+                            </div>
+                            <label style="display:block;margin-bottom:4px;font-size:13px;color:var(--text-light);">Cuenta en la app (puede marcar y confirmar)</label>
+                            <select class="pp-s-user" style="${inputStyle}">
+                                <option value="">Sin cuenta</option>
+                                ${familyMembers.map(m => `<option value="${m.id}" ${s.user_id === m.id ? 'selected' : ''}>${escapeHtml(m.name)}</option>`).join('')}
+                            </select>
+                        </div>`).join('')}
+                        <button class="btn primary" style="width:100%;justify-content:center;margin-top:6px;" onclick="saveParentsSettings()"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                    </div>`;
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+                document.body.appendChild(modal);
+            };
+
+            window.saveParentsSettings = async function () {
+                const modal = document.getElementById('dynamic-parents-modal');
+                try {
+                    await apiCall('/api/parents/settings', 'PUT', { due_day: document.getElementById('pp-due-input').value });
+                    for (const el of modal.querySelectorAll('[data-pp-sender]')) {
+                        const s = parentsData.senders.find(x => x.id === Number(el.dataset.ppSender));
+                        // Only keep the stored fallback avatar for senders without an
+                        // account; a linked sender's avatar comes from their profile.
+                        const userId = el.querySelector('.pp-s-user').value || null;
+                        await apiCall(`/api/parents/senders/${s.id}`, 'PUT', {
+                            name: el.querySelector('.pp-s-name').value.trim() || s.sender_name,
+                            monthly_amount: parseFloat(el.querySelector('.pp-s-amount').value) || 0,
+                            user_id: userId ? Number(userId) : null,
+                            color: s.color,
+                            avatar: s.user_id ? null : s.avatar
+                        });
+                    }
+                    modal.remove();
+                    await reloadParents();
+                    showToast('Ajustes guardados', '');
+                } catch (e) {
+                    showToast('Error', e.message);
+                }
+            };
+            // ── END MAMÁ & PAPÁ ────────────────────────────────────────────────
 
         </script>
         <audio id="notificationSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"

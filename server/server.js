@@ -377,6 +377,25 @@ setInterval(async () => {
         }, null);
       }
 
+      // Mamá & Papá — on the monthly due day, nudge everyone about whoever
+      // hasn't sent this month's money yet.
+      const dueRow = await db.get(`SELECT value FROM app_settings WHERE key = 'parents_due_day'`);
+      const dueDay = dueRow ? parseInt(dueRow.value, 10) : 5;
+      if (parseInt(todayStr.slice(8), 10) === dueDay) {
+        const pending = await db.all(
+          `SELECT name FROM parent_senders WHERE id NOT IN (SELECT sender_id FROM parent_transfers WHERE month = ?) ORDER BY sort_order`,
+          [todayStr.slice(0, 7)]
+        );
+        if (pending.length > 0) {
+          sendPushToAll({
+            title: '💛 Mamá & Papá',
+            body: `Hoy es el día de enviar. Falta: ${pending.map(p => p.name).join(', ')}.`,
+            tag: 'parents-due-' + todayStr,
+            url: '/'
+          }, null);
+        }
+      }
+
       // Cleaning penalty — if yesterday's turn wasn't marked done, apply a $40
       // penalty to that member's debt exactly once, and let everyone know.
       // Gated on "penalized = 0" (not just "completed = 0") so restarting the

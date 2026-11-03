@@ -781,5 +781,127 @@ module.exports = (io) => {
     }
   });
 
+  // MAMÁ & PAPÁ — monthly money sent home by the siblings. Everyone in the
+  // family can see it; only the senders themselves (their linked accounts)
+  // and the admin can mark, confirm or undo a transfer.
+  const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+  async function canManageParents(req) {
+    if (req.user.is_admin) return true;
+    const linked = await db.get(`SELECT id FROM parent_senders WHERE user_id = ?`, [req.user.id]);
+    return !!linked;
+  }
+
+  router.get('/parents', async (req, res) => {
+    try {
+      const senders = await db.all(`
+        SELECT s.id, s.user_id, s.monthly_amount, s.sort_order, s.name AS sender_name,
+               COALESCE(u.avatar, s.avatar) AS avatar, COALESCE(s.color, u.color) AS color, u.name AS user_name
+        FROM parent_senders s LEFT JOIN users u ON s.user_id = u.id
+        ORDER BY s.sort_order, s.id
+      `);
+      const transfers = await db.all(`SELECT * FROM parent_transfers ORDER BY month DESC`);
+      const dueRow = await db.get(`SELECT value FROM app_settings WHERE key = 'parents_due_day'`);
+      res.json({
+        senders,
+        transfers,
+        due_day: dueRow ? parseInt(dueRow.value, 10) : 5,
+        can_manage: await canManageParents(req)
+      });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post('/parents/:senderId/:month/sent', async (req, res) => {
+    const { senderId, month } = req.params;
+    const { amount, method, note, sent_at } = req.body;
+    if (!MONTH_RE.test(month)) return res.status(400).json({ error: 'Mes inválido' });
+    if (!(amount > 0)) return res.status(400).json({ error: 'El monto debe ser mayor a 0' });
+    try {
+      if (!(await canManageParents(req))) return res.status(403).json({ error: 'Solo los hermanos que envían pueden marcar envíos' });
+      const sender = await db.get(`SELECT * FROM parent_senders WHERE id = ?`, [senderId]);
+      if (!sender) return res.status(404).json({ error: 'Sender not found' });
+
+      // Editing an existing transfer clears its confirmation, since whoever
+      // checked it confirmed the old details, not the new ones.
+      await db.run(
+        `INSERT INTO parent_transfers (sender_id, month, amount, method, note, sent_at, recorded_by, confirmed_by, confirmed_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL)
+         ON CONFLICT(sender_id, month) DO UPDATE SET amount = excluded.amount, method = excluded.method, note = excluded.note,
+           sent_at = excluded.sent_at, recorded_by = excluded.recorded_by, confirmed_by = NULL, confirmed_at = NULL`,
+        [senderId, month, amount, method || '', note || '', sent_at || new Date().toISOString(), req.user.id]
+      );
+      io.emit('updateData');
+      sendPushToAll({
+        title: '💛 Envío a Mamá & Papá',
+        body: `${sender.name} envió $${amount} a Mamá & Papá${method ? ' por ' + method : ''}. ¡Gracias!`,
+        tag: 'parents-' + senderId + '-' + month,
+        url: '/'
+      }, req.user.id);
+      res.json({ message: 'Transfer recorded' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // A transfer is confirmed by someone other than the person who recorded
+  // it — that second pair of eyes is the whole point of the check.
+  router.post('/parents/:senderId/:month/confirm', async (req, res) => {
+    const { senderId, month } = req.params;
+    try {
+      if (!(await canManageParents(req))) return res.status(403).json({ error: 'Solo los hermanos que envían pueden confirmar' });
+      const t = await db.get(`SELECT * FROM parent_transfers WHERE sender_id = ? AND month = ?`, [senderId, month]);
+      if (!t) return res.status(404).json({ error: 'Transfer not found' });
+      if (t.recorded_by === req.user.id) return res.status(400).json({ error: 'Otra persona debe confirmar este envío' });
+      await db.run(`UPDATE parent_transfers SET confirmed_by = ?, confirmed_at = ? WHERE id = ?`,
+        [req.user.id, new Date().toISOString(), t.id]);
+      io.emit('updateData');
+      res.json({ message: 'Transfer confirmed' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.delete('/parents/:senderId/:month', async (req, res) => {
+    const { senderId, month } = req.params;
+    try {
+      const t = await db.get(`SELECT * FROM parent_transfers WHERE sender_id = ? AND month = ?`, [senderId, month]);
+      if (!t) return res.status(404).json({ error: 'Transfer not found' });
+      if (t.recorded_by !== req.user.id && !req.user.is_admin) return res.status(403).json({ error: 'Solo quien lo registró puede deshacerlo' });
+      await db.run(`DELETE FROM parent_transfers WHERE id = ?`, [t.id]);
+      io.emit('updateData');
+      res.json({ message: 'Transfer removed' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.put('/parents/senders/:id', requireAdmin, async (req, res) => {
+    const { name, monthly_amount, user_id, color, avatar } = req.body;
+    try {
+      await db.run(
+        `UPDATE parent_senders SET name = ?, monthly_amount = ?, user_id = ?, color = ?, avatar = ? WHERE id = ?`,
+        [name, monthly_amount || 0, user_id || null, color || null, avatar || null, req.params.id]
+      );
+      io.emit('updateData');
+      res.json({ message: 'Sender updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.put('/parents/settings', requireAdmin, async (req, res) => {
+    const day = parseInt(req.body.due_day, 10);
+    if (!(day >= 1 && day <= 28)) return res.status(400).json({ error: 'El día debe estar entre 1 y 28' });
+    try {
+      await db.run(`INSERT OR REPLACE INTO app_settings (key, value) VALUES ('parents_due_day', ?)`, [String(day)]);
+      io.emit('updateData');
+      res.json({ message: 'Settings updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };
